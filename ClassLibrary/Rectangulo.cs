@@ -24,7 +24,7 @@ namespace ClassLibrary
 
         }
 
-        public Rectangulo(double temp, double vel, double dens, double pres, double altura) // crea el estado presente de la celda, dado como parámetros
+        public Rectangulo(double temp, double vel, double dens, double pres, double altura) // crea el estado presente con la altura
         {
             this.tempP = temp;
             this.velP = vel;
@@ -33,13 +33,21 @@ namespace ClassLibrary
             this.altura = altura;
         }
 
-        public Rectangulo(Rectangulo celda) // constructor copia (estado presente)
+        public Rectangulo(double temp, double vel, double dens, double pres) // crea el estado presente sin la altura
         {
-            this.tempP = celda.GetTempP();
-            this.velP = celda.GetVelP();
-            this.densP = celda.GetDensP();
-            this.presP = celda.GetPresP();
-            this.altura = celda.GetAltura();
+            this.tempP = temp;
+            this.velP = vel;
+            this.densP = dens;
+            this.presP = pres;
+        }
+
+        public Rectangulo(Rectangulo rectC) // constructor copia (estado presente)
+        {
+            this.tempP = rectC.GetTempP();
+            this.velP = rectC.GetVelP();
+            this.densP = rectC.GetDensP();
+            this.presP = rectC.GetPresP();
+            this.altura = rectC.GetAltura();
         }
 
             // GETTERS
@@ -135,7 +143,7 @@ namespace ClassLibrary
         }
 
             // ALTRES MÈTODES
-        public void ComputeFutureState(double At, double Ax, double gamma, Rectangulo rectD)
+        public void ComputeFutureState(double At, double Ax, double gamma, Rectangulo rectD) // utiliza las eqs discretizadas para calcular el estado futuro de la celda, necesita los parámetros de discretización (incrementos de t y x), el parámetro del fluido (gamma) y el estado presente de la célula adyacente)
         {
             double AT = rectD.GetTempP() - this.tempP;
             double AV = rectD.GetVelP() - this.velP;
@@ -144,7 +152,8 @@ namespace ClassLibrary
             double K = At / Ax;
 
             this.tempF = this.tempP - (K * (this.velP * AT + (this.tempP * (gamma - 1) * (AV + (this.velP * Math.Log(relA))))));
-            this.velF=this.velP-(K*((this.velP*AV)+(AT/gamma)+()))
+            this.velF = this.velP - (K * ((this.velP * AV) + (AT / gamma) + ((this.tempP / (gamma * this.densP)) * Adens)));
+            this.densF = this.densP - (K * ((this.densP * AV) + (this.densP * this.velP * Math.Log(relA)) + (this.velP * Adens)));
         }
 
         public void ChangeState() // acutaliza el estado: el estado presente pasa a ser el futuro
