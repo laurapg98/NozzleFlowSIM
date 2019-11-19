@@ -84,5 +84,19 @@ namespace ClassLibrary
                 pos++;
             }
         }
+
+        public void AsignarAlturas(double Ax) // asigna las alturas a cada rectángulo
+        {
+            // Equation: A(X)=1+2.2(x-1.5)^2
+            double x = 0;
+            while(x<=3)
+            {
+                double A = 1 + (2.2 * Math.Pow(x - 1.5, 2));
+                double h = Math.Pow(4 * A / Math.PI, 0.5);
+
+                x = x + Ax;
+            }
+        }
+
     }
 }
