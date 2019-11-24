@@ -11,7 +11,7 @@ namespace ClassLibrary
     {
             // ATRIBUTS
         int numRect;
-        Rectangulo[,] nozzle;
+        Rectangulo[] nozzle;
 
             // CONSTRUCTORS
         public Nozzle() // constructor vacío
@@ -22,12 +22,12 @@ namespace ClassLibrary
         public Nozzle(Nozzle nozzleC) // constructor copia
         {
             this.numRect = nozzleC.GetNumRects();
-            this.nozzle = new Rectangulo[1, this.numRect + 2];
+            this.nozzle = new Rectangulo[this.numRect + 2];
 
             int pos = 0;
             while (pos <= this.numRect + 2)
             {
-                this.nozzle[1, pos] = nozzleC.GetRectangulo(pos);
+                this.nozzle[pos] = nozzleC.GetRectangulo(pos);
                 pos++;
             }
         }
@@ -35,12 +35,12 @@ namespace ClassLibrary
         public Nozzle(int numrect, double temp, double vel, double dens, double pres) // crea el nozzle con las condiciones iniciales que se dan como input - no asigna altura
         {
             this.numRect = numrect;
-            this.nozzle = new Rectangulo[1, this.numRect + 2];
+            this.nozzle = new Rectangulo[this.numRect + 2];
 
             int pos = 0;
-            while (pos <= this.numRect + 2)
+            while (pos < this.numRect + 2)
             {
-                this.nozzle[1, pos] = new Rectangulo(temp, vel, dens, pres);
+                this.nozzle[pos] = new Rectangulo(temp, vel, dens, pres);
                 pos++;
             }
         }
@@ -53,7 +53,7 @@ namespace ClassLibrary
 
         public void SetRectangulo(int pos, Rectangulo rect)
         {
-            this.nozzle[1, pos] = rect;
+            this.nozzle[pos] = rect;
         }
 
             // GETTERS
@@ -64,7 +64,7 @@ namespace ClassLibrary
 
         public Rectangulo GetRectangulo(int pos)
         {
-            return this.nozzle[1, pos];
+            return this.nozzle[pos + 1];
         }
 
             // ALTRES MÈTODES
@@ -73,7 +73,7 @@ namespace ClassLibrary
             int pos = 1;
             while (pos <= this.numRect)
             {
-                this.nozzle[1, pos].ComputeFutureState(At, Ax, gamma, this.nozzle[1, pos + 1]);
+                this.nozzle[pos].ComputeFutureState(At, Ax, gamma, this.nozzle[pos + 1]);
                 pos++;
             }
         }
@@ -83,7 +83,7 @@ namespace ClassLibrary
             int pos = 1;
             while (pos <= this.numRect)
             {
-                this.nozzle[1, pos].ChangeState();
+                this.nozzle[pos].ChangeState();
                 pos++;
             }
         }
@@ -104,7 +104,7 @@ namespace ClassLibrary
                 double h = Math.Pow(4 * A / Math.PI, 0.5);
 
                 // asignamos la altura
-                this.nozzle[1, i].SetAltura(h);
+                this.nozzle[i].SetAltura(h);
 
                 i++;
             }
@@ -122,7 +122,7 @@ namespace ClassLibrary
             int i = 0;
             while (i <= this.numRect + 2)
             {
-                Rectangulo rect = this.nozzle[1, i];
+                Rectangulo rect = this.nozzle[i];
 
                 //recollim dades de cada rectangle, separades per ';'
                 string dades = Convert.ToString(rect.GetTempP()) + ";" + Convert.ToString(rect.GetVelP()) + ";" + Convert.ToString(rect.GetDensP()) + ";" + Convert.ToString(rect.GetPresP()) + ";" + rect.GetAltura();
@@ -151,7 +151,7 @@ namespace ClassLibrary
             this.numRect = Convert.ToInt32(R.ReadLine());
 
             //formem el vector de rectangles 
-            this.nozzle = new Rectangulo[1, this.numRect];
+            this.nozzle = new Rectangulo[this.numRect];
 
             //agafem les propietats del fluid a cada rectangle
             int i = 0;
@@ -168,7 +168,7 @@ namespace ClassLibrary
 
                 Rectangulo rect = new Rectangulo(temp, vel, dens, pres, alt);
 
-                this.nozzle[1, i] = rect;
+                this.nozzle[i] = rect;
 
                 i++;
             }
