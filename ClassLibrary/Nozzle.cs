@@ -196,20 +196,31 @@ namespace ClassLibrary
             this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
         }
 
-        //public DataTable GetEstado() // devuelve una datatable con los datos del estado actual
-        //{
-        //    DataTable estado = new DataTable();
+        public DataTable GetEstado(double Ax) // devuelve una datatable con los datos del estado actual
+        {
+            DataTable estado = new DataTable();
 
-        //    estado.Rows.Add("Position", "Area", "Density", "Velocity", "Temperature", "Pressure", "Mach number");
+            estado.Rows.Add("Position", "Area", "Density", "Velocity", "Temperature", "Pressure", "Mach number");
 
-        //    int i = 1;
-        //    while (i <= this.numRect)
-        //    {
-        //        Rectangulo rect=
-        //        i++;
-        //    }
+            int i = 0;
+            while (i <= this.numRect)
+            {
+                Rectangulo rect = this.nozzle[i];
 
-        //    return estado;
-        //}
+                double position = i * Ax; // coord x
+                double area = Math.PI * Math.Pow(rect.GetAltura(), 2);
+                double density = rect.GetDensP();
+                double velocity = rect.GetVelP();
+                double temperature = rect.GetTempP();
+                double pressure = rect.GetPresP();
+                double mach = velocity / Math.Sqrt(temperature);
+
+                estado.Rows.Add(position, area, density, velocity, temperature, pressure, mach);
+
+                i++;
+            }
+
+            return estado;
+        }
     }
 }
