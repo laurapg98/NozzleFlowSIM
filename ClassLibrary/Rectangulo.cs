@@ -155,6 +155,7 @@ namespace ClassLibrary
             this.tempF = this.tempP - (K * (this.velP * AT + (this.tempP * (gamma - 1) * (AV + (this.velP * Math.Log(relA))))));
             this.velF = this.velP - (K * ((this.velP * AV) + (AT / gamma) + ((this.tempP / (gamma * this.densP)) * Adens)));
             this.densF = this.densP - (K * ((this.densP * AV) + (this.densP * this.velP * Math.Log(relA)) + (this.velP * Adens)));
+            this.presF = this.densF * this.tempF;
         }
 
         public void ChangeState() // acutaliza el estado: el estado presente pasa a ser el futuro
@@ -164,5 +165,6 @@ namespace ClassLibrary
             this.densP = this.densF;
             this.presP = this.presF;
         }
+
     }
 }
