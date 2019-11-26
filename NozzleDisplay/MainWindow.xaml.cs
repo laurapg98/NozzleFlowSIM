@@ -23,15 +23,19 @@ namespace NozzleDisplay
     {
         Nozzle nozzle;
         Rectangle[] nozzlerectangles;
+        double dx;
+        double dt;
+        double C;
+        int numR;
         public MainWindow()
         {
             InitializeComponent();
-            this.nozzle = new Nozzle(60, 1, 0.099, 1, 1);
-            this.nozzle.AsignarAlturas(0.05);
+            this.dx = 0.1;
+            this.numR = 30;
+            this.nozzle = new Nozzle(this.numR,this.dx);
             
             nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
 
-            fillCanvasNozzle();
         }
 
 
@@ -69,8 +73,10 @@ namespace NozzleDisplay
 
         private void parambut_Click(object sender, RoutedEventArgs e)
         {
+           // this.dt = C*()
             this.nozzle.EjecutarCiclo(0.00555, 0.1, 1.4);
             this.nozzle.ActualizarEstados();
+            fillCanvasNozzle();
         }
     }
 }
