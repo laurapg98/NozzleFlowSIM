@@ -32,16 +32,34 @@ namespace ClassLibrary
             }
         }
 
-        public Nozzle(int numrect, double temp, double vel, double dens, double pres) // crea el nozzle con las condiciones iniciales que se dan como input - no asigna altura
+        public Nozzle(int numrect, double Ax) // crea el nozzle con las condiciones iniciales y la altura
         {
             this.numRect = numrect;
             this.nozzle = new Rectangulo[this.numRect + 2];
 
-            int pos = 0;
-            while (pos < this.numRect + 2)
+            int i = 1;
+            while (i <= this.numRect)
             {
-                this.nozzle[pos] = new Rectangulo(temp, vel, dens, pres);
-                pos++;
+                // coord x
+                double x = i * Ax;
+
+                // area
+                double A = 1 + (2.2 * Math.Pow(x - 1.5, 2));
+
+                // altura --> Equation: A(X)=1+2.2(x-1.5)^2
+                double h = Math.Pow(4 * A / Math.PI, 0.5);
+
+                // asignamos las condiciones iniciales
+                double dens = 1 - (0.3146 * x);
+                double temp = 1 - (0.2314 * x);
+                double vel = (0.1 + (1.09 * x)) * Math.Sqrt(temp);
+                double pres = dens * temp;
+                this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
+
+                // asignamos la altura
+                this.nozzle[i].SetAltura(h);
+
+                i++;
             }
         }
 
@@ -85,28 +103,6 @@ namespace ClassLibrary
             {
                 this.nozzle[pos].ChangeState();
                 pos++;
-            }
-        }
-
-        public void AsignarAlturas(double Ax) // asigna las alturas a cada rectángulo
-        {
-            // Equation: A(X)=1+2.2(x-1.5)^2
-            int i = 1;
-            while (i <= this.numRect)
-            {
-                // coord x
-                double x = i * Ax;
-
-                // area
-                double A = 1 + (2.2 * Math.Pow(x - 1.5, 2));
-
-                // altura
-                double h = Math.Pow(4 * A / Math.PI, 0.5);
-
-                // asignamos la altura
-                this.nozzle[i].SetAltura(h);
-
-                i++;
             }
         }
 
