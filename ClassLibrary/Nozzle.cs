@@ -9,23 +9,23 @@ namespace ClassLibrary
 {
     public class Nozzle
     {
-            // ATRIBUTS
+        // ATRIBUTS
         int numRect;
         Rectangulo[] nozzle;
 
-            // CONSTRUCTORS
+        // CONSTRUCTORS
         public Nozzle() // constructor vacío
         {
-            
+
         }
 
         public Nozzle(Nozzle nozzleC) // constructor copia
         {
             this.numRect = nozzleC.GetNumRects();
-            this.nozzle = new Rectangulo[this.numRect + 2];
+            this.nozzle = new Rectangulo[this.numRect + 1];
 
             int pos = 0;
-            while (pos <= this.numRect + 2)
+            while (pos <= this.numRect)
             {
                 this.nozzle[pos] = nozzleC.GetRectangulo(pos);
                 pos++;
@@ -35,35 +35,40 @@ namespace ClassLibrary
         public Nozzle(int numrect, double Ax) // crea el nozzle con las condiciones iniciales y la altura
         {
             this.numRect = numrect;
-            this.nozzle = new Rectangulo[this.numRect + 2];
+            this.nozzle = new Rectangulo[this.numRect + 1];
 
-            int i = 1;
+            int i = 0;
             while (i <= this.numRect)
             {
                 // coord x
                 double x = i * Ax;
 
-                // area
-                double A = 1 + (2.2 * Math.Pow(x - 1.5, 2));
+                if (i == this.numRect) // boundary conditions --> extrapolation
+                    this.ComputeBoundaryConditions(i);
+                else
+                {
+                    // asignamos las condiciones iniciales
+                    double dens = 1 - (0.3146 * x);
+                    double temp = 1 - (0.2314 * x);
+                    double vel = (0.1 + (1.09 * x)) * Math.Sqrt(temp);
+                    double pres = dens * temp;
+                    this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
 
-                // altura --> Equation: A(X)=1+2.2(x-1.5)^2
-                double h = Math.Pow(4 * A / Math.PI, 0.5);
+                    // area
+                    double A = 1 + (2.2 * Math.Pow(x - 1.5, 2));
 
-                // asignamos las condiciones iniciales
-                double dens = 1 - (0.3146 * x);
-                double temp = 1 - (0.2314 * x);
-                double vel = (0.1 + (1.09 * x)) * Math.Sqrt(temp);
-                double pres = dens * temp;
-                this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
+                    // altura --> Equation: A(X)=1+2.2(x-1.5)^2
+                    double h = Math.Pow(4 * A / Math.PI, 0.5);
 
-                // asignamos la altura
-                this.nozzle[i].SetAltura(h);
+                    // asignamos la altura
+                    this.nozzle[i].SetAltura(h);
+                }
 
                 i++;
             }
         }
 
-            // SETTERS
+        // SETTERS
         public void SetNumRects(int nr)
         {
             this.numRect = nr;
@@ -74,7 +79,7 @@ namespace ClassLibrary
             this.nozzle[pos] = rect;
         }
 
-            // GETTERS
+        // GETTERS
         public int GetNumRects()
         {
             return this.numRect;
@@ -85,13 +90,17 @@ namespace ClassLibrary
             return this.nozzle[pos + 1];
         }
 
-            // ALTRES MÈTODES
+        // ALTRES MÈTODES
         public void EjecutarCiclo(double At, double Ax, double gamma) // calcula el estado futuro de todos los rectangulos
         {
-            int pos = 1;
+            int pos = 0;
             while (pos <= this.numRect)
             {
-                this.nozzle[pos].ComputeFutureState(At, Ax, gamma, this.nozzle[pos + 1]);
+                if (pos == this.numRect)
+                    this.ComputeBoundaryConditions(pos);
+                else
+                    this.nozzle[pos].ComputeFutureState(At, Ax, gamma, this.nozzle[pos + 1]);
+
                 pos++;
             }
         }
@@ -116,7 +125,7 @@ namespace ClassLibrary
 
             //guardem les dades de cada rectangle en strings
             int i = 0;
-            while (i <= this.numRect + 2)
+            while (i <= this.numRect + 1)
             {
                 Rectangulo rect = this.nozzle[i];
 
@@ -138,7 +147,7 @@ namespace ClassLibrary
             W.Close();
         }
 
-        public double[,] CargarEstadoFichero(string fichero)
+        public double[] CargarEstadoFichero(string fichero)
         {
             //llegim fitxer
             StreamReader R = new StreamReader(fichero);
@@ -151,7 +160,7 @@ namespace ClassLibrary
 
             //agafem les propietats del fluid a cada rectangle
             int i = 0;
-            while (i <= this.numRect + 2)
+            while (i <= this.numRect + 1)
             {
                 string linea = R.ReadLine();
                 string[] trozos = linea.Split(';');
@@ -170,12 +179,37 @@ namespace ClassLibrary
             }
 
             //agafem els altres paràmetres
-            double[,] parametres = new double[1, 3];
-            parametres[1, 0] = Convert.ToDouble(R.ReadLine());
-            parametres[1, 1] = Convert.ToDouble(R.ReadLine());
-            parametres[1, 2] = Convert.ToDouble(R.ReadLine());
+            double[] parametres = new double[3];
+            parametres[0] = Convert.ToDouble(R.ReadLine());
+            parametres[1] = Convert.ToDouble(R.ReadLine());
+            parametres[2] = Convert.ToDouble(R.ReadLine());
 
             return parametres;
         }
+
+        public void ComputeBoundaryConditions(int i)
+        {
+            double dens = (2 * this.nozzle[i - 1].GetDensP()) - this.nozzle[i - 2].GetDensP();
+            double temp = (2 * this.nozzle[i - 1].GetTempP()) - this.nozzle[i - 2].GetTempP();
+            double vel = (2 * this.nozzle[i - 1].GetVelP()) - this.nozzle[i - 2].GetVelP();
+            double pres = dens * temp;
+            this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
+        }
+
+        //public DataTable GetEstado() // devuelve una datatable con los datos del estado actual
+        //{
+        //    DataTable estado = new DataTable();
+
+        //    estado.Rows.Add("Position", "Area", "Density", "Velocity", "Temperature", "Pressure", "Mach number");
+
+        //    int i = 1;
+        //    while (i <= this.numRect)
+        //    {
+        //        Rectangulo rect=
+        //        i++;
+        //    }
+
+        //    return estado;
+        //}
     }
 }
