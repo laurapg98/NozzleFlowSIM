@@ -47,9 +47,13 @@
         </ItemsControl>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="1" Width="200" Height="300" Margin="0,20,0,0">
             <Grid>
-                <TextBox x:Name="dxbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="44,49,66.333,223.333"></TextBox>
-                <TextBox x:Name="cbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="43,90,61.333,185.333" ></TextBox>
-                <Button x:Name="parambut" Content="Save" Margin="43,145,81.333,125.333"></Button>
+                <TextBox x:Name="dxbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="32,40,68.333,230.333"></TextBox>
+                <TextBox x:Name="cbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="33,92,70.333,182.333" ></TextBox>
+                <Button x:Name="parambut" Content="Save" Margin="20,253,104.333,17.333" Click="parambut_Click"></Button>
+                <TextBox x:Name="cbox_Copy" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="30,144,71.333,128.333" />
+                <TextBlock HorizontalAlignment="Left" Margin="35,19,0,0" TextWrapping="Wrap" Text="^t" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="36,72,0,0" TextWrapping="Wrap" Text="^x" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="34,122,0,0" TextWrapping="Wrap" Text="Num Rect" VerticalAlignment="Top"/>
             </Grid>
         </Border>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="1" Grid.RowSpan="4" Width="200" Height="300" Grid.ColumnSpan="1" Margin="0,20,0,0"/>

@@ -66,5 +66,11 @@ namespace NozzleDisplay
 
             return Color.FromRgb((Byte)red, (Byte)green, (Byte)0);
         }
+
+        private void parambut_Click(object sender, RoutedEventArgs e)
+        {
+            this.nozzle.EjecutarCiclo(0.00555, 0.1, 1.4);
+            this.nozzle.ActualizarEstados();
+        }
     }
 }
