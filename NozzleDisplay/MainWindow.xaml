@@ -42,9 +42,10 @@
             <MenuItem Header="_Help"></MenuItem>
             <MenuItem Header="_About Us"></MenuItem>
         </Menu>
-        <ItemsControl x:Name="nozzelcontrol" Grid.Column="4" Grid.Row="1" Width="850" Height="300" Grid.RowSpan="4" Grid.ColumnSpan="4" HorizontalAlignment="Center" Background="Transparent" Margin="0,20,0,0">
-            <Canvas HorizontalAlignment="Left" x:Name="canvasNozzle" Width="850" Height="300" Background="DarkGray"/>
+        <ItemsControl x:Name="nozzelcontrol" Grid.Column="4" Grid.Row="1" Width="800" Height="300" Grid.RowSpan="4" Grid.ColumnSpan="3" HorizontalAlignment="Center" Background="Transparent" Margin="20,20,0,0">
+            <Canvas HorizontalAlignment="Left" x:Name="canvasNozzle" Width="800" Height="300" Background="DarkGray" Margin="0"/>
         </ItemsControl>
+        <Rectangle x:Name="rectanglescale" Height="300" Grid.Column="7" Grid.RowSpan="4" Grid.ColumnSpan="1" Width="25" Grid.Row="1" Fill="Black" Margin="0,20,0,0"/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="1" Width="200" Height="300" Margin="0,20,0,0">
             <Grid>
                 <TextBox x:Name="dxbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="32,40,68.333,230.333"></TextBox>

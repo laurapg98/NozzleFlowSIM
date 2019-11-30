@@ -36,6 +36,8 @@ namespace NozzleDisplay
             
             nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
 
+            fillCanvasNozzle();
+
         }
 
 
@@ -77,6 +79,11 @@ namespace NozzleDisplay
             this.nozzle.EjecutarCiclo(0.00555, 0.1, 1.4);
             this.nozzle.ActualizarEstados();
             fillCanvasNozzle();
+        }
+
+        public void colorRectangleMach(Rectangle rect)
+        {
+
         }
     }
 }
