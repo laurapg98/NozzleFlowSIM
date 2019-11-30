@@ -22,10 +22,10 @@ namespace ClassLibrary
         public Nozzle(Nozzle nozzleC) // constructor copia
         {
             this.numRect = nozzleC.GetNumRects();
-            this.nozzle = new Rectangulo[this.numRect + 1];
+            this.nozzle = new Rectangulo[this.numRect + 2];
 
             int pos = 0;
-            while (pos <= this.numRect)
+            while (pos <= this.numRect + 1)
             {
                 this.nozzle[pos] = nozzleC.GetRectangulo(pos);
                 pos++;
@@ -35,16 +35,16 @@ namespace ClassLibrary
         public Nozzle(int numrect, double Ax) // crea el nozzle con las condiciones iniciales y la altura
         {
             this.numRect = numrect;
-            this.nozzle = new Rectangulo[this.numRect + 1];
+            this.nozzle = new Rectangulo[this.numRect + 2];
 
-            int i = 0;
-            while (i <= this.numRect)
+            int i = 1;
+            while (i <= this.numRect + 1)
             {
                 // coord x
                 double x = i * Ax;
 
-                if (i == this.numRect) // boundary conditions --> extrapolation
-                    this.ComputeBoundaryConditions(i);
+                if (i == this.numRect) // supersonic outflow boundary conditions --> extrapolation
+                    this.ComputeOutflowBoundaryConditions(i);
                 else
                 {
                     // asignamos las condiciones iniciales
@@ -66,6 +66,8 @@ namespace ClassLibrary
 
                 i++;
             }
+
+            this.ComputeInflowBoundaryConditions();
         }
 
         // SETTERS
@@ -93,16 +95,18 @@ namespace ClassLibrary
         // ALTRES MÈTODES
         public void EjecutarCiclo(double At, double Ax, double gamma) // calcula el estado futuro de todos los rectangulos
         {
-            int pos = 0;
-            while (pos <= this.numRect)
+            int pos = 1;
+            while (pos <= this.numRect + 1)
             {
-                if (pos == this.numRect)
-                    this.ComputeBoundaryConditions(pos);
+                if (pos == this.numRect + 1)
+                    this.ComputeOutflowBoundaryConditions(pos);
                 else
                     this.nozzle[pos].ComputeFutureState(At, Ax, gamma, this.nozzle[pos + 1]);
 
                 pos++;
             }
+
+            this.ComputeInflowBoundaryConditions();
         }
 
         public void ActualizarEstados() // actualiza los estados de todos los rectangulos de las toveras
@@ -147,7 +151,7 @@ namespace ClassLibrary
             W.Close();
         }
 
-        public double[] CargarEstadoFichero(string fichero)
+        public double[] CargarEstadoFichero(string fichero) // carga como estado actual del nozzle los datos que lee de un fichero txt
         {
             //llegim fitxer
             StreamReader R = new StreamReader(fichero);
@@ -187,13 +191,22 @@ namespace ClassLibrary
             return parametres;
         }
 
-        public void ComputeBoundaryConditions(int i)
+        public void ComputeOutflowBoundaryConditions(int i) // calcula los valores del rectángulo extra de la salida del dlujo 
         {
             double dens = (2 * this.nozzle[i - 1].GetDensP()) - this.nozzle[i - 2].GetDensP();
             double temp = (2 * this.nozzle[i - 1].GetTempP()) - this.nozzle[i - 2].GetTempP();
             double vel = (2 * this.nozzle[i - 1].GetVelP()) - this.nozzle[i - 2].GetVelP();
             double pres = dens * temp;
             this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
+        }
+
+        public void ComputeInflowBoundaryConditions() // calcula los valores del rectángulo extra de la salida del flujo
+        {
+            double dens = (2 * this.nozzle[1].GetDensP()) - this.nozzle[2].GetDensP();
+            double temp = (2 * this.nozzle[1].GetTempP()) - this.nozzle[2].GetTempP();
+            double vel = (2 * this.nozzle[1].GetVelP()) - this.nozzle[2].GetVelP();
+            double pres = dens * temp;
+            this.nozzle[0] = new Rectangulo(temp, vel, dens, pres);
         }
 
         public DataTable GetEstado(double Ax) // devuelve una datatable con los datos del estado actual
@@ -203,7 +216,7 @@ namespace ClassLibrary
             estado.Rows.Add("Position", "Area", "Density", "Velocity", "Temperature", "Pressure", "Mach number");
 
             int i = 0;
-            while (i <= this.numRect)
+            while (i <= this.numRect + 1)
             {
                 Rectangulo rect = this.nozzle[i];
 
