@@ -43,14 +43,14 @@ namespace NozzleDisplay
 
         public void fillCanvasNozzle()
         {
-            for (int i = 0; i < this.nozzle.GetNumRects(); i++)
+            for (int i = 0; i < nozzlerectangles.Length; i++)
             {
                 Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i);
                 Rectangle rect_canvas = new Rectangle();
                 rect_canvas.Height = rect_nozzle.GetAltura()*100;
                 rect_canvas.Width = canvasNozzle.Width / this.nozzle.GetNumRects();
                 rect_canvas.Fill = new SolidColorBrush(Colors.White);
-                rect_canvas.StrokeThickness = 0;
+                rect_canvas.StrokeThickness = 0.1;
                 rect_canvas.Stroke = Brushes.Black;
                 canvasNozzle.Children.Add(rect_canvas);
                 Canvas.SetLeft(rect_canvas, i * rect_canvas.Width);
@@ -154,7 +154,7 @@ namespace NozzleDisplay
                 rectanglescale.Fill = lgb;
             }
 
-            if (comboboxcolor.SelectedIndex == 1) //Mach
+            if (comboboxcolor.SelectedIndex == 1) //Velocity
             {
                 for (int i = 0; i < nozzlerectangles.Length; i++)
                 {
@@ -163,9 +163,9 @@ namespace NozzleDisplay
                     rect_canvas.Fill = new SolidColorBrush(GetColorMach(0, 4, rect_nozzle.GetVelP()));
                 }
 
-                LinearGradientBrush lgb = new LinearGradientBrush(GetColorMach(0, 4, 4), GetColorMach(0, 4, 0), 90);
+                LinearGradientBrush lgb = new LinearGradientBrush(GetColorMach(0, 2.5, 2.5), GetColorMach(0, 2.5, 0), 90);
                 GradientStop gs = new GradientStop();
-                gs.Color = GetColorMach(0, 4, 2);
+                gs.Color = GetColorMach(0, 2.5, 1.25);
                 gs.Offset = 0.5;
                 lgb.GradientStops.Add(gs);
                 rectanglescale.Fill = lgb;
@@ -204,6 +204,12 @@ namespace NozzleDisplay
                 lgb.GradientStops.Add(gs);
                 rectanglescale.Fill = lgb;
             }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Anderson a = new Anderson();
+            a.ShowDialog();
         }
     }
 }

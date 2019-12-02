@@ -5,10 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NozzleDisplay"
         mc:Ignorable="d"
-        Title="Anderson" Height="640" Width="800">
+        Title="Anderson" Height="747.078" Width="857.24">
     <Grid>
-        <DataGrid x:Name="andersongrid" HorizontalAlignment="Left" Height="573" Margin="24,21,0,0" VerticalAlignment="Top" Width="363"/>
-        <DataGrid x:Name="datasimgrid" HorizontalAlignment="Left" Height="573" Margin="411,22,0,0" VerticalAlignment="Top" Width="363"/>
+        <DataGrid x:Name="andersongrid" HorizontalAlignment="Left" Height="650" Margin="20,20,0,20" VerticalAlignment="Center" Width="375" CanUserReorderColumns="False" CanUserSortColumns="False" ColumnWidth = "*" ItemsSource="{Binding Path=.}" IsReadOnly="True" CanUserAddRows="False"/>
+        <DataGrid x:Name="datasimgrid" HorizontalAlignment="Center" Height="650" Margin="450,20,20,20" VerticalAlignment="Center" Width="375" CanUserReorderColumns="False" CanUserSortColumns="False" ColumnWidth="*" ItemsSource="{Binding}"/>
+        <ComboBox HorizontalAlignment="Left" Margin="21,6,0,0" VerticalAlignment="Top" Width="120" x:Name="andersoncombobox" SelectionChanged ="andersoncombobox_SelectionChanged">
+            <ComboBoxItem IsSelected="True">First Step</ComboBoxItem>
+            <ComboBoxItem IsSelected="False">Steady State</ComboBoxItem>
+        </ComboBox>
+        <ComboBox HorizontalAlignment="Left" Margin="455,5,0,0" VerticalAlignment="Top" Width="120"/>
 
     </Grid>
 </Window>

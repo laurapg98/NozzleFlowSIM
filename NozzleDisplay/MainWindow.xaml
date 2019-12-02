@@ -38,7 +38,7 @@
         </Grid.RowDefinitions>
         <Menu IsMainMenu="True" Background="{x:Null}" Width="1350" Height="25" Grid.ColumnSpan="8" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top">
             <MenuItem Header="_File"></MenuItem>
-            <MenuItem Header="_Anderson"></MenuItem>
+            <MenuItem Header="_Anderson" Click="MenuItem_Click"></MenuItem>
             <MenuItem Header="_Help"></MenuItem>
             <MenuItem Header="_About Us"></MenuItem>
         </Menu>
@@ -60,7 +60,7 @@
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="1" Grid.RowSpan="4" Width="200" Height="300" Grid.ColumnSpan="1" Margin="0,20,0,0">
             <ComboBox x:Name="comboboxcolor" Margin="31.667,33.667,47.667,236.667" SelectionChanged="comboboxcolor_SelectionChanged">
                 <ComboBoxItem x:Name="pressure" Content="Pressure" IsSelected="True"></ComboBoxItem>
-                <ComboBoxItem x:Name="mach" Content="Mach" IsSelected="False"></ComboBoxItem>
+                <ComboBoxItem x:Name="velocity" Content="Velocity" IsSelected="False"></ComboBoxItem>
                 <ComboBoxItem x:Name="temperature" Content="Temperature" IsSelected="False"></ComboBoxItem>
                 <ComboBoxItem x:Name="density" Content="Density" IsSelected="False"></ComboBoxItem>
             </ComboBox>
