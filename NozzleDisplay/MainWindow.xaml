@@ -40,7 +40,7 @@
             <MenuItem Header="_File"></MenuItem> 
             <MenuItem Header="_Anderson" Click="MenuItem_Click"></MenuItem>
             <MenuItem Header="_Help"></MenuItem>
-            <MenuItem Header="_About Us" Click="MenuItem_ClickU">></MenuItem>
+            <MenuItem Header="_About Us" Click="Click_Aboutus" ></MenuItem>
         </Menu>
         <ItemsControl x:Name="nozzelcontrol" Grid.Column="4" Grid.Row="1" Width="800" Height="300" Grid.RowSpan="4" Grid.ColumnSpan="3" HorizontalAlignment="Center" Background="Transparent" Margin="20,20,0,0">
             <Canvas HorizontalAlignment="Left" x:Name="canvasNozzle" Width="800" Height="300" Background="DarkGray" Margin="0"/>
