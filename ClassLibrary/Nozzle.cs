@@ -237,5 +237,16 @@ namespace ClassLibrary
 
             return estado;
         }
+
+        public double getdt(double C, double dx)
+        {
+            double dt = 1.0;
+            for(int i = 1; i <= this.numRect; i++)
+            {
+                dt = Math.Min(dt, (C * dx) / (Math.Sqrt(this.nozzle[i].GetTempP()) + this.nozzle[i].GetVelP()));
+            }
+
+            return dt;
+        }
     }
 }

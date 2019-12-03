@@ -33,7 +33,10 @@ namespace NozzleDisplay
             InitializeComponent();
             this.dx = 0.1;
             this.numR = 30;
+            this.C = 0.5;
+
             this.nozzle = new Nozzle(this.numR,this.dx);
+            this.dt = this.nozzle.getdt(this.C,this.dx);
             
             nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
 
@@ -117,7 +120,7 @@ namespace NozzleDisplay
         private void parambut_Click(object sender, RoutedEventArgs e) // botón SAVE
         {
            // this.dt = C*()
-            this.EjecutarUnCiclo(0.00555, 0.1, 1.4);
+            this.EjecutarUnCiclo();
 
             //// comprobamos que no estén vacíos
             //if (dxbox.Text == "" || cbox.Text == "" || cbox_Copy.Text == "")
@@ -237,9 +240,10 @@ namespace NozzleDisplay
             a.ShowDialog();
         }
 
-        private void EjecutarUnCiclo(double At, double Ax, double gamma) // función que ejecuta un ciclo
+        private void EjecutarUnCiclo() // función que ejecuta un ciclo
         {
-            this.nozzle.EjecutarCiclo(At, Ax, gamma);
+
+            this.nozzle.EjecutarCiclo(this.dt, this.dx, 1.4);
             this.nozzle.ActualizarEstados();
             this.refreshCanvas();
         }
