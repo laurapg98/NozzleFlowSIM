@@ -17,5 +17,9 @@ namespace NozzleDisplay
 {
     public partial class Aboutus : Window
     {
+        public Aboutus()
+        {
+            InitializeComponent();
+        }
     }
 }
