@@ -248,6 +248,7 @@ namespace NozzleDisplay
             a.ShowDialog();
         }
 
+
         private void EjecutarUnCiclo() // función que ejecuta un ciclo
         {
 
@@ -255,6 +256,10 @@ namespace NozzleDisplay
             this.nozzle.ActualizarEstados();
             this.refreshCanvas();
         }
-
+        private void Click_Aboutus(object sender, RoutedEventArgs e)
+        {
+            Aboutus au = new Aboutus();
+            au.ShowDialog();
+        }
     }
 }
