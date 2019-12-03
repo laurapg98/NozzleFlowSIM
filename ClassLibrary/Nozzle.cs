@@ -43,7 +43,7 @@ namespace ClassLibrary
                 // coord x
                 double x = i * Ax;
 
-                if (i == this.numRect) // supersonic outflow boundary conditions --> extrapolation
+                if (i == this.numRect + 1) // supersonic outflow boundary conditions --> extrapolation
                     this.ComputeOutflowBoundaryConditions(i);
                 else
                 {
@@ -55,10 +55,10 @@ namespace ClassLibrary
                     this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
 
                     // area
-                    double A = 1 + (2.2 * Math.Pow(x - 1.5, 2));
+                    double A = 1 + (2.2 * (x - 1.5)*(x - 1.5));
 
                     // altura --> Equation: A(X)=1+2.2(x-1.5)^2
-                    double h = Math.Pow(4 * A / Math.PI, 0.5);
+                    double h = 2 * Math.Sqrt(A / Math.PI);
 
                     // asignamos la altura
                     this.nozzle[i].SetAltura(h);
