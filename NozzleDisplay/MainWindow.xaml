@@ -37,10 +37,10 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Menu IsMainMenu="True" Background="{x:Null}" Width="1350" Height="25" Grid.ColumnSpan="8" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <MenuItem Header="_File"></MenuItem>
+            <MenuItem Header="_File"></MenuItem> 
             <MenuItem Header="_Anderson" Click="MenuItem_Click"></MenuItem>
             <MenuItem Header="_Help"></MenuItem>
-            <MenuItem Header="_About Us"></MenuItem>
+            <MenuItem Header="_About Us" Click="MenuItem_Click">></MenuItem>
         </Menu>
         <ItemsControl x:Name="nozzelcontrol" Grid.Column="4" Grid.Row="1" Width="800" Height="300" Grid.RowSpan="4" Grid.ColumnSpan="3" HorizontalAlignment="Center" Background="Transparent" Margin="20,20,0,0">
             <Canvas HorizontalAlignment="Left" x:Name="canvasNozzle" Width="800" Height="300" Background="DarkGray" Margin="0"/>

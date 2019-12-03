@@ -5,15 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NozzleDisplay"
         mc:Ignorable="d"
-        Title="Anderson" Height="747.078" Width="857.24">
-    <Grid>
-        <DataGrid x:Name="andersongrid" HorizontalAlignment="Left" Height="650" Margin="20,20,0,20" VerticalAlignment="Center" Width="375" CanUserReorderColumns="False" CanUserSortColumns="False" ColumnWidth = "*" ItemsSource="{Binding Path=.}" IsReadOnly="True" CanUserAddRows="False"/>
-        <DataGrid x:Name="datasimgrid" HorizontalAlignment="Center" Height="650" Margin="450,20,20,20" VerticalAlignment="Center" Width="375" CanUserReorderColumns="False" CanUserSortColumns="False" ColumnWidth="*" ItemsSource="{Binding}"/>
-        <ComboBox HorizontalAlignment="Left" Margin="21,6,0,0" VerticalAlignment="Top" Width="120" x:Name="andersoncombobox" SelectionChanged ="andersoncombobox_SelectionChanged">
-            <ComboBoxItem IsSelected="True">First Step</ComboBoxItem>
-            <ComboBoxItem IsSelected="False">Steady State</ComboBoxItem>
-        </ComboBox>
-        <ComboBox HorizontalAlignment="Left" Margin="455,5,0,0" VerticalAlignment="Top" Width="120"/>
-
+        Title="About us" Height="350" Width="650">
+    <Grid Margin="10,10,360,199.5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="164*"/>
+            <ColumnDefinition Width="71*"/>
+        </Grid.ColumnDefinitions>
+        <Image Margin="0,0,27,-5" Source="Image1.png" Stretch="Fill" Grid.ColumnSpan="2"/>
+        <Grid Margin="0,123,-337,-192" Grid.ColumnSpan="2">
+            <TextBox Name="tbSettingText">
+                "Contenido About US"
+            </TextBox>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="164*"/>
+                <ColumnDefinition Width="71*"/>
+            </Grid.ColumnDefinitions>
+        </Grid>
     </Grid>
 </Window>
