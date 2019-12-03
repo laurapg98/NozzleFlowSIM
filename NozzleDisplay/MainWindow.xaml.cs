@@ -239,6 +239,12 @@ namespace NozzleDisplay
             Anderson a = new Anderson();
             a.ShowDialog();
         }
+        private void MenuItem_ClickU(object sender, RoutedEventArgs e) // botón AboutUs
+        {
+            Aboutus au = new Aboutus();
+            au.ShowDialog();
+        }
+
 
         private void EjecutarUnCiclo() // función que ejecuta un ciclo
         {
