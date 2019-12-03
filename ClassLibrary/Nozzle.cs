@@ -37,7 +37,7 @@ namespace ClassLibrary
             this.numRect = numrect;
             this.nozzle = new Rectangulo[this.numRect + 2];
 
-            int i = 1;
+            int i = 0;
             while (i <= this.numRect + 1)
             {
                 // coord x
@@ -45,23 +45,25 @@ namespace ClassLibrary
 
                 if (i == this.numRect + 1) // supersonic outflow boundary conditions --> extrapolation
                     this.ComputeOutflowBoundaryConditions(i);
+                else if (i == 0)
+                {
+                    double dens = 1;
+                    double temp = 1;
+                    double vel = 1;
+                    double pres = 0;
+                    this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
+                }
                 else
                 {
-                    // asignamos las condiciones iniciales
+                    // asignamos las condiciones iniciales y la altura
                     double dens = 1 - (0.3146 * x);
                     double temp = 1 - (0.2314 * x);
                     double vel = (0.1 + (1.09 * x)) * Math.Sqrt(temp);
                     double pres = dens * temp;
-                    this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
+                    double A = 1 + (2.2 * (x - 1.5) * (x - 1.5)); // Equation: A(X) = 1 + 2.2(x - 1.5) ^ 2
+                    double h = 2 * Math.Sqrt(A / Math.PI); // area de la circumferencia
 
-                    // area
-                    double A = 1 + (2.2 * (x - 1.5)*(x - 1.5));
-
-                    // altura --> Equation: A(X)=1+2.2(x-1.5)^2
-                    double h = 2 * Math.Sqrt(A / Math.PI);
-
-                    // asignamos la altura
-                    this.nozzle[i].SetAltura(h);
+                    this.nozzle[i] = new Rectangulo(temp, vel, dens, pres, h);
                 }
 
                 i++;
