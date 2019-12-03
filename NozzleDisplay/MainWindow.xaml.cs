@@ -31,16 +31,6 @@ namespace NozzleDisplay
         public MainWindow()
         {
             InitializeComponent();
-            this.dx = 0.1;
-            this.numR = 30;
-            this.C = 0.5;
-
-            this.nozzle = new Nozzle(this.numR,this.dx);
-            this.dt = this.nozzle.getdt(this.C,this.dx);
-            
-            nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
-
-            fillCanvasNozzle();
         }
 
         public void fillCanvasNozzle()
@@ -49,7 +39,7 @@ namespace NozzleDisplay
             {
                 Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i);
                 Rectangle rect_canvas = new Rectangle();
-                rect_canvas.Height = rect_nozzle.GetAltura()*100;
+                rect_canvas.Height = Math.Min(rect_nozzle.GetAltura()*100,canvasNozzle.Height);
                 rect_canvas.Width = canvasNozzle.Width / this.nozzle.GetNumRects();
                 rect_canvas.Fill = new SolidColorBrush(Colors.White);
                 rect_canvas.StrokeThickness = 0.1;
@@ -119,14 +109,26 @@ namespace NozzleDisplay
 
         private void parambut_Click(object sender, RoutedEventArgs e) // botón SAVE
         {
-<<<<<<< HEAD
-           // this.dt = C*()
-            this.EjecutarUnCiclo();
-=======
-            // this.dt = C*()
-            this.fillCanvasNozzle();
-            this.EjecutarUnCiclo(0.00555, 0.1, 1.4);
->>>>>>> 265104bea15de166188a21d022c65fd10eeaec38
+            try
+            {
+                canvasNozzle.Children.Clear();
+
+                this.C = Convert.ToDouble(cbox.Text);
+                this.dx = Convert.ToDouble(dxbox.Text);
+                this.numR = Convert.ToInt32(numrectbox.Text);
+
+                this.nozzle = new Nozzle(this.numR, this.dx);
+                this.dt = this.nozzle.getdt(this.C, this.dx);
+
+                nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
+
+                fillCanvasNozzle();
+                refreshCanvas();
+            }
+            catch
+            {
+                MessageBox.Show("Error");
+            }
 
             //// comprobamos que no estén vacíos
             //if (dxbox.Text == "" || cbox.Text == "" || cbox_Copy.Text == "")
@@ -253,7 +255,6 @@ namespace NozzleDisplay
             this.nozzle.ActualizarEstados();
             this.refreshCanvas();
         }
-
 
     }
 }

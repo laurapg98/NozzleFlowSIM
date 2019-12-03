@@ -245,7 +245,7 @@ namespace ClassLibrary
             {
                 dt = Math.Min(dt, (C * dx) / (Math.Sqrt(this.nozzle[i].GetTempP()) + this.nozzle[i].GetVelP()));
             }
-
+            
             return dt;
         }
     }
