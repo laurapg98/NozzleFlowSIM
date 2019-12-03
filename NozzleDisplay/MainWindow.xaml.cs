@@ -119,8 +119,14 @@ namespace NozzleDisplay
 
         private void parambut_Click(object sender, RoutedEventArgs e) // botón SAVE
         {
+<<<<<<< HEAD
            // this.dt = C*()
             this.EjecutarUnCiclo();
+=======
+            // this.dt = C*()
+            this.fillCanvasNozzle();
+            this.EjecutarUnCiclo(0.00555, 0.1, 1.4);
+>>>>>>> 265104bea15de166188a21d022c65fd10eeaec38
 
             //// comprobamos que no estén vacíos
             //if (dxbox.Text == "" || cbox.Text == "" || cbox_Copy.Text == "")
