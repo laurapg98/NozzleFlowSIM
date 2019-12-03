@@ -18,6 +18,7 @@ namespace ClassLibrary
         double presP;
         double presF;
         double altura;
+        double area;
 
             // CONSTRUCTORS
         public Rectangulo() // constructor vacío
@@ -25,13 +26,14 @@ namespace ClassLibrary
 
         }
 
-        public Rectangulo(double temp, double vel, double dens, double pres, double altura) // crea el estado presente con la altura
+        public Rectangulo(double temp, double vel, double dens, double pres, double altura, double area) // crea el estado presente con la altura
         {
             this.tempP = temp;
             this.velP = vel;
             this.densP = dens;
             this.presP = pres;
             this.altura = altura;
+            this.area = area;
         }
 
         public Rectangulo(double temp, double vel, double dens, double pres) // crea el estado presente sin la altura
@@ -49,6 +51,7 @@ namespace ClassLibrary
             this.densP = rectC.GetDensP();
             this.presP = rectC.GetPresP();
             this.altura = rectC.GetAltura();
+            this.area = rectC.GetArea();
         }
 
             // GETTERS
@@ -97,6 +100,11 @@ namespace ClassLibrary
             return this.altura;
         }
 
+        public double GetArea()
+        {
+            return this.area;
+        }
+
             // SETTERS
         public void SetTempP(double tempP)
         {
@@ -143,13 +151,18 @@ namespace ClassLibrary
             this.altura = alt;
         }
 
+        public void SetArea(double area)
+        {
+            this.area = area;
+        }
+
             // ALTRES MÈTODES
         public void ComputeFutureState(double At, double Ax, double gamma, Rectangulo rectD) // utiliza las eqs discretizadas para calcular el estado futuro de la celda, necesita los parámetros de discretización (incrementos de t y x), el parámetro del fluido (gamma) y el estado presente de la célula adyacente)
         {
             double AT = rectD.GetTempP() - this.tempP;
             double AV = rectD.GetVelP() - this.velP;
             double Adens = rectD.GetDensP() - this.densP;
-            double relA = (Math.PI*Math.Pow(rectD.GetAltura()/2,2)) / (Math.PI * Math.Pow(this.altura / 2, 2));
+            double relA = rectD.GetArea() / this.area;
             double K = At / Ax;
 
             this.tempF = this.tempP - (K * (this.velP * AT + (this.tempP * (gamma - 1) * (AV + (this.velP * Math.Log(relA))))));

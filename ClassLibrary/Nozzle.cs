@@ -49,27 +49,30 @@ namespace ClassLibrary
                 {
                     double dens = 1;
                     double temp = 1;
-                    double vel = 1;
-                    double pres = 0;
+                    double vel = 0;
+                    double pres = 1;
                     this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
                 }
                 else
                 {
-                    // asignamos las condiciones iniciales y la altura
+                    // asignamos las condiciones iniciales
                     double dens = 1 - (0.3146 * x);
                     double temp = 1 - (0.2314 * x);
                     double vel = (0.1 + (1.09 * x)) * Math.Sqrt(temp);
                     double pres = dens * temp;
-                    double A = 1 + (2.2 * (x - 1.5) * (x - 1.5)); // Equation: A(X) = 1 + 2.2(x - 1.5) ^ 2
-                    double h = 2 * Math.Sqrt(A / Math.PI); // area de la circumferencia
 
-                    this.nozzle[i] = new Rectangulo(temp, vel, dens, pres, h);
+                    this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
                 }
+
+                // asignamos la altura
+                double A = 1 + (2.2 * (x - 1.5) * (x - 1.5)); // Equation: A(X) = 1 + 2.2(x - 1.5) ^ 2
+                double h = 2 * Math.Sqrt(A / Math.PI); // area de la circumferencia
+
+                this.nozzle[i].SetAltura(h);
+                this.nozzle[i].SetArea(A);
 
                 i++;
             }
-
-            this.ComputeInflowBoundaryConditions();
         }
 
         // SETTERS
@@ -107,8 +110,6 @@ namespace ClassLibrary
 
                 pos++;
             }
-
-            this.ComputeInflowBoundaryConditions();
         }
 
         public void ActualizarEstados() // actualiza los estados de todos los rectangulos de las toveras
@@ -136,7 +137,7 @@ namespace ClassLibrary
                 Rectangulo rect = this.nozzle[i];
 
                 //recollim dades de cada rectangle, separades per ';'
-                string dades = Convert.ToString(rect.GetTempP()) + ";" + Convert.ToString(rect.GetVelP()) + ";" + Convert.ToString(rect.GetDensP()) + ";" + Convert.ToString(rect.GetPresP()) + ";" + rect.GetAltura();
+                string dades = Convert.ToString(rect.GetTempP()) + ";" + Convert.ToString(rect.GetVelP()) + ";" + Convert.ToString(rect.GetDensP()) + ";" + Convert.ToString(rect.GetPresP()) + ";" + Convert.ToString(rect.GetAltura()) + ";" + Convert.ToString(rect.GetArea());
 
                 //escribim una linea x cada rectangle
                 W.WriteLine(dades);
@@ -176,8 +177,9 @@ namespace ClassLibrary
                 double dens = Convert.ToDouble(trozos[2]);
                 double pres = Convert.ToDouble(trozos[3]);
                 double alt = Convert.ToDouble(trozos[4]);
+                double area = Convert.ToDouble(trozos[5]);
 
-                Rectangulo rect = new Rectangulo(temp, vel, dens, pres, alt);
+                Rectangulo rect = new Rectangulo(temp, vel, dens, pres, alt, area);
 
                 this.nozzle[i] = rect;
 
@@ -202,15 +204,6 @@ namespace ClassLibrary
             this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
         }
 
-        public void ComputeInflowBoundaryConditions() // calcula los valores del rectángulo extra de la salida del flujo
-        {
-            double dens = (2 * this.nozzle[1].GetDensP()) - this.nozzle[2].GetDensP();
-            double temp = (2 * this.nozzle[1].GetTempP()) - this.nozzle[2].GetTempP();
-            double vel = (2 * this.nozzle[1].GetVelP()) - this.nozzle[2].GetVelP();
-            double pres = dens * temp;
-            this.nozzle[0] = new Rectangulo(temp, vel, dens, pres);
-        }
-
         public DataTable GetEstado(double Ax) // devuelve una datatable con los datos del estado actual
         {
             DataTable estado = new DataTable();
@@ -223,7 +216,7 @@ namespace ClassLibrary
                 Rectangulo rect = this.nozzle[i];
 
                 double position = i * Ax; // coord x
-                double area = Math.PI * Math.Pow(rect.GetAltura(), 2);
+                double area = rect.GetArea();
                 double density = rect.GetDensP();
                 double velocity = rect.GetVelP();
                 double temperature = rect.GetTempP();
