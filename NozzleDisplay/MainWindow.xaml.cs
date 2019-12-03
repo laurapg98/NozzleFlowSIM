@@ -27,6 +27,7 @@ namespace NozzleDisplay
         double dt;
         double C;
         int numR;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,9 +38,7 @@ namespace NozzleDisplay
             nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
 
             fillCanvasNozzle();
-
         }
-
 
         public void fillCanvasNozzle()
         {
@@ -59,7 +58,7 @@ namespace NozzleDisplay
             }
         }
 
-        public Color GetColorMach(double rangeStart, double rangeEnd, double actualValue)
+        public Color GetColorMach(double rangeStart, double rangeEnd, double actualValue) // escala de color de la velocidad (Mach)
         {
             if (rangeStart >= rangeEnd) return Colors.Black;
 
@@ -72,7 +71,7 @@ namespace NozzleDisplay
             return Color.FromRgb((Byte)red, (Byte)0, (Byte)blue);
         }
 
-        public Color GetColorTemp(double rangeStart, double rangeEnd, double actualValue)
+        public Color GetColorTemp(double rangeStart, double rangeEnd, double actualValue) // escala de color de la temperatura
         {
 
             if (actualValue >= rangeEnd) return Color.FromRgb((Byte)255, (Byte)0, (Byte)0);
@@ -87,7 +86,7 @@ namespace NozzleDisplay
             return Color.FromRgb((Byte)red, (Byte)green, (Byte)blue);
         }
 
-        public Color GetColorPressure(double rangeStart, double rangeEnd, double actualValue)
+        public Color GetColorPressure(double rangeStart, double rangeEnd, double actualValue) // escala de color de la presión
         {
             if (rangeStart >= rangeEnd) return Colors.Black;
 
@@ -101,7 +100,7 @@ namespace NozzleDisplay
             return Color.FromRgb((Byte)red, (Byte)green, (Byte)blue);
         }
 
-        public Color GetColorDensity(double rangeStart, double rangeEnd, double actualValue)
+        public Color GetColorDensity(double rangeStart, double rangeEnd, double actualValue) // escala de color de la densidad
         {
             if (actualValue >= rangeEnd) return Colors.Black;
 
@@ -115,12 +114,38 @@ namespace NozzleDisplay
             return Color.FromRgb((Byte)red, (Byte)green, (Byte)blue);
         }
 
-        private void parambut_Click(object sender, RoutedEventArgs e)
+        private void parambut_Click(object sender, RoutedEventArgs e) // botón SAVE
         {
            // this.dt = C*()
-            this.nozzle.EjecutarCiclo(0.00555, 0.1, 1.4);
-            this.nozzle.ActualizarEstados();
-            fillCanvasNozzle();
+            this.EjecutarUnCiclo(0.00555, 0.1, 1.4);
+
+            //// comprobamos que no estén vacíos
+            //if (dxbox.Text == "" || cbox.Text == "" || cbox_Copy.Text == "")
+            //    MessageBox.Show("All parameters should be established\n(^t, ^x & number of rectangles)");
+            //else
+            //{
+            //    // comprobamos que tengan el formato que han de tener
+            //    try
+            //    {
+            //        // comprobamos que sean positivos y diferentes de 0
+            //        double dt = Convert.ToDouble(dxbox.Text);
+            //        double dx = Convert.ToDouble(cbox.Text);
+            //        int numrect = Convert.ToInt32(cbox_Copy.Text);
+            //        if (dt <= 0 || dx <= 0 || numrect <= 0)
+            //            MessageBox.Show("All parameters should be positive and different from 0");
+            //        else
+            //        {
+            //            // guardamos los parámetros
+            //            this.dt = dt;
+            //            this.dx = dx;
+            //            this.numR = numrect;
+            //        }
+            //    }
+            //    catch 
+            //    {
+            //        MessageBox.Show("The parameters ^t and ^x can be decimal numbers, but the number of rectangles not\nPlease check it");
+            //    }
+            //}
         }
 
         private void comboboxcolor_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -135,7 +160,7 @@ namespace NozzleDisplay
             }
         }
 
-        private void refreshCanvas()
+        private void refreshCanvas() // actualiza la visualización (colores)
         {
             if (comboboxcolor.SelectedIndex == 0) //Pressure
             {
@@ -206,10 +231,19 @@ namespace NozzleDisplay
             }
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_Click(object sender, RoutedEventArgs e) // botón ANDERSON
         {
             Anderson a = new Anderson();
             a.ShowDialog();
         }
+
+        private void EjecutarUnCiclo(double At, double Ax, double gamma) // función que ejecuta un ciclo
+        {
+            this.nozzle.EjecutarCiclo(At, Ax, gamma);
+            this.nozzle.ActualizarEstados();
+            this.refreshCanvas();
+        }
+
+
     }
 }
