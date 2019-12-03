@@ -66,5 +66,7 @@ namespace NozzleDisplay
 
             return Color.FromRgb((Byte)red, (Byte)green, (Byte)0);
         }
+
+
     }
 }
