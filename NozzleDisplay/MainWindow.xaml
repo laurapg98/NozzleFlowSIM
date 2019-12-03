@@ -65,6 +65,10 @@
                 <ComboBoxItem x:Name="density" Content="Density" IsSelected="False"></ComboBoxItem>
             </ComboBox>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="8" Grid.RowSpan="3" Grid.ColumnSpan="7" Height="300" Width="1300" Margin="10,20,10,10" VerticalAlignment="Bottom"/>
+        <TabControl BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="8" Grid.RowSpan="3" Grid.ColumnSpan="7" Height="300" Width="1250" Margin="10,20,10,10" VerticalAlignment="Bottom">
+            <TabItem Header="Plots"></TabItem>
+            <TabItem Header="Data"></TabItem>
+            <TabItem Header="..."></TabItem>
+        </TabControl>
     </Grid>
 </Window>
