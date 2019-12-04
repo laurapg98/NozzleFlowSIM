@@ -157,18 +157,59 @@ namespace ClassLibrary
         }
 
             // ALTRES MÈTODES
-        public void ComputeFutureState(double At, double Ax, double gamma, Rectangulo rectD) // utiliza las eqs discretizadas para calcular el estado futuro de la celda, necesita los parámetros de discretización (incrementos de t y x), el parámetro del fluido (gamma) y el estado presente de la célula adyacente)
+        public void ComputePredictedFutureState(double At, double Ax, double gamma, Rectangulo rectD) // MACCORMACK'S TECHNIQUE: utiliza las eqs discretizadas para calcular el predicted state de la celda --> lo guardamos todo en futuro 
         {
+            // constant
+            double K = At / Ax;
+
+            // relations
             double AT = rectD.GetTempP() - this.tempP;
             double AV = rectD.GetVelP() - this.velP;
             double Adens = rectD.GetDensP() - this.densP;
             double relA = rectD.GetArea() / this.area;
-            double K = At / Ax;
 
+            // equations --> predicted state
             this.tempF = this.tempP - (K * (this.velP * AT + (this.tempP * (gamma - 1) * (AV + (this.velP * Math.Log(relA))))));
             this.velF = this.velP - (K * ((this.velP * AV) + (AT / gamma) + ((this.tempP / (gamma * this.densP)) * Adens)));
             this.densF = this.densP - (K * ((this.densP * AV) + (this.densP * this.velP * Math.Log(relA)) + (this.velP * Adens)));
-            this.presF = this.densF * this.tempF;
+        }
+
+        public void ComputeFutureState(double At, double Ax, double gamma, Rectangulo rectD) // PREDICTED-CORRECTION TECHNIQUE: corrije el estado predicted (que está en futuro) usando también el presente (que está en presente)
+        {
+            // constant
+            double K = At / Ax;
+            double relA = rectD.GetArea() / this.area;
+
+            // Current state
+            double T_P = this.tempP;
+            double V_P = this.velP;
+            double dens_P = this.densP;
+
+            // Predicted state
+            double T_F = this.tempF;
+            double V_F = this.velF;
+            double dens_F = this.densF;
+
+            // relations - Current state
+            double AT_P = rectD.GetTempP() - this.tempP;
+            double AV_P = rectD.GetVelP() - this.velP;
+            double Adens_P = rectD.GetDensP() - this.densP;
+
+            // relations - Predicted state
+            double AT_F = rectD.GetTempF() - this.tempF;
+            double AV_F = rectD.GetVelF() - this.velF;
+            double Adens_F = rectD.GetDensF() - this.densF;
+
+            // equations --> future state
+            double parteP_V = (V_P * AV_P) + (AT_P / gamma) + ((T_P * Adens_P) / (gamma * dens_P));
+            double parteF_V = (V_F * AV_F) + (AT_F / gamma) + ((T_F * Adens_F) / (gamma * dens_F));
+            this.velF = V_P - ((K / 2) * (parteP_V + parteF_V));
+            double parteP_dens = (dens_P * AV_P) + (dens_P * V_P * Math.Log(relA)) + (V_P * dens_P);
+            double parteF_dens = (dens_F * AV_F) + (densF * V_F * Math.Log(relA)) + (V_F * dens_F);
+            this.densF = dens_P - ((K / 2) * (parteP_dens + parteF_dens));
+            double parteP_T = (V_P * AT_P) + (T_P * (gamma - 1) * (AV_P - (V_P * Math.Log(relA))));
+            double parteF_T = (V_F * AT_F) + (T_F * (gamma - 1) * (AV_F - (V_F * Math.Log(relA))));
+            this.tempF = T_P - ((K / 2) * (parteP_T + parteF_T));
         }
 
         public void ChangeState() // acutaliza el estado: el estado presente pasa a ser el futuro

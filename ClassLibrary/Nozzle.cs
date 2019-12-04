@@ -100,7 +100,20 @@ namespace ClassLibrary
         // ALTRES MÈTODES
         public void EjecutarCiclo(double At, double Ax, double gamma) // calcula el estado futuro de todos los rectangulos
         {
+            // predicted
             int pos = 1;
+            while (pos <= this.numRect + 1)
+            {
+                if (pos == this.numRect + 1)
+                    this.ComputeOutflowBoundaryConditions(pos);
+                else
+                    this.nozzle[pos].ComputePredictedFutureState(At, Ax, gamma, this.nozzle[pos + 1]);
+
+                pos++;
+            }
+
+            // final
+            pos = 1;
             while (pos <= this.numRect + 1)
             {
                 if (pos == this.numRect + 1)
