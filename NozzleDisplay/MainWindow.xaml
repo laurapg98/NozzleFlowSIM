@@ -46,7 +46,7 @@
         <ItemsControl x:Name="nozzelcontrol" Grid.Column="4" Grid.Row="1" Width="800" Height="300" Grid.RowSpan="4" Grid.ColumnSpan="3" HorizontalAlignment="Center" Background="Transparent" Margin="20,20,0,0">
             <Canvas HorizontalAlignment="Left" x:Name="canvasNozzle" Width="800" Height="300" Background="DarkGray" Margin="0"/>
         </ItemsControl>
-        <Rectangle x:Name="rectanglescale" Height="300" Grid.Column="7" Grid.RowSpan="4" Grid.ColumnSpan="1" Width="25" Grid.Row="1" Fill="Black" Margin="0,20,0,0"/>
+        <Rectangle x:Name="rectanglescale" Height="300" Grid.Column="7" Grid.RowSpan="4" Grid.ColumnSpan="1" Width="25" Grid.Row="1" Fill="DarkGray" Margin="0,20,0,0"/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="1" Width="200" Height="300" Margin="0,20,0,0">
             <Grid>
                 <TextBox x:Name="cbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="30,40,68.333,230.333"></TextBox>
@@ -59,12 +59,18 @@
             </Grid>
         </Border>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="1" Grid.RowSpan="4" Width="200" Height="300" Grid.ColumnSpan="1" Margin="0,20,0,0">
-            <ComboBox x:Name="comboboxcolor" Margin="31.667,33.667,47.667,236.667" SelectionChanged="comboboxcolor_SelectionChanged">
-                <ComboBoxItem x:Name="pressure" Content="Pressure" IsSelected="True"></ComboBoxItem>
-                <ComboBoxItem x:Name="velocity" Content="Velocity" IsSelected="False"></ComboBoxItem>
-                <ComboBoxItem x:Name="temperature" Content="Temperature" IsSelected="False"></ComboBoxItem>
-                <ComboBoxItem x:Name="density" Content="Density" IsSelected="False"></ComboBoxItem>
-            </ComboBox>
+            <Grid>
+                <ComboBox x:Name="comboboxcolor" Margin="31.667,33.667,47.667,236.667" SelectionChanged="comboboxcolor_SelectionChanged">
+                    <ComboBoxItem x:Name="pressure" Content="Pressure" IsSelected="True"></ComboBoxItem>
+                    <ComboBoxItem x:Name="velocity" Content="Velocity" IsSelected="False"></ComboBoxItem>
+                    <ComboBoxItem x:Name="temperature" Content="Temperature" IsSelected="False"></ComboBoxItem>
+                    <ComboBoxItem x:Name="density" Content="Density" IsSelected="False"></ComboBoxItem>
+                </ComboBox>
+                <Button x:Name="playbut" Content="Play" Margin="38,143,86.333,127.333"></Button>
+                <Button x:Name="pausebut" Content="Pause" Margin="33,178,91.333,92.333"></Button>
+                <Button x:Name="resetbut" Content="Reset" Margin="33,212,91.333,58.333"></Button>
+                <Button x:Name="onestepbut" Content="Step" Margin="119,212,5.333,58.333" Click="onestepbut_Click"></Button>
+            </Grid>
         </Border>
         <TabControl BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="8" Grid.RowSpan="3" Grid.ColumnSpan="7" Height="300" Width="1250" Margin="10,20,10,10" VerticalAlignment="Bottom">
             <TabItem Header="Plots X/L">
