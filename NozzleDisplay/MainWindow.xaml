@@ -109,7 +109,8 @@
             </TabItem>
             <TabItem Header="Data">
                 <Grid>
-                    <DataGrid x:Name="gridnozzle" CanUserSortColumns="False" ColumnWidth = "*" ItemsSource="{Binding Path=.}" IsReadOnly="True" CanUserAddRows="False"></DataGrid>
+                    <DataGrid x:Name="gridnozzle" CanUserSortColumns="False" ItemsSource="{Binding}" IsReadOnly="True" CanUserAddRows="False">
+                    </DataGrid>
                 </Grid>
             </TabItem>
         </TabControl>

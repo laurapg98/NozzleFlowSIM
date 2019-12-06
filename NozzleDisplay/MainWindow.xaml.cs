@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,10 +24,12 @@ namespace NozzleDisplay
     {
         Nozzle nozzle;
         Rectangle[] nozzlerectangles;
+        DataTable datanozzle;
         double dx;
         double dt;
         double C;
         int numR;
+        List<double> listtemp, listdx, listvel, listpre, listden;
 
         public MainWindow()
         {
@@ -58,8 +61,8 @@ namespace NozzleDisplay
             double max = rangeEnd - rangeStart; // make the scale start from 0
             double value = actualValue - rangeStart; // adjust the value accordingly
 
-            double red = (255 * value) / max; // calculate green (the closer the value is to max, the greener it gets)
-            double blue = 255 - red; // set red as inverse of green
+            double red = (255 * value) / max; 
+            double blue = 255 - red; 
 
             return Color.FromRgb((Byte)red, (Byte)0, (Byte)blue);
         }
@@ -86,8 +89,8 @@ namespace NozzleDisplay
             double max = rangeEnd - rangeStart; // make the scale start from 0
             double value = actualValue - rangeStart; // adjust the value accordingly
 
-            double blue = (255 * value) / max; // calculate green (the closer the value is to max, the greener it gets)
-            double red = 255 - blue; // set red as inverse of green
+            double blue = (255 * value) / max;
+            double red = 255 - blue;
             double green = blue / 2;
 
             return Color.FromRgb((Byte)red, (Byte)green, (Byte)blue);
@@ -124,6 +127,8 @@ namespace NozzleDisplay
 
                 fillCanvasNozzle();
                 refreshCanvas();
+                updateParameterlist();
+                crearDataTable();
             }
             catch
             {
@@ -251,15 +256,68 @@ namespace NozzleDisplay
 
         private void EjecutarUnCiclo() // función que ejecuta un ciclo
         {
-
             this.nozzle.EjecutarCiclo(this.dt, this.dx, 1.4);
             this.nozzle.ActualizarEstados();
             this.refreshCanvas();
+            this.updateParameterlist();
+            this.crearDataTable();
         }
         private void Click_Aboutus(object sender, RoutedEventArgs e)
         {
             Aboutus au = new Aboutus();
             au.ShowDialog();
+        }
+
+        private void onestepbut_Click(object sender, RoutedEventArgs e)
+        {
+            EjecutarUnCiclo();
+        }
+
+        private void crearDataTable()
+        {
+            datanozzle = new DataTable();
+
+            datanozzle.Columns.Add(new DataColumn(" "));
+
+            for (int i = 0; i < this.numR; i++)
+            {
+                datanozzle.Columns.Add(new DataColumn((i + 1).ToString()));
+            }
+
+            DataRow dr_dx = datanozzle.NewRow(); dr_dx[0] = ("X L");
+            DataRow dr_p = datanozzle.NewRow(); dr_p[0] = ("P Po");
+            DataRow dr_v = datanozzle.NewRow(); dr_v[0] = ("V Vo");
+            DataRow dr_t = datanozzle.NewRow(); dr_t[0] = ("T To");
+            DataRow dr_de = datanozzle.NewRow(); dr_de[0] = ("p po");
+
+            for (int i = 1; i < datanozzle.Columns.Count; i++)
+            {
+                dr_dx[i] = listdx[i - 1];
+                dr_p[i] = listpre[i - 1];
+                dr_v[i] = listvel[i - 1];
+                dr_t[i] = listtemp[i - 1];
+                dr_de[i] = listden[i - 1];
+            }
+
+            datanozzle.Rows.Add(dr_dx);
+            datanozzle.Rows.Add(dr_p);
+            datanozzle.Rows.Add(dr_v);
+            datanozzle.Rows.Add(dr_t);
+            datanozzle.Rows.Add(dr_de);
+
+
+            gridnozzle.ItemsSource = datanozzle.DefaultView;
+            gridnozzle.DataContext = datanozzle.DefaultView;
+            gridnozzle.Items.Refresh();
+        }
+
+        private void updateParameterlist()
+        {
+            this.listdx = this.nozzle.getNozzleXL(this.dx);
+            this.listpre = this.nozzle.getPressures();
+            this.listvel = this.nozzle.getVelocities();
+            this.listtemp = this.nozzle.getTemperatures();
+            this.listden = this.nozzle.getDensities();
         }
     }
 }

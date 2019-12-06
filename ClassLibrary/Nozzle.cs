@@ -254,5 +254,65 @@ namespace ClassLibrary
             
             return dt;
         }
+
+        public List<double> getPressures()
+        {
+            List<double> pressures = new List<double>();
+
+            for (int i = 1; i <= this.numRect; i++)
+            {
+                pressures.Add(this.nozzle[i].GetPresP());
+            }
+
+            return pressures;
+        }
+
+        public List<double> getVelocities()
+        {
+            List<double> velocities = new List<double>();
+
+            for (int i = 1; i <= this.numRect; i++)
+            {
+                velocities.Add(this.nozzle[i].GetVelP());
+            }
+
+            return velocities;
+        }
+
+        public List<double> getDensities()
+        {
+            List<double> densities = new List<double>();
+
+            for (int i = 1; i <= this.numRect; i++)
+            {
+                densities.Add(this.nozzle[i].GetDensP());
+            }
+
+            return densities;
+        }
+
+        public List<double> getTemperatures()
+        {
+            List<double> temperatures = new List<double>();
+
+            for (int i = 1; i <= this.numRect; i++)
+            {
+                temperatures.Add(this.nozzle[i].GetTempP());
+            }
+
+            return temperatures;
+        }
+
+        public List<double> getNozzleXL(double dx)
+        {
+            List<double> dxs = new List<double>();
+
+            for (int i = 0; i < this.numRect; i++)
+            {
+                dxs.Add(dx * i);
+            }
+
+            return dxs;
+        }
     }
 }
