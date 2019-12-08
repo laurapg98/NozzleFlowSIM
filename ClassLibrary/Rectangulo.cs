@@ -156,60 +156,66 @@ namespace ClassLibrary
             this.area = area;
         }
 
-            // ALTRES MÈTODES
-        public void ComputePredictedFutureState(double At, double Ax, double gamma, Rectangulo rectD) // MACCORMACK'S TECHNIQUE: utiliza las eqs discretizadas para calcular el predicted state de la celda --> lo guardamos todo en futuro 
+        // ALTRES MÈTODES
+        public double[] ComputePredictedFutureState(double At, double Ax, double gamma, Rectangulo rectD) // MACCORMACK'S TECHNIQUE: utiliza las eqs discretizadas para calcular el predicted state de la celda --> lo guardamos todo en futuro 
         {
-            // constant
-            double K = At / Ax;
+            // return the derivatives: 
+            double[] ders = new double[3];
 
             // relations
             double AT = rectD.GetTempP() - this.tempP;
             double AV = rectD.GetVelP() - this.velP;
             double Adens = rectD.GetDensP() - this.densP;
-            double relA = rectD.GetArea() / this.area;
+            double AlnA = Math.Log(rectD.GetArea()) - Math.Log(this.area);
 
-            // equations --> predicted state
-            this.tempF = this.tempP - (K * (this.velP * AT + (this.tempP * (gamma - 1) * (AV + (this.velP * Math.Log(relA))))));
-            this.velF = this.velP - (K * ((this.velP * AV) + (AT / gamma) + ((this.tempP / (gamma * this.densP)) * Adens)));
-            this.densF = this.densP - (K * ((this.densP * AV) + (this.densP * this.velP * Math.Log(relA)) + (this.velP * Adens)));
+            // equations
+                //derivatives
+            double derT = -((this.velP * AT) / Ax) - ((gamma - 1) * this.tempP * ((AV / Ax) + ((this.velP * AlnA) / Ax)));
+            double derV = -((this.velP * AV) / Ax) - ((1 / gamma) * ((AT / Ax) + ((this.tempP / this.densP) * (Adens / Ax))));
+            double derDENS = -((this.densP * AV) / Ax) - (this.densP * this.velP * (AlnA / Ax)) - (this.velP * (Adens / Ax));
+            ders[0] = derDENS;
+            ders[1] = derV;
+            ders[2] = derT;
+                //predicted state
+            this.tempF = this.tempP + (derT * At);
+            this.velF = this.velP + (derV * At);
+            this.densF = this.densP + (derDENS * At);
+
+            // return time derivatives
+            return ders;
         }
 
-        public void ComputeFutureState(double At, double Ax, double gamma, Rectangulo rectD) // PREDICTED-CORRECTION TECHNIQUE: corrije el estado predicted (que está en futuro) usando también el presente (que está en presente)
+        public void ComputeFutureState(double At, double Ax, double gamma, double[] ders, Rectangulo rectI) // PREDICTED-CORRECTION TECHNIQUE: corrije el estado predicted (que está en futuro) usando también el presente (que está en presente)
         {
-            // constant
-            double K = At / Ax;
-            double relA = rectD.GetArea() / this.area;
-
-            // Current state
-            double T_P = this.tempP;
-            double V_P = this.velP;
-            double dens_P = this.densP;
-
             // Predicted state
             double T_F = this.tempF;
             double V_F = this.velF;
             double dens_F = this.densF;
 
-            // relations - Current state
-            double AT_P = rectD.GetTempP() - this.tempP;
-            double AV_P = rectD.GetVelP() - this.velP;
-            double Adens_P = rectD.GetDensP() - this.densP;
-
             // relations - Predicted state
-            double AT_F = rectD.GetTempF() - this.tempF;
-            double AV_F = rectD.GetVelF() - this.velF;
-            double Adens_F = rectD.GetDensF() - this.densF;
+            double AT_F = T_F - rectI.GetTempF();
+            double AV_F = V_F - rectI.GetVelF();
+            double Adens_F = dens_F - rectI.GetDensF();
+            double AlnA = Math.Log(this.area) - Math.Log(rectI.GetArea());
 
-            // equations --> future state
-            double parteP_V = (V_P * AV_P) + (AT_P / gamma) + ((T_P * Adens_P) / (gamma * dens_P));
-            double parteF_V = (V_F * AV_F) + (AT_F / gamma) + ((T_F * Adens_F) / (gamma * dens_F));
-            this.velF = V_P - ((K / 2) * (parteP_V + parteF_V));
-            double parteP_dens = (dens_P * AV_P) + (dens_P * V_P * Math.Log(relA)) + (V_P * dens_P);
-            double parteF_dens = (dens_F * AV_F) + (densF * V_F * Math.Log(relA)) + (V_F * dens_F);
-            this.densF = dens_P - ((K / 2) * (parteP_dens + parteF_dens));
-            double parteP_T = (V_P * AT_P) + (T_P * (gamma - 1) * (AV_P - (V_P * Math.Log(relA))));
-            double parteF_T = (V_F * AT_F) + (T_F * (gamma - 1) * (AV_F - (V_F * Math.Log(relA))));
-            this.tempF = T_P - ((K / 2) * (parteP_T + parteF_T));
+            // equations
+                //current state derviatives
+            double dDENS_I = ders[0];
+            double dV_I = ders[1];
+            double dT_I = ders[2];
+                //predicted future state derivatives
+            double dDENS_P = -(dens_F * (AV_F / Ax)) - (dens_F * V_F * (AlnA / Ax)) - (V_F * (Adens_F / Ax));
+            double dV_P = -(V_F * (AV_F / Ax)) - ((1 / gamma) * ((AT_F / Ax) + ((T_F / dens_F) * (Adens_F / Ax))));
+            double dT_P = -(V_F * (AT_F / Ax)) - ((gamma - 1) * T_F * ((AV_F / Ax) + (V_F * (AlnA / Ax))));
+                //average derivatives
+            double dDENS_av = 0.5 * (dDENS_I + dDENS_P);
+            double dV_av = 0.5 * (dV_I + dV_P);
+            double dT_av = 0.5 * (dT_I + dT_P);
+                //future state
+            this.densF = this.densP + (dDENS_av * At);
+            this.velF = this.velP + (dV_av * At);
+            this.tempF = this.tempP + (dT_av * At);
+            this.presF = this.tempF * this.densF;
         }
 
         public void ChangeState() // acutaliza el estado: el estado presente pasa a ser el futuro

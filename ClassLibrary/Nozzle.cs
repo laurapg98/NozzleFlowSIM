@@ -37,6 +37,10 @@ namespace ClassLibrary
             this.numRect = numrect;
             this.nozzle = new Rectangulo[this.numRect + 2];
 
+            double dens;
+            double temp;
+            double vel;
+            double pres;
             int i = 0;
             while (i <= this.numRect + 1)
             {
@@ -44,25 +48,29 @@ namespace ClassLibrary
                 double x = i * Ax;
 
                 if (i == this.numRect + 1) // supersonic outflow boundary conditions --> extrapolation
-                    this.ComputeOutflowBoundaryConditions(i);
+                {
+                    dens = (2 * this.nozzle[i - 1].GetDensP()) - this.nozzle[i - 2].GetDensP();
+                    temp = (2 * this.nozzle[i - 1].GetTempP()) - this.nozzle[i - 2].GetTempP();
+                    vel = (2 * this.nozzle[i - 1].GetVelP()) - this.nozzle[i - 2].GetVelP();
+                    pres = dens * temp;
+                }
                 else if (i == 0)
                 {
-                    double dens = 1;
-                    double temp = 1;
-                    double vel = 0;
-                    double pres = 1;
-                    this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
+                    dens = 1;
+                    temp = 1;
+                    vel = 0;
+                    pres = 1;
                 }
-                else
+                else 
                 {
-                    // asignamos las condiciones iniciales
-                    double dens = 1 - (0.3146 * x);
-                    double temp = 1 - (0.2314 * x);
-                    double vel = (0.1 + (1.09 * x)) * Math.Sqrt(temp);
-                    double pres = dens * temp;
-
-                    this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
+                    dens = 1 - (0.3146 * x);
+                    temp = 1 - (0.2314 * x);
+                    vel = (0.1 + (1.09 * x)) * Math.Sqrt(temp);
+                    pres = dens * temp;
                 }
+
+                // creamos el rectangulo
+                this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
 
                 // asignamos la altura
                 double A = 1 + (2.2 * (x - 1.5) * (x - 1.5)); // Equation: A(X) = 1 + 2.2(x - 1.5) ^ 2
@@ -101,34 +109,45 @@ namespace ClassLibrary
         public void EjecutarCiclo(double At, double Ax, double gamma) // calcula el estado futuro de todos los rectangulos
         {
             // predicted
+            double[,] derivatives_I = new double[this.numRect, 3];
             int pos = 1;
-            while (pos <= this.numRect + 1)
+            while (pos < this.numRect + 1)
             {
-                if (pos == this.numRect + 1)
-                    this.ComputeOutflowBoundaryConditions(pos);
-                else
-                    this.nozzle[pos].ComputePredictedFutureState(At, Ax, gamma, this.nozzle[pos + 1]);
+                double[] ders=this.nozzle[pos].ComputePredictedFutureState(At, Ax, gamma, this.nozzle[pos + 1]);
+
+                derivatives_I[pos - 1, 0] = ders[0];
+                derivatives_I[pos - 1, 1] = ders[1];
+                derivatives_I[pos - 1, 2] = ders[2];
 
                 pos++;
             }
+            this.nozzle[0].SetVelF((2 * this.nozzle[1].GetVelF()) - this.nozzle[2].GetVelF()); // inflow boundary conditions --> extrapolation
 
             // final
             pos = 1;
             while (pos <= this.numRect + 1)
             {
                 if (pos == this.numRect + 1)
-                    this.ComputeOutflowBoundaryConditions(pos);
+                    this.ComputeOutflowBoundaryConditions(pos); // outflow boundary conditions --> extrapolation
                 else
-                    this.nozzle[pos].ComputeFutureState(At, Ax, gamma, this.nozzle[pos + 1]);
+                {
+                    double[] ders = new double[3];
+                    ders[0] = derivatives_I[pos - 1, 0];
+                    ders[1] = derivatives_I[pos - 1, 1];
+                    ders[2] = derivatives_I[pos - 1, 2];
+
+                    this.nozzle[pos].ComputeFutureState(At, Ax, gamma, ders, this.nozzle[pos - 1]);
+                }
 
                 pos++;
             }
+            this.nozzle[0].SetVelF((2 * this.nozzle[1].GetVelF()) - this.nozzle[2].GetVelF()); // inflow boundary conditions --> extrapolation
         }
 
         public void ActualizarEstados() // actualiza los estados de todos los rectangulos de las toveras
         {
             int pos = 1;
-            while (pos <= this.numRect)
+            while (pos <= this.numRect + 1)
             {
                 this.nozzle[pos].ChangeState();
                 pos++;
@@ -208,13 +227,12 @@ namespace ClassLibrary
             return parametres;
         }
 
-        public void ComputeOutflowBoundaryConditions(int i) // calcula los valores del rectángulo extra de la salida del dlujo 
+        public void ComputeOutflowBoundaryConditions(int i) // calcula los valores del rectángulo extra de la salida del flujo 
         {
-            double dens = (2 * this.nozzle[i - 1].GetDensP()) - this.nozzle[i - 2].GetDensP();
-            double temp = (2 * this.nozzle[i - 1].GetTempP()) - this.nozzle[i - 2].GetTempP();
-            double vel = (2 * this.nozzle[i - 1].GetVelP()) - this.nozzle[i - 2].GetVelP();
-            double pres = dens * temp;
-            this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
+            this.nozzle[i].SetDensF((2 * this.nozzle[i - 1].GetDensP()) - this.nozzle[i - 2].GetDensP());
+            this.nozzle[i].SetTempF((2 * this.nozzle[i - 1].GetTempP()) - this.nozzle[i - 2].GetTempP());
+            this.nozzle[i].SetVelF((2 * this.nozzle[i - 1].GetVelP()) - this.nozzle[i - 2].GetVelP());
+            this.nozzle[i].SetPresF(this.nozzle[i].GetDensF() * this.nozzle[i].GetTempF());
         }
 
         public DataTable GetEstado(double Ax) // devuelve una datatable con los datos del estado actual
@@ -314,5 +332,6 @@ namespace ClassLibrary
 
             return dxs;
         }
+
     }
 }

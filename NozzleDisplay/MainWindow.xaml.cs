@@ -36,7 +36,7 @@ namespace NozzleDisplay
             InitializeComponent();
         }
 
-        public void fillCanvasNozzle()
+        public void fillCanvasNozzle() // crea el nozzle
         {
             for (int i = 0; i < nozzlerectangles.Length; i++)
             {
@@ -116,7 +116,7 @@ namespace NozzleDisplay
             {
                 canvasNozzle.Children.Clear();
 
-                this.C = Convert.ToDouble(cbox.Text);
+                this.C = Convert.ToSingle(cbox.Text);
                 this.dx = Convert.ToDouble(dxbox.Text);
                 this.numR = Convert.ToInt32(numrectbox.Text);
 
@@ -253,7 +253,6 @@ namespace NozzleDisplay
             a.ShowDialog();
         }
 
-
         private void EjecutarUnCiclo() // función que ejecuta un ciclo
         {
             this.nozzle.EjecutarCiclo(this.dt, this.dx, 1.4);
@@ -262,6 +261,7 @@ namespace NozzleDisplay
             this.updateParameterlist();
             this.crearDataTable();
         }
+
         private void Click_Aboutus(object sender, RoutedEventArgs e)
         {
             Aboutus au = new Aboutus();
