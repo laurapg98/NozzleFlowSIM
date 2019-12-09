@@ -75,33 +75,33 @@
         <TabControl x:Name="PlotsTabControl" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="8" Grid.RowSpan="3" Grid.ColumnSpan="7" Height="300" Width="1250" Margin="10,20,10,10" VerticalAlignment="Bottom">
             <TabItem Header="Plots X/L">
                 <Grid>
-                    <d3:Chart BottomTitle="X/L" LeftTitle="P/Po" Margin="8,15,937.333,16.667">
-                        <d3:LineGraph x:Name="pressureplot" Description="Pressure" Stroke="Blue" StrokeThickness="3"/>
+                    <d3:Chart BottomTitle="X/L" LeftTitle="P/Po" Margin="9,29,936.333,2.667">
+                        <d3:LineGraph x:Name="pressureplot" d3:Plot.X1="0" d3:Plot.X2="3" d3:Plot.Y1="0" d3:Plot.Y2="1"/>
                     </d3:Chart>
-                    <d3:Chart BottomTitle="X/L" LeftTitle="V/Vo" Margin="314,11,631.333,20.667">
-                        <d3:LineGraph x:Name="velocityplot" Description="Velocity" Stroke="Blue" StrokeThickness="3"/>
+                    <d3:Chart BottomTitle="X/L" LeftTitle="V/Vo" Margin="314,29,631.333,2.667">
+                        <d3:LineGraph x:Name="velocityplot" />
                     </d3:Chart>
-                    <d3:Chart BottomTitle="X/L" LeftTitle="T/To" Margin="625,12,320.333,19.667">
-                        <d3:LineGraph x:Name="temperatureplot" Description="Temperature" Stroke="Blue" StrokeThickness="3"/>
+                    <d3:Chart BottomTitle="X/L" LeftTitle="T/To" Margin="613,30,332.333,1.667">
+                        <d3:LineGraph x:Name="temperatureplot" />
                     </d3:Chart>
-                    <d3:Chart BottomTitle="X/L" LeftTitle="p/po" Margin="937,14,8.333,17.667">
-                        <d3:LineGraph x:Name="densityplot" Description="Density" Stroke="Blue" StrokeThickness="3"/>
+                    <d3:Chart BottomTitle="X/L" LeftTitle="p/po" Margin="912,32,33.333,-0.333">
+                        <d3:LineGraph x:Name="densityplot"/>
                     </d3:Chart>
                 </Grid>
             </TabItem>
             <TabItem Header="Plots ^t">
                 <Grid>
                     <d3:Chart BottomTitle="t" LeftTitle="P/Po" Margin="8,15,937.333,16.667">
-                        <d3:LineGraph x:Name="pressureplotdt" Description="Pressure" Stroke="Blue" StrokeThickness="3"/>
+                        <d3:LineGraph x:Name="pressureplotdt"/>
                     </d3:Chart>
                     <d3:Chart BottomTitle="t" LeftTitle="V/Vo" Margin="314,11,631.333,20.667">
-                        <d3:LineGraph x:Name="velocityplotdt" Description="Velocity" Stroke="Blue" StrokeThickness="3"/>
+                        <d3:LineGraph x:Name="velocityplotdt"/>
                     </d3:Chart>
                     <d3:Chart BottomTitle="t" LeftTitle="T/To" Margin="625,12,320.333,19.667">
-                        <d3:LineGraph x:Name="temperatureplotdt" Description="Temperature" Stroke="Blue" StrokeThickness="3"/>
+                        <d3:LineGraph x:Name="temperatureplotdt"/>
                     </d3:Chart>
                     <d3:Chart BottomTitle="t" LeftTitle="p/po" Margin="937,14,8.333,17.667">
-                        <d3:LineGraph x:Name="densityplotdt" Description="Density" Stroke="Blue" StrokeThickness="3"/>
+                        <d3:LineGraph x:Name="densityplotdt"/>
                     </d3:Chart>
                 </Grid>
             </TabItem>

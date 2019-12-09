@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ClassLibrary;
+using InteractiveDataDisplay.WPF;
 
 namespace NozzleDisplay
 {
@@ -52,7 +53,7 @@ namespace NozzleDisplay
         {
             for (int i = 0; i < nozzlerectangles.Length; i++)
             {
-                Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i);
+                Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i + 1);
                 Rectangle rect_canvas = new Rectangle();
                 rect_canvas.Height = Math.Min(rect_nozzle.GetAltura()*100,canvasNozzle.Height);
                 rect_canvas.Width = canvasNozzle.Width / this.nozzle.GetNumRects();
@@ -103,7 +104,7 @@ namespace NozzleDisplay
 
             double blue = (255 * value) / max;
             double red = 255 - blue;
-            double green = blue / 2;
+            double green = red / 2;
 
             return Color.FromRgb((Byte)red, (Byte)green, (Byte)blue);
         }
@@ -158,7 +159,7 @@ namespace NozzleDisplay
                     // comprobamos que sean positivos y diferentes de 0
                     double C = Convert.ToDouble(cbox.Text);
                     double dx = Convert.ToDouble(dxbox.Text);
-                    int numrect = Convert.ToInt32(numrectbox.Text);
+                    int numrect = Convert.ToInt32(numrectbox.Text) + 1;
                     if (C <= 0 || dx <= 0 || numrect <= 0)
                         MessageBox.Show("All parameters should be positive and different from 0\n(^t, ^x & number of rectangles)");
                     else
@@ -202,10 +203,12 @@ namespace NozzleDisplay
                         }
                     }
                 }
+                
                 catch
                 {
                     MessageBox.Show("The parameters ^t and ^x can be decimal numbers, but the number of rectangles not\nPlease check it");
                 }
+                
             }
         }
 
@@ -228,7 +231,7 @@ namespace NozzleDisplay
                 for (int i = 0; i < nozzlerectangles.Length; i++)
                 {
                     Rectangle rect_canvas = this.nozzlerectangles[i];
-                    Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i);
+                    Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i + 1);
                     rect_canvas.Fill = new SolidColorBrush(GetColorPressure(0, 1, rect_nozzle.GetPresP()));
                 }
 
@@ -245,7 +248,7 @@ namespace NozzleDisplay
                 for (int i = 0; i < nozzlerectangles.Length; i++)
                 {
                     Rectangle rect_canvas = this.nozzlerectangles[i];
-                    Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i);
+                    Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i + 1);
                     rect_canvas.Fill = new SolidColorBrush(GetColorMach(0, 4, rect_nozzle.GetVelP()));
                 }
 
@@ -262,7 +265,7 @@ namespace NozzleDisplay
                 for (int i = 0; i < nozzlerectangles.Length; i++)
                 {
                     Rectangle rect_canvas = this.nozzlerectangles[i];
-                    Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i);
+                    Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i + 1);
                     rect_canvas.Fill = new SolidColorBrush(GetColorTemp(0, 1, rect_nozzle.GetTempP()));
                 }
 
@@ -279,7 +282,7 @@ namespace NozzleDisplay
                 for (int i = 0; i < nozzlerectangles.Length; i++)
                 {
                     Rectangle rect_canvas = this.nozzlerectangles[i];
-                    Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i);
+                    Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i + 1);
                     rect_canvas.Fill = new SolidColorBrush(GetColorDensity(0, 1, rect_nozzle.GetDensP()));
                 }
 
@@ -407,6 +410,44 @@ namespace NozzleDisplay
             this.listvel = this.nozzle.getVelocities();
             this.listtemp = this.nozzle.getTemperatures();
             this.listden = this.nozzle.getDensities();
+
+            refreshplotsxl();
+        }
+
+        private void refreshplotsxl()
+        {
+            pressureplot.Children.Clear();
+            var lg = new LineGraph();
+            pressureplot.Children.Add(lg);
+            lg.Stroke = new SolidColorBrush(Colors.Red);
+            lg.Description = String.Format("Pressure");
+            lg.StrokeThickness = 2;
+            lg.Plot(this.listdx.ToArray(), this.listpre.ToArray());
+
+            velocityplot.Children.Clear();
+            lg = new LineGraph();
+            velocityplot.Children.Add(lg);
+            lg.Stroke = new SolidColorBrush(Colors.DarkBlue);
+            lg.Description = String.Format("Velocity");
+            lg.StrokeThickness = 2;
+            lg.Plot(this.listdx.ToArray(), this.listvel.ToArray());
+
+            temperatureplot.Children.Clear();
+            lg = new LineGraph();
+            temperatureplot.Children.Add(lg);
+            lg.Stroke = new SolidColorBrush(Colors.DarkRed);
+            lg.Description = String.Format("Temperature");
+            lg.StrokeThickness = 2;
+            lg.Plot(this.listdx.ToArray(), this.listtemp.ToArray());
+
+            densityplot.Children.Clear();
+            lg = new LineGraph();
+            densityplot.Children.Add(lg);
+            lg.Stroke = new SolidColorBrush(Colors.BlueViolet);
+            lg.Description = String.Format("Density");
+            lg.StrokeThickness = 2;
+            lg.Plot(this.listdx.ToArray(), this.listden.ToArray());
+
         }
 
     }
