@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ClassLibrary;
 
 namespace NozzleDisplay
 {
@@ -22,27 +23,87 @@ namespace NozzleDisplay
     {
         DataTable AndersonTabla_FisrtStep;
         DataTable AndersonTabla_SteadyState;
+        DataTable AndersonTabla_InitialConditions;
+        double Ax;
+        double At;
+        Nozzle nozzleI;
+        DataTable NozzleTabla_FirstStep;
+        DataTable NozzleTabla_SteadyState;
+        DataTable NozzleTabla_InitialConditions;
+
         public Anderson()
         {
             InitializeComponent();
 
+            // creamos las tablas
             AndersonTabla_FisrtStep = new DataTable();
             AndersonTabla_SteadyState = new DataTable();
-
+            AndersonTabla_InitialConditions = new DataTable();
+            NozzleTabla_FirstStep = new DataTable();
+            NozzleTabla_SteadyState = new DataTable();
+            NozzleTabla_InitialConditions = new DataTable();
             createAndersonTables();
 
+            // por defecto: first step table
             andersongrid.ItemsSource = AndersonTabla_FisrtStep.DefaultView;
             andersongrid.DataContext = AndersonTabla_FisrtStep.DefaultView;
             andersongrid.Items.Refresh();
-
+            //datasimgrid.ItemsSource = NozzleTabla_FirstStep.DefaultView;
+            //datasimgrid.DataContext = NozzleTabla_FirstStep.DefaultView;
+            //datasimgrid.Items.Refresh();
         }
 
-        private void andersoncombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void GetAx(double Ax) // guarda el incremento de x que le dan
+        {
+            this.Ax = Ax;
+        }
+
+        public void GetAt(double At) // guarda el incremento de t
+        {
+            this.At = At;
+        }
+
+        public void GetEstadoInicial(Nozzle nozzle) // guarda el estado inicial del nozzle
+        {
+            this.nozzleI = new Nozzle(nozzle);
+            this.CreateSimulationTables();
+            datasimgrid.ItemsSource = NozzleTabla_FirstStep.DefaultView;
+            datasimgrid.DataContext = NozzleTabla_FirstStep.DefaultView;
+            datasimgrid.Items.Refresh();
+        }
+
+        private void andersoncombobox_SelectionChanged(object sender, SelectionChangedEventArgs e) // click en cualquier desplegable --> actualiza la tabla
         {
             try
             {
-                if (andersoncombobox.SelectedIndex == 0) { andersongrid.ItemsSource = AndersonTabla_FisrtStep.DefaultView; andersongrid.DataContext = AndersonTabla_FisrtStep.DefaultView; }
-                if (andersoncombobox.SelectedIndex == 1) { andersongrid.ItemsSource = AndersonTabla_SteadyState.DefaultView; andersongrid.DataContext = AndersonTabla_SteadyState.DefaultView; }
+                if (andersoncombobox.SelectedIndex == 0) // FIRST STEP
+                { 
+                    // ANDERSON
+                    andersongrid.ItemsSource = AndersonTabla_FisrtStep.DefaultView; 
+                    andersongrid.DataContext = AndersonTabla_FisrtStep.DefaultView;
+                    // SIMULATION
+                    datasimgrid.ItemsSource = NozzleTabla_FirstStep.DefaultView;
+                    datasimgrid.DataContext = NozzleTabla_FirstStep.DefaultView;
+                }
+                if (andersoncombobox.SelectedIndex == 1) // STEADY STATE
+                {
+                    // ANDERSON
+                    andersongrid.ItemsSource = AndersonTabla_SteadyState.DefaultView;
+                    andersongrid.DataContext = AndersonTabla_SteadyState.DefaultView;
+                    // SIMULATION
+                    datasimgrid.ItemsSource = NozzleTabla_SteadyState.DefaultView;
+                    datasimgrid.DataContext = NozzleTabla_SteadyState.DefaultView;
+                }
+                if (andersoncombobox.SelectedIndex == 2) // INITIAL CONDITIONS
+                {
+                    // ANDERSON
+                    andersongrid.ItemsSource = AndersonTabla_InitialConditions.DefaultView;
+                    andersongrid.DataContext = AndersonTabla_InitialConditions.DefaultView;
+                    // SIMULATION
+                    datasimgrid.ItemsSource = NozzleTabla_InitialConditions.DefaultView;
+                    datasimgrid.DataContext = NozzleTabla_InitialConditions.DefaultView;
+                }
+
                 andersongrid.Items.Refresh();
             }
             catch
@@ -53,6 +114,7 @@ namespace NozzleDisplay
 
         private void createAndersonTables()
         {
+            // FIRST STEP
             AndersonTabla_FisrtStep.Columns.Add(new DataColumn("x L"));
             AndersonTabla_FisrtStep.Columns.Add(new DataColumn("A A*"));
             AndersonTabla_FisrtStep.Columns.Add(new DataColumn("ρ ρo"));
@@ -94,7 +156,7 @@ namespace NozzleDisplay
             AndersonTabla_FisrtStep.Rows.Add(3.0, 5.950, 0.063, 1.438, 0.200, 0.013, 3.217);
 
 
-
+            // STEADY STATE
             AndersonTabla_SteadyState.Columns.Add(new DataColumn("x L"));
             AndersonTabla_SteadyState.Columns.Add(new DataColumn("A A*"));
             AndersonTabla_SteadyState.Columns.Add(new DataColumn("ρ ρo"));
@@ -134,6 +196,77 @@ namespace NozzleDisplay
             AndersonTabla_SteadyState.Rows.Add(2.8, 4.718, 0.068, 1.817, 0.344, 0.023, 3.100);
             AndersonTabla_SteadyState.Rows.Add(2.9, 5.312, 0.060, 1.840, 0.327, 0.019, 3.216);
             AndersonTabla_SteadyState.Rows.Add(3.0, 5.950, 0.052, 1.863, 0.310, 0.016, 3.345);
+
+
+            // INITIAL CONDITIONS
+            AndersonTabla_InitialConditions.Columns.Add(new DataColumn("x L"));
+            AndersonTabla_InitialConditions.Columns.Add(new DataColumn("A A*"));
+            AndersonTabla_InitialConditions.Columns.Add(new DataColumn("ρ ρo"));
+            AndersonTabla_InitialConditions.Columns.Add(new DataColumn("V ao"));
+            AndersonTabla_InitialConditions.Columns.Add(new DataColumn("T To"));
+
+            AndersonTabla_InitialConditions.Rows.Add(0.0, 5.950, 1.000, 0.100, 1.000);
+            AndersonTabla_InitialConditions.Rows.Add(0.1, 5.312, 0.969, 0.207, 0.977);
+            AndersonTabla_InitialConditions.Rows.Add(0.2, 4.718, 0.937, 0.311, 0.954);
+            AndersonTabla_InitialConditions.Rows.Add(0.3, 4.168, 0.906, 0.412, 0.931);
+            AndersonTabla_InitialConditions.Rows.Add(0.4, 3.662, 0.874, 0.511, 0.907);
+            AndersonTabla_InitialConditions.Rows.Add(0.5, 3.200, 0.843, 0.607, 0.884);
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add();
+        }
+
+        private void CreateSimulationTables()
+        {
+            // FIRST STEP 
+            NozzleTabla_FirstStep = this.SimularUnCiclo();
+
+            // STEADY STATE 
+            NozzleTabla_SteadyState = this.SimularHastaSteady();
+
+            // INITIAL CONDITIONS 
+            NozzleTabla_InitialConditions = this.nozzleI.GetEstado(this.Ax);
+        }
+
+        public DataTable SimularHastaSteady()
+        {
+            Nozzle newnozzle = new Nozzle(this.nozzleI);
+
+            // hacer simulacion -------------------------- FALTA HACER !!!!!!!!!!!!!
+
+            return newnozzle.GetEstado(this.Ax);
+        }
+
+        public DataTable SimularUnCiclo()
+        {
+            Nozzle newnozzle = new Nozzle(this.nozzleI);
+
+            newnozzle.EjecutarCiclo(this.At, this.Ax, 1.4);
+            newnozzle.ActualizarEstados();
+
+            return newnozzle.GetEstado(this.Ax);
         }
     }
 }

@@ -30,10 +30,22 @@ namespace NozzleDisplay
         double C;
         int numR;
         List<double> listtemp, listdx, listvel, listpre, listden;
+        Stack<Nozzle> pilaNozzle;
+        System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer(); //Para el tick del timer
+        int milisecs = 1000;
+        Nozzle nozzle_CI;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            //escondemos botones etc --> control de errores
+            playbut.Visibility = Visibility.Hidden;
+            pausebut.Visibility = Visibility.Hidden;
+            resetbut.Visibility = Visibility.Hidden;
+            onestepbut.Visibility = Visibility.Hidden;
+            comboboxcolor.Visibility = Visibility.Hidden;
+            PlotsTabControl.Visibility = Visibility.Hidden;
         }
 
         public void fillCanvasNozzle() // crea el nozzle
@@ -112,59 +124,92 @@ namespace NozzleDisplay
 
         private void parambut_Click(object sender, RoutedEventArgs e) // botón SAVE
         {
-            try
-            {
-                canvasNozzle.Children.Clear();
-
-                this.C = Convert.ToSingle(cbox.Text);
-                this.dx = Convert.ToDouble(dxbox.Text);
-                this.numR = Convert.ToInt32(numrectbox.Text);
-
-                this.nozzle = new Nozzle(this.numR, this.dx);
-                this.dt = this.nozzle.getdt(this.C, this.dx);
-
-                nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
-
-                fillCanvasNozzle();
-                refreshCanvas();
-                updateParameterlist();
-                crearDataTable();
-            }
-            catch
-            {
-                MessageBox.Show("Error");
-            }
-
-            //// comprobamos que no estén vacíos
-            //if (dxbox.Text == "" || cbox.Text == "" || cbox_Copy.Text == "")
-            //    MessageBox.Show("All parameters should be established\n(^t, ^x & number of rectangles)");
-            //else
+            //try
             //{
-            //    // comprobamos que tengan el formato que han de tener
-            //    try
-            //    {
-            //        // comprobamos que sean positivos y diferentes de 0
-            //        double dt = Convert.ToDouble(dxbox.Text);
-            //        double dx = Convert.ToDouble(cbox.Text);
-            //        int numrect = Convert.ToInt32(cbox_Copy.Text);
-            //        if (dt <= 0 || dx <= 0 || numrect <= 0)
-            //            MessageBox.Show("All parameters should be positive and different from 0");
-            //        else
-            //        {
-            //            // guardamos los parámetros
-            //            this.dt = dt;
-            //            this.dx = dx;
-            //            this.numR = numrect;
-            //        }
-            //    }
-            //    catch 
-            //    {
-            //        MessageBox.Show("The parameters ^t and ^x can be decimal numbers, but the number of rectangles not\nPlease check it");
-            //    }
+            //    canvasNozzle.Children.Clear();
+
+            //    this.C = Convert.ToSingle(cbox.Text);
+            //    this.dx = Convert.ToDouble(dxbox.Text);
+            //    this.numR = Convert.ToInt32(numrectbox.Text);
+
+            //    this.nozzle = new Nozzle(this.numR, this.dx);
+            //    this.dt = this.nozzle.getdt(this.C, this.dx);
+
+            //    nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
+
+            //    fillCanvasNozzle();
+            //    refreshCanvas();
+            //    updateParameterlist();
+            //    crearDataTable();
             //}
+            //catch
+            //{
+            //    MessageBox.Show("Error");
+            //}
+
+            // comprobamos que no estén vacíos
+            if (dxbox.Text == "" || cbox.Text == "" || numrectbox.Text == "")
+                MessageBox.Show("All parameters should be established\n(^t, ^x & number of rectangles)");
+            else
+            {
+                // comprobamos que tengan el formato que han de tener
+                try
+                {
+                    // comprobamos que sean positivos y diferentes de 0
+                    double C = Convert.ToDouble(cbox.Text);
+                    double dx = Convert.ToDouble(dxbox.Text);
+                    int numrect = Convert.ToInt32(numrectbox.Text);
+                    if (C <= 0 || dx <= 0 || numrect <= 0)
+                        MessageBox.Show("All parameters should be positive and different from 0\n(^t, ^x & number of rectangles)");
+                    else
+                    {
+                        // comprobamos que se cumpla la condicion de Courant --> estabilidad
+                        if (C > 1)
+                        {
+                            MessageBox.Show("In order to get a stable simulation, the parameter C should not be bigger than 1");
+                        }
+                        else
+                        {
+                            // guardamos los parámetros
+                            this.C = C;
+                            this.dx = dx;
+                            this.numR = numrect;
+
+                            // creamos el nozzle
+                            this.nozzle = new Nozzle(this.numR, this.dx);
+                            this.pilaNozzle = new Stack<Nozzle>();
+
+                            // guardamos el nozzle solo con las condiciones iniciales
+                            this.nozzle_CI = new Nozzle(this.numR, this.dx);
+
+                            // Courant condition --> stability
+                            this.dt = this.nozzle.getdt(this.C, this.dx);
+
+                            nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
+
+                            fillCanvasNozzle();
+                            refreshCanvas();
+                            updateParameterlist();
+                            crearDataTable();
+
+                            //enseñamos botones etc
+                            playbut.Visibility = Visibility.Visible;
+                            pausebut.Visibility = Visibility.Visible;
+                            resetbut.Visibility = Visibility.Visible;
+                            onestepbut.Visibility = Visibility.Visible;
+                            comboboxcolor.Visibility = Visibility.Visible;
+                            PlotsTabControl.Visibility = Visibility.Visible;
+                        }
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("The parameters ^t and ^x can be decimal numbers, but the number of rectangles not\nPlease check it");
+                }
+            }
         }
 
-        private void comboboxcolor_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void comboboxcolor_SelectionChanged(object sender, SelectionChangedEventArgs e) // click en el combobox de escoger propiedad a mostrar
         {
             try
             {
@@ -250,27 +295,71 @@ namespace NozzleDisplay
         private void MenuItem_Click(object sender, RoutedEventArgs e) // botón ANDERSON
         {
             Anderson a = new Anderson();
+            a.GetAx(this.dx);
+            a.GetAt(this.dt);
+            a.GetEstadoInicial(this.nozzle_CI);
             a.ShowDialog();
         }
 
         private void EjecutarUnCiclo() // función que ejecuta un ciclo
         {
+            // copiamos el estado actual del nozzle y lo metemos en la pila
+            Nozzle nozzlecopia = new Nozzle(this.nozzle);
+            pilaNozzle.Push(nozzlecopia);
+
+            // ejecutamos un ciclo
             this.nozzle.EjecutarCiclo(this.dt, this.dx, 1.4);
             this.nozzle.ActualizarEstados();
+
+            // actualizamos la parte gráfica
             this.refreshCanvas();
             this.updateParameterlist();
             this.crearDataTable();
         }
 
-        private void Click_Aboutus(object sender, RoutedEventArgs e)
+        private void playbut_Click(object sender, RoutedEventArgs e) // botón START
+        {
+            // configuramos el timer
+            dispatcherTimer.Tick += dispatcherTimer_Tick;
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, this.milisecs);
+
+            //iniciamos timer
+            dispatcherTimer.Start();
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e) // lo que hace cada interval del timer
+        {
+            if (this.nozzle.SimulacionAcabada() == true)
+            {
+                MessageBox.Show("Simulation has finished");
+                dispatcherTimer.Stop();
+            }
+            else
+                this.EjecutarUnCiclo();
+        }
+
+        private void pausebut_Click(object sender, RoutedEventArgs e) // botón STOP
+        {
+            dispatcherTimer.Stop();
+        }
+
+        private void resetbut_Click(object sender, RoutedEventArgs e) // botón RESET
+        {
+
+        }
+
+        private void Click_Aboutus(object sender, RoutedEventArgs e) // botón ABOUT US
         {
             Aboutus au = new Aboutus();
             au.ShowDialog();
         }
 
-        private void onestepbut_Click(object sender, RoutedEventArgs e)
+        private void onestepbut_Click(object sender, RoutedEventArgs e) // botón STEP
         {
-            EjecutarUnCiclo();
+            if (this.nozzle.SimulacionAcabada() == true)
+                MessageBox.Show("Simulation has finished");
+            else
+                this.EjecutarUnCiclo();
         }
 
         private void crearDataTable()
@@ -319,5 +408,6 @@ namespace NozzleDisplay
             this.listtemp = this.nozzle.getTemperatures();
             this.listden = this.nozzle.getDensities();
         }
+
     }
 }

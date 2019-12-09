@@ -102,7 +102,12 @@ namespace ClassLibrary
 
         public Rectangulo GetRectangulo(int pos)
         {
-            return this.nozzle[pos + 1];
+            return this.nozzle[pos];
+        }
+
+        public Rectangulo[] GetNozzle()
+        {
+            return this.nozzle;
         }
 
         // ALTRES MÈTODES
@@ -239,7 +244,14 @@ namespace ClassLibrary
         {
             DataTable estado = new DataTable();
 
-            estado.Rows.Add("Position", "Area", "Density", "Velocity", "Temperature", "Pressure", "Mach number");
+            //estado.Rows.Add("Position", "Area", "Density", "Velocity", "Temperature", "Pressure", "Mach number");
+            estado.Columns.Add(new DataColumn("Position"));
+            estado.Columns.Add(new DataColumn("Area"));
+            estado.Columns.Add(new DataColumn("Density"));
+            estado.Columns.Add(new DataColumn("Velocity"));
+            estado.Columns.Add(new DataColumn("Temperature"));
+            estado.Columns.Add(new DataColumn("Pressure"));
+            estado.Columns.Add(new DataColumn("Mach number"));
 
             int i = 0;
             while (i <= this.numRect + 1)
@@ -252,7 +264,7 @@ namespace ClassLibrary
                 double velocity = rect.GetVelP();
                 double temperature = rect.GetTempP();
                 double pressure = rect.GetPresP();
-                double mach = velocity / Math.Sqrt(temperature);
+                double mach = velocity / Math.Sqrt(temperature); // M = V / a
 
                 estado.Rows.Add(position, area, density, velocity, temperature, pressure, mach);
 
@@ -262,10 +274,10 @@ namespace ClassLibrary
             return estado;
         }
 
-        public double getdt(double C, double dx)
+        public double getdt(double C, double dx) 
         {
             double dt = 1.0;
-            for(int i = 1; i <= this.numRect; i++)
+            for (int i = 1; i <= this.numRect; i++)
             {
                 dt = Math.Min(dt, (C * dx) / (Math.Sqrt(this.nozzle[i].GetTempP()) + this.nozzle[i].GetVelP()));
             }
@@ -331,6 +343,11 @@ namespace ClassLibrary
             }
 
             return dxs;
+        }
+
+        public bool SimulacionAcabada()
+        {
+            return false;
         }
 
     }

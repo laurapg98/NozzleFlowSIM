@@ -66,13 +66,13 @@
                     <ComboBoxItem x:Name="temperature" Content="Temperature" IsSelected="False"></ComboBoxItem>
                     <ComboBoxItem x:Name="density" Content="Density" IsSelected="False"></ComboBoxItem>
                 </ComboBox>
-                <Button x:Name="playbut" Content="Play" Margin="38,143,86.333,127.333"></Button>
-                <Button x:Name="pausebut" Content="Pause" Margin="33,178,91.333,92.333"></Button>
-                <Button x:Name="resetbut" Content="Reset" Margin="33,212,91.333,58.333"></Button>
+                <Button x:Name="playbut" Content="Play" Margin="38,143,86.333,127.333" Click="playbut_Click"></Button>
+                <Button x:Name="pausebut" Content="Pause" Margin="33,178,91.333,92.333" Click="pausebut_Click"></Button>
+                <Button x:Name="resetbut" Content="Reset" Margin="33,212,91.333,58.333" Click="resetbut_Click"></Button>
                 <Button x:Name="onestepbut" Content="Step" Margin="119,212,5.333,58.333" Click="onestepbut_Click"></Button>
             </Grid>
         </Border>
-        <TabControl BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="8" Grid.RowSpan="3" Grid.ColumnSpan="7" Height="300" Width="1250" Margin="10,20,10,10" VerticalAlignment="Bottom">
+        <TabControl x:Name="PlotsTabControl" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="8" Grid.RowSpan="3" Grid.ColumnSpan="7" Height="300" Width="1250" Margin="10,20,10,10" VerticalAlignment="Bottom">
             <TabItem Header="Plots X/L">
                 <Grid>
                     <d3:Chart BottomTitle="X/L" LeftTitle="P/Po" Margin="8,15,937.333,16.667">
