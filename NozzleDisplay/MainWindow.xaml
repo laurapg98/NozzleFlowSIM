@@ -70,6 +70,7 @@
                 <Button x:Name="pausebut" Content="Pause" Margin="33,178,91.333,92.333" Click="pausebut_Click"></Button>
                 <Button x:Name="resetbut" Content="Reset" Margin="33,212,91.333,58.333" Click="resetbut_Click"></Button>
                 <Button x:Name="onestepbut" Content="Step" Margin="119,212,5.333,58.333" Click="onestepbut_Click"></Button>
+                <Button x:Name="stepback" Content="Step back" HorizontalAlignment="Left" Margin="119,177,0,0" VerticalAlignment="Top" Width="75" Click="stepback_Click"/>
             </Grid>
         </Border>
         <TabControl x:Name="PlotsTabControl" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="8" Grid.RowSpan="3" Grid.ColumnSpan="7" Height="300" Width="1250" Margin="10,20,10,10" VerticalAlignment="Bottom">

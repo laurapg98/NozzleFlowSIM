@@ -47,6 +47,7 @@ namespace NozzleDisplay
             onestepbut.Visibility = Visibility.Hidden;
             comboboxcolor.Visibility = Visibility.Hidden;
             PlotsTabControl.Visibility = Visibility.Hidden;
+            stepback.Visibility = Visibility.Hidden;
         }
 
         public void fillCanvasNozzle() // crea el nozzle
@@ -200,6 +201,10 @@ namespace NozzleDisplay
                             onestepbut.Visibility = Visibility.Visible;
                             comboboxcolor.Visibility = Visibility.Visible;
                             PlotsTabControl.Visibility = Visibility.Visible;
+                            stepback.Visibility = Visibility.Visible;
+
+                            // enseñamos el botón que genera un nuevo nozzle
+                            parambut.Visibility = Visibility.Hidden;
                         }
                     }
                 }
@@ -348,7 +353,42 @@ namespace NozzleDisplay
 
         private void resetbut_Click(object sender, RoutedEventArgs e) // botón RESET
         {
+            // vaciamos los parámetros
+            this.nozzle = new Nozzle();
+            this.nozzlerectangles = new Rectangle[0];
+            this.datanozzle = new DataTable();
+            this.dx = 0;
+            this.dt = 0;
+            this.C = 0;
+            this.numR = 0;
+            this.listtemp = new List<double>();
+            this.listdx = new List<double>();
+            this.listvel = new List<double>();
+            this.listpre = new List<double>();
+            this.listden = new List<double>();
+            this.pilaNozzle = new Stack<Nozzle>();
+            this.nozzle_CI = new Nozzle();
 
+            // escondemos botones etc        
+            playbut.Visibility = Visibility.Hidden;
+            pausebut.Visibility = Visibility.Hidden;
+            resetbut.Visibility = Visibility.Hidden;
+            onestepbut.Visibility = Visibility.Hidden;
+            comboboxcolor.Visibility = Visibility.Hidden;
+            PlotsTabControl.Visibility = Visibility.Hidden;
+            stepback.Visibility = Visibility.Hidden;
+
+            // escondemos canvas
+            canvasNozzle.Children.Clear();
+            rectanglescale.Fill = new SolidColorBrush(Colors.DarkGray);
+
+            // vaciamos las textbox
+            cbox.Text = "";
+            dxbox.Text = "";
+            numrectbox.Text = "";
+
+            // enseñamos el botón que genera un nuevo nozzle
+            parambut.Visibility = Visibility.Visible;
         }
 
         private void Click_Aboutus(object sender, RoutedEventArgs e) // botón ABOUT US
@@ -357,15 +397,31 @@ namespace NozzleDisplay
             au.ShowDialog();
         }
 
+        private void stepback_Click(object sender, RoutedEventArgs e) // botón STEP BACK
+        {
+            if (this.pilaNozzle.Count() == 0) // si estamos en el estado inicial no se puede tirar atrás
+                MessageBox.Show("There is no data about previous states");
+            else // si no:
+            {
+                // sacamos la última posición de la pila y la asignamos como estado actual
+                this.nozzle = this.pilaNozzle.Pop();
+
+                // actualizamos la parte gráfica
+                this.refreshCanvas();
+                this.updateParameterlist();
+                this.crearDataTable();
+            }
+        }
+
         private void onestepbut_Click(object sender, RoutedEventArgs e) // botón STEP
         {
-            if (this.nozzle.SimulacionAcabada() == true)
+            if (this.nozzle.SimulacionAcabada() == true) // si la simulación ha acabado, no se puede seguir
                 MessageBox.Show("Simulation has finished");
-            else
+            else // si no:
                 this.EjecutarUnCiclo();
         }
 
-        private void crearDataTable()
+        private void crearDataTable() // crea la tabla de la pestaña 'Data' del tabcontrol
         {
             datanozzle = new DataTable();
 
@@ -403,14 +459,16 @@ namespace NozzleDisplay
             gridnozzle.Items.Refresh();
         }
 
-        private void updateParameterlist()
+        private void updateParameterlist() // crea listas con los parámetros del nozzle
         {
+            // creamos las listas de datos
             this.listdx = this.nozzle.getNozzleXL(this.dx);
             this.listpre = this.nozzle.getPressures();
             this.listvel = this.nozzle.getVelocities();
             this.listtemp = this.nozzle.getTemperatures();
             this.listden = this.nozzle.getDensities();
 
+            // actualizamos el plot
             refreshplotsxl();
         }
 
@@ -447,7 +505,6 @@ namespace NozzleDisplay
             lg.Description = String.Format("Density");
             lg.StrokeThickness = 2;
             lg.Plot(this.listdx.ToArray(), this.listden.ToArray());
-
         }
 
     }
