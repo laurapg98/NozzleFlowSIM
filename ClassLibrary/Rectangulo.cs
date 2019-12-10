@@ -204,8 +204,9 @@ namespace ClassLibrary
             double dV_I = ders[1];
             double dT_I = ders[2];
                 //predicted future state derivatives
-            double dDENS_P = -(dens_F * (AV_F / Ax)) - (dens_F * V_F * (AlnA / Ax)) - (V_F * (Adens_F / Ax));
+            double dDENS_P = -(dens_F * (AV_F / Ax)) - ((dens_F * V_F * AlnA) / Ax) - ((V_F * Adens_F) / Ax);
             double dV_P = -(V_F * (AV_F / Ax)) - ((1 / gamma) * ((AT_F / Ax) + ((T_F / dens_F) * (Adens_F / Ax))));
+            //double dV_P = (-(V_F) * (AV_F / Ax)) - ((1 / gamma) * ((AT_F / Ax) + (T_F / dens_F) * (Adens_F / Ax)));
             double dT_P = -(V_F * (AT_F / Ax)) - ((gamma - 1) * T_F * ((AV_F / Ax) + (V_F * (AlnA / Ax))));
                 //average derivatives
             double dDENS_av = 0.5 * (dDENS_I + dDENS_P);

@@ -34,7 +34,7 @@ namespace NozzleDisplay
         List<double> listtemp, listdx, listvel, listpre, listden, listtempdt, listdt, listveldt, listpredt, listdendt;
         Stack<Nozzle> pilaNozzle;
         System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer(); //Para el tick del timer
-        int milisecs = 1000;
+        int milisecs = 500;
         Nozzle nozzle_CI;
 
         int positionThroat;
@@ -73,7 +73,7 @@ namespace NozzleDisplay
 
         public Color GetColorMach(double rangeStart, double rangeEnd, double actualValue) // escala de color de la velocidad (Mach)
         {
-            if (rangeStart >= rangeEnd) return Colors.Black;
+            if (actualValue >= rangeEnd) return Colors.Red;
 
             double max = rangeEnd - rangeStart; // make the scale start from 0
             double value = actualValue - rangeStart; // adjust the value accordingly
@@ -101,7 +101,7 @@ namespace NozzleDisplay
 
         public Color GetColorPressure(double rangeStart, double rangeEnd, double actualValue) // escala de color de la presión
         {
-            if (rangeStart >= rangeEnd) return Colors.Black;
+            if (actualValue >= rangeEnd) return Colors.Blue;
 
             double max = rangeEnd - rangeStart; // make the scale start from 0
             double value = actualValue - rangeStart; // adjust the value accordingly
@@ -141,7 +141,7 @@ namespace NozzleDisplay
                     // comprobamos que sean positivos y diferentes de 0
                     double C = Convert.ToDouble(cbox.Text);
                     double dx = Convert.ToDouble(dxbox.Text);
-                    int numrect = Convert.ToInt32(numrectbox.Text) + 1;
+                    int numrect = Convert.ToInt32(numrectbox.Text);
                     if (C <= 0 || dx <= 0 || numrect <= 0)
                         MessageBox.Show("All parameters should be positive and different from 0\n(^t, ^x & number of rectangles)");
                     else
@@ -246,7 +246,7 @@ namespace NozzleDisplay
                 {
                     Rectangle rect_canvas = this.nozzlerectangles[i];
                     Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i + 1);
-                    rect_canvas.Fill = new SolidColorBrush(GetColorMach(0, 4, rect_nozzle.GetVelP()));
+                    rect_canvas.Fill = new SolidColorBrush(GetColorMach(0, 2.5, rect_nozzle.GetVelP()));
                 }
 
                 LinearGradientBrush lgb = new LinearGradientBrush(GetColorMach(0, 2.5, 2.5), GetColorMach(0, 2.5, 0), 90);
@@ -422,29 +422,29 @@ namespace NozzleDisplay
 
             for (int i = 0; i < this.numR; i++)
             {
-                datanozzle.Columns.Add(new DataColumn((i + 1).ToString()));
+                datanozzle.Columns.Add(new DataColumn((i).ToString()));
             }
 
-            DataRow dr_dx = datanozzle.NewRow(); dr_dx[0] = ("X L");
-            DataRow dr_p = datanozzle.NewRow(); dr_p[0] = ("P Po");
-            DataRow dr_v = datanozzle.NewRow(); dr_v[0] = ("V Vo");
-            DataRow dr_t = datanozzle.NewRow(); dr_t[0] = ("T To");
-            DataRow dr_de = datanozzle.NewRow(); dr_de[0] = ("p po");
+            DataRow dr_dx = datanozzle.NewRow(); dr_dx[" "] = ("x L").ToString();
+            DataRow dr_p = datanozzle.NewRow(); dr_p[" "] = "P Po".ToString();
+            DataRow dr_v = datanozzle.NewRow(); dr_v[" "] = "V Vo".ToString();
+            DataRow dr_t = datanozzle.NewRow(); dr_t[" "] = "T To".ToString();
+            DataRow dr_de = datanozzle.NewRow(); dr_de[" "] = "p po".ToString();
 
             for (int i = 1; i < datanozzle.Columns.Count; i++)
             {
-                dr_dx[i] = listdx[i - 1];
-                dr_p[i] = listpre[i - 1];
-                dr_v[i] = listvel[i - 1];
-                dr_t[i] = listtemp[i - 1];
-                dr_de[i] = listden[i - 1];
+                dr_dx[i] = listdx[i - 1].ToString();
+                dr_p[i] = listpre[i - 1].ToString();
+                dr_v[i] = listvel[i - 1].ToString();
+                dr_t[i] = listtemp[i - 1].ToString();
+                dr_de[i] = listden[i - 1].ToString();
             }
-
-            datanozzle.Rows.Add(dr_dx);
-            datanozzle.Rows.Add(dr_p);
-            datanozzle.Rows.Add(dr_v);
-            datanozzle.Rows.Add(dr_t);
-            datanozzle.Rows.Add(dr_de);
+             
+            datanozzle.Rows.Add(dr_dx.ItemArray);
+            datanozzle.Rows.Add(dr_p.ItemArray);
+            datanozzle.Rows.Add(dr_v.ItemArray);
+            datanozzle.Rows.Add(dr_t.ItemArray);
+            datanozzle.Rows.Add(dr_de.ItemArray);
 
 
             gridnozzle.ItemsSource = datanozzle.DefaultView;

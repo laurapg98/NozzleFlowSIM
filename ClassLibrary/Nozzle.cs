@@ -129,6 +129,10 @@ namespace ClassLibrary
                 pos++;
             }
             this.nozzle[0].SetVelF((2 * this.nozzle[1].GetVelF()) - this.nozzle[2].GetVelF()); // inflow boundary conditions --> extrapolation
+            this.nozzle[0].SetVelF(this.nozzle[0].GetVelP());
+            this.nozzle[0].SetTempF(this.nozzle[0].GetTempP());
+            this.nozzle[0].SetDensF(this.nozzle[0].GetDensP());
+
 
             // final
             pos = 1;
