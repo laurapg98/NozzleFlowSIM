@@ -211,11 +211,11 @@ namespace NozzleDisplay
             AndersonTabla_InitialConditions.Rows.Add(0.3, 4.168, 0.906, 0.412, 0.931);
             AndersonTabla_InitialConditions.Rows.Add(0.4, 3.662, 0.874, 0.511, 0.907);
             AndersonTabla_InitialConditions.Rows.Add(0.5, 3.200, 0.843, 0.607, 0.884);
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add(0.6, 2.782, 0.811, 0.700, 0.861);
+            AndersonTabla_InitialConditions.Rows.Add(0.7, 2.408, 0.780, 0.790, 0.838);
+            AndersonTabla_InitialConditions.Rows.Add(0.8, 2.078, 0.748, 0.877, 0.815);
+            AndersonTabla_InitialConditions.Rows.Add(0.9, 1.792, 0.717, 0.962, 0.792);
+            AndersonTabla_InitialConditions.Rows.Add(1.0, 1.550, 0.685, 1.043, 0.769);
             AndersonTabla_InitialConditions.Rows.Add();
             AndersonTabla_InitialConditions.Rows.Add();
             AndersonTabla_InitialConditions.Rows.Add();
