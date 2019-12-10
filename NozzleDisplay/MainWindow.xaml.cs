@@ -29,12 +29,15 @@ namespace NozzleDisplay
         double dx;
         double dt;
         double C;
+        int contadordt;
         int numR;
-        List<double> listtemp, listdx, listvel, listpre, listden;
+        List<double> listtemp, listdx, listvel, listpre, listden, listtempdt, listdt, listveldt, listpredt, listdendt;
         Stack<Nozzle> pilaNozzle;
         System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer(); //Para el tick del timer
         int milisecs = 1000;
         Nozzle nozzle_CI;
+
+        int positionThroat;
 
         public MainWindow()
         {
@@ -123,7 +126,7 @@ namespace NozzleDisplay
             return Color.FromRgb((Byte)red, (Byte)green, (Byte)blue);
         }
 
-        private void parambut_Click(object sender, RoutedEventArgs e) // botón SAVE
+        private void parambut_Click(object sender, RoutedEventArgs e) // botón Build
         {
             //try
             //{
@@ -154,8 +157,8 @@ namespace NozzleDisplay
             else
             {
                 // comprobamos que tengan el formato que han de tener
-                try
-                {
+                //try
+                //{
                     // comprobamos que sean positivos y diferentes de 0
                     double C = Convert.ToDouble(cbox.Text);
                     double dx = Convert.ToDouble(dxbox.Text);
@@ -188,13 +191,22 @@ namespace NozzleDisplay
 
                             nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
 
-                            fillCanvasNozzle();
-                            refreshCanvas();
-                            updateParameterlist();
-                            crearDataTable();
+                            this.positionThroat = this.nozzle.getthroatpos();
+                            this.contadordt = 0;
 
-                            //enseñamos botones etc
-                            playbut.Visibility = Visibility.Visible;
+                            this.listdt = new List<double>(); this.listdt.Add(this.contadordt);
+                            this.listdendt = new List<double>(); this.listdendt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetDensP());
+                            this.listpredt = new List<double>(); this.listpredt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetPresP());
+                            this.listtempdt = new List<double>(); this.listtempdt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetTempP());
+                            this.listveldt = new List<double>(); this.listveldt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetVelP());
+
+                        fillCanvasNozzle();
+                        refreshCanvas();
+                        updateParameterlist();
+                        crearDataTable();
+
+                        //enseñamos botones etc
+                        playbut.Visibility = Visibility.Visible;
                             pausebut.Visibility = Visibility.Visible;
                             resetbut.Visibility = Visibility.Visible;
                             onestepbut.Visibility = Visibility.Visible;
@@ -202,12 +214,14 @@ namespace NozzleDisplay
                             PlotsTabControl.Visibility = Visibility.Visible;
                         }
                     }
-                }
+                //}
                 
+                /*
                 catch
                 {
                     MessageBox.Show("The parameters ^t and ^x can be decimal numbers, but the number of rectangles not\nPlease check it");
                 }
+                */
                 
             }
         }
@@ -313,6 +327,7 @@ namespace NozzleDisplay
             // ejecutamos un ciclo
             this.nozzle.EjecutarCiclo(this.dt, this.dx, 1.4);
             this.nozzle.ActualizarEstados();
+            this.contadordt++;
 
             // actualizamos la parte gráfica
             this.refreshCanvas();
@@ -411,7 +426,14 @@ namespace NozzleDisplay
             this.listtemp = this.nozzle.getTemperatures();
             this.listden = this.nozzle.getDensities();
 
+            this.listdt.Add(this.contadordt);
+            this.listdendt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetDensP());
+            this.listpredt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetPresP());
+            this.listtempdt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetTempP());
+            this.listveldt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetVelP());
+
             refreshplotsxl();
+            refreshplotstime();
         }
 
         private void refreshplotsxl()
@@ -448,6 +470,42 @@ namespace NozzleDisplay
             lg.StrokeThickness = 2;
             lg.Plot(this.listdx.ToArray(), this.listden.ToArray());
 
+        }
+
+        public void refreshplotstime()
+        {
+
+            pressureplotdt.Children.Clear();
+            var lg = new LineGraph();
+            pressureplotdt.Children.Add(lg);
+            lg.Stroke = new SolidColorBrush(Colors.Red);
+            lg.Description = String.Format("Pressure");
+            lg.StrokeThickness = 2;
+            lg.Plot(this.listdt.ToArray(), this.listpredt.ToArray());
+
+            velocityplotdt.Children.Clear();
+            lg = new LineGraph();
+            velocityplotdt.Children.Add(lg);
+            lg.Stroke = new SolidColorBrush(Colors.DarkBlue);
+            lg.Description = String.Format("Velocity");
+            lg.StrokeThickness = 2;
+            lg.Plot(this.listdt.ToArray(), this.listveldt.ToArray());
+
+            temperatureplotdt.Children.Clear();
+            lg = new LineGraph();
+            temperatureplotdt.Children.Add(lg);
+            lg.Stroke = new SolidColorBrush(Colors.DarkRed);
+            lg.Description = String.Format("Temperature");
+            lg.StrokeThickness = 2;
+            lg.Plot(this.listdt.ToArray(), this.listtempdt.ToArray());
+
+            densityplotdt.Children.Clear();
+            lg = new LineGraph();
+            densityplotdt.Children.Add(lg);
+            lg.Stroke = new SolidColorBrush(Colors.BlueViolet);
+            lg.Description = String.Format("Density");
+            lg.StrokeThickness = 2;
+            lg.Plot(this.listdt.ToArray(), this.listdendt.ToArray());
         }
 
     }

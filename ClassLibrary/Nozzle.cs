@@ -339,7 +339,7 @@ namespace ClassLibrary
 
             for (int i = 0; i < this.numRect; i++)
             {
-                dxs.Add(dx * i);
+                dxs.Add(dx * (i + 1));
             }
 
             return dxs;
@@ -348,6 +348,20 @@ namespace ClassLibrary
         public bool SimulacionAcabada()
         {
             return false;
+        }
+
+        public int getthroatpos()
+        {
+            int pt = 0;
+            foreach(Rectangulo rect in nozzle)
+            {
+                if (rect.GetArea() == 1.0)
+                {
+                    return pt;
+                }
+                pt++;
+            }
+            return 0;
         }
 
     }
