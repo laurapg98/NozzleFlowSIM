@@ -129,28 +129,6 @@ namespace NozzleDisplay
 
         private void parambut_Click(object sender, RoutedEventArgs e) // botón Build
         {
-            //try
-            //{
-            //    canvasNozzle.Children.Clear();
-
-            //    this.C = Convert.ToSingle(cbox.Text);
-            //    this.dx = Convert.ToDouble(dxbox.Text);
-            //    this.numR = Convert.ToInt32(numrectbox.Text);
-
-            //    this.nozzle = new Nozzle(this.numR, this.dx);
-            //    this.dt = this.nozzle.getdt(this.C, this.dx);
-
-            //    nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
-
-            //    fillCanvasNozzle();
-            //    refreshCanvas();
-            //    updateParameterlist();
-            //    crearDataTable();
-            //}
-            //catch
-            //{
-            //    MessageBox.Show("Error");
-            //}
 
             // comprobamos que no estén vacíos
             if (dxbox.Text == "" || cbox.Text == "" || numrectbox.Text == "")
@@ -201,13 +179,13 @@ namespace NozzleDisplay
                             this.listtempdt = new List<double>(); this.listtempdt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetTempP());
                             this.listveldt = new List<double>(); this.listveldt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetVelP());
 
-                        fillCanvasNozzle();
-                        refreshCanvas();
-                        updateParameterlist();
-                        crearDataTable();
+                            fillCanvasNozzle();
+                            refreshCanvas();
+                            updateParameterlist();
+                            crearDataTable();
 
-                        //enseñamos botones etc
-                        playbut.Visibility = Visibility.Visible;
+                            //enseñamos botones etc
+                            playbut.Visibility = Visibility.Visible;
                             pausebut.Visibility = Visibility.Visible;
                             resetbut.Visibility = Visibility.Visible;
                             onestepbut.Visibility = Visibility.Visible;
@@ -220,8 +198,8 @@ namespace NozzleDisplay
                         }
                     }
                 }
-                
-                
+
+
                 catch
                 {
                     MessageBox.Show("The parameters ^t and ^x can be decimal numbers, but the number of rectangles not\nPlease check it");

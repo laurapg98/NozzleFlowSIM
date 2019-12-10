@@ -81,6 +81,8 @@ namespace ClassLibrary
 
                 i++;
             }
+            this.nozzle[0].SetVelP((2 * this.nozzle[1].GetVelP()) - this.nozzle[2].GetVelP()); // inflow boundary conditions --> extrapolation
+
         }
 
         // SETTERS
@@ -245,13 +247,13 @@ namespace ClassLibrary
             DataTable estado = new DataTable();
 
             //estado.Rows.Add("Position", "Area", "Density", "Velocity", "Temperature", "Pressure", "Mach number");
-            estado.Columns.Add(new DataColumn("Position"));
-            estado.Columns.Add(new DataColumn("Area"));
-            estado.Columns.Add(new DataColumn("Density"));
-            estado.Columns.Add(new DataColumn("Velocity"));
-            estado.Columns.Add(new DataColumn("Temperature"));
-            estado.Columns.Add(new DataColumn("Pressure"));
-            estado.Columns.Add(new DataColumn("Mach number"));
+            estado.Columns.Add(new DataColumn("x L"));
+            estado.Columns.Add(new DataColumn("A A*"));
+            estado.Columns.Add(new DataColumn("ρ ρo"));
+            estado.Columns.Add(new DataColumn("V ao"));
+            estado.Columns.Add(new DataColumn("T To"));
+            estado.Columns.Add(new DataColumn("P Po"));
+            estado.Columns.Add(new DataColumn("M"));
 
             int i = 0;
             while (i <= this.numRect + 1)
