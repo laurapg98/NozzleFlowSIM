@@ -34,8 +34,7 @@ namespace NozzleDisplay
         List<double> listtemp, listdx, listvel, listpre, listden, listtempdt, listdt, listveldt, listpredt, listdendt;
         Stack<Nozzle> pilaNozzle;
         System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer(); //Para el tick del timer
-        int milisecs = 500;
-        Nozzle nozzle_CI;
+        int milisecs = 250;
 
         int positionThroat;
 
@@ -57,6 +56,9 @@ namespace NozzleDisplay
 
         public void fillCanvasNozzle() // crea el nozzle
         {
+            canvasNozzle.Children.Clear();
+            sliderthroat.Maximum = this.numR;
+            sliderthroat.Minimum = 1;
             for (int i = 0; i < nozzlerectangles.Length; i++)
             {
                 Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i + 1);
@@ -64,12 +66,26 @@ namespace NozzleDisplay
                 rect_canvas.Height = Math.Min(rect_nozzle.GetAltura()*100,canvasNozzle.Height);
                 rect_canvas.Width = canvasNozzle.Width / this.nozzle.GetNumRects();
                 rect_canvas.Fill = new SolidColorBrush(Colors.White);
-                rect_canvas.StrokeThickness = 0.1;
+                rect_canvas.StrokeThickness = 0.15;
                 rect_canvas.Stroke = Brushes.Black;
                 canvasNozzle.Children.Add(rect_canvas);
                 Canvas.SetLeft(rect_canvas, i * rect_canvas.Width);
                 Canvas.SetTop(rect_canvas, (canvasNozzle.Height / 2) - (rect_canvas.Height / 2));
                 nozzlerectangles[i] = rect_canvas;
+
+                sliderthroat.Ticks.Add(Convert.ToDouble(i));
+            }
+        }
+
+        public void fillCanvasNozzleSlider()
+        {
+            for (int i = 0; i < nozzlerectangles.Length; i++)
+            {
+                Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i + 1);
+                nozzlerectangles[i].Height = Math.Min(rect_nozzle.GetAltura() * 100, canvasNozzle.Height);
+                canvasNozzle.Children.Add(nozzlerectangles[i]);
+                Canvas.SetLeft(nozzlerectangles[i], i * nozzlerectangles[i].Width);
+                Canvas.SetTop(nozzlerectangles[i], (canvasNozzle.Height / 2) - (nozzlerectangles[i].Height / 2));
             }
         }
 
@@ -155,6 +171,7 @@ namespace NozzleDisplay
                         }
                         else
                         {
+
                             // guardamos los parámetros
                             this.C = C;
                             this.dx = dx;
@@ -165,7 +182,6 @@ namespace NozzleDisplay
                             this.pilaNozzle = new Stack<Nozzle>();
 
                             // guardamos el nozzle solo con las condiciones iniciales
-                            this.nozzle_CI = new Nozzle(this.numR, this.dx);
 
                             // Courant condition --> stability
                             this.dt = this.nozzle.getdt(this.C, this.dx);
@@ -195,18 +211,8 @@ namespace NozzleDisplay
                             PlotsTabControl.Visibility = Visibility.Visible;
                             stepback.Visibility = Visibility.Visible;
 
-                            // enseñamos el botón que genera un nuevo nozzle
-                            parambut.Visibility = Visibility.Hidden;
-
-                            //actualizamos el slider
-                            sliderthroat.Maximum = this.numR;
-                            sliderthroat.Minimum = 0;
+                            //ajustamos el slider
                             sliderthroat.Value = this.numR / 2;
-                            for (int i = 0; i < this.numR; i++)
-                            {
-                                sliderthroat.Ticks.Add(Convert.ToDouble(i));
-                            }
-                                    
                         }
                     }
                 }
@@ -348,6 +354,39 @@ namespace NozzleDisplay
                 this.EjecutarUnCiclo();
         }
 
+        private void sliderthroat_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) //funcion que cambia la forma de la tubera
+        {
+            try
+            {
+
+
+                canvasNozzle.Children.Clear();
+
+                double k = sliderthroat.Value / 10;
+                this.nozzle = new Nozzle(this.numR, this.dx, k);
+                this.pilaNozzle = new Stack<Nozzle>();
+
+                // Courant condition --> stability
+                this.dt = this.nozzle.getdt(this.C, this.dx);
+
+                this.positionThroat = this.nozzle.getthroatpos();
+                this.contadordt = 0;
+
+                this.listdt = new List<double>(); this.listdt.Add(this.contadordt);
+                this.listdendt = new List<double>(); this.listdendt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetDensP());
+                this.listpredt = new List<double>(); this.listpredt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetPresP());
+                this.listtempdt = new List<double>(); this.listtempdt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetTempP());
+                this.listveldt = new List<double>(); this.listveldt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetVelP());
+
+                fillCanvasNozzleSlider();
+                refreshCanvas();
+                updateParameterlist();
+                crearDataTable();
+            }
+            catch { }
+
+        }
+
         private void pausebut_Click(object sender, RoutedEventArgs e) // botón STOP
         {
             dispatcherTimer.Stop();
@@ -369,7 +408,6 @@ namespace NozzleDisplay
             this.listpre = new List<double>();
             this.listden = new List<double>();
             this.pilaNozzle = new Stack<Nozzle>();
-            this.nozzle_CI = new Nozzle();
 
             // escondemos botones etc        
             playbut.Visibility = Visibility.Hidden;

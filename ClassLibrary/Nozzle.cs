@@ -12,6 +12,7 @@ namespace ClassLibrary
         // ATRIBUTS
         int numRect;
         Rectangulo[] nozzle;
+        double k; //parametro para cambiar la posicion de la tubera
 
         // CONSTRUCTORS
         public Nozzle() // constructor vacío
@@ -74,6 +75,61 @@ namespace ClassLibrary
 
                 // asignamos la altura
                 double A = 1 + (2.2 * (x - 1.5) * (x - 1.5)); // Equation: A(X) = 1 + 2.2(x - 1.5) ^ 2
+                double h = 2 * Math.Sqrt(A / Math.PI); // area de la circumferencia
+
+                this.nozzle[i].SetAltura(h);
+                this.nozzle[i].SetArea(A);
+
+                i++;
+            }
+            this.nozzle[0].SetVelP((2 * this.nozzle[1].GetVelP()) - this.nozzle[2].GetVelP()); // inflow boundary conditions --> extrapolation
+
+        }
+
+        //Constructor sobrecargado
+        public Nozzle(int numrect, double Ax, double K) // crea el nozzle con las condiciones iniciales y la altura + la posicion nueva del cuello 
+        {
+            this.k = K;
+            this.numRect = numrect;
+            this.nozzle = new Rectangulo[this.numRect + 2];
+
+            double dens;
+            double temp;
+            double vel;
+            double pres;
+            int i = 0;
+            while (i <= this.numRect + 1)
+            {
+                // coord x
+                double x = i * Ax;
+
+                if (i == this.numRect + 1) // supersonic outflow boundary conditions --> extrapolation
+                {
+                    dens = (2 * this.nozzle[i - 1].GetDensP()) - this.nozzle[i - 2].GetDensP();
+                    temp = (2 * this.nozzle[i - 1].GetTempP()) - this.nozzle[i - 2].GetTempP();
+                    vel = (2 * this.nozzle[i - 1].GetVelP()) - this.nozzle[i - 2].GetVelP();
+                    pres = dens * temp;
+                }
+                else if (i == 0)
+                {
+                    dens = 1;
+                    temp = 1;
+                    vel = 0;
+                    pres = 1;
+                }
+                else
+                {
+                    dens = 1 - (0.3146 * x);
+                    temp = 1 - (0.2314 * x);
+                    vel = (0.1 + (1.09 * x)) * Math.Sqrt(temp);
+                    pres = dens * temp;
+                }
+
+                // creamos el rectangulo
+                this.nozzle[i] = new Rectangulo(temp, vel, dens, pres);
+
+                // asignamos la altura
+                double A = 1 + (2.2 * (x - this.k) * (x - this.k)); // Equation: A(X) = 1 + 2.2(x - 1.5) ^ 2
                 double h = 2 * Math.Sqrt(A / Math.PI); // area de la circumferencia
 
                 this.nozzle[i].SetAltura(h);
