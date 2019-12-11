@@ -141,7 +141,7 @@ namespace NozzleDisplay
                     // comprobamos que sean positivos y diferentes de 0
                     double C = Convert.ToDouble(cbox.Text);
                     double dx = Convert.ToDouble(dxbox.Text);
-                    int numrect = Convert.ToInt32(numrectbox.Text) + 1;
+                    int numrect = Convert.ToInt32(numrectbox.Text);
                     if (C <= 0 || dx <= 0 || numrect <= 0)
                         MessageBox.Show("All parameters should be positive and different from 0\n(^t, ^x & number of rectangles)");
                     else
@@ -295,9 +295,6 @@ namespace NozzleDisplay
         private void MenuItem_Click(object sender, RoutedEventArgs e) // botón ANDERSON
         {
             Anderson a = new Anderson();
-            a.GetAx(this.dx);
-            a.GetAt(this.dt);
-            a.GetEstadoInicial(this.nozzle_CI);
             a.ShowDialog();
         }
 
@@ -411,6 +408,7 @@ namespace NozzleDisplay
             if (this.nozzle.SimulacionAcabada() == true) // si la simulación ha acabado, no se puede seguir
                 MessageBox.Show("Simulation has finished");
             else // si no:
+
                 this.EjecutarUnCiclo();
         }
 
@@ -418,14 +416,13 @@ namespace NozzleDisplay
         {
             datanozzle = new DataTable();
 
-            datanozzle.Columns.Add(new DataColumn(" "));
+            datanozzle.Columns.Add(new DataColumn("X L"));
 
             for (int i = 0; i < this.numR; i++)
             {
-                datanozzle.Columns.Add(new DataColumn((i + 1).ToString()));
+                datanozzle.Columns.Add(new DataColumn(Convert.ToString((i + 1)*this.dx)));
             }
 
-            DataRow dr_dx = datanozzle.NewRow(); dr_dx[0] = ("X L");
             DataRow dr_p = datanozzle.NewRow(); dr_p[0] = ("P Po");
             DataRow dr_v = datanozzle.NewRow(); dr_v[0] = ("V Vo");
             DataRow dr_t = datanozzle.NewRow(); dr_t[0] = ("T To");
@@ -433,14 +430,13 @@ namespace NozzleDisplay
 
             for (int i = 1; i < datanozzle.Columns.Count; i++)
             {
-                dr_dx[i] = listdx[i - 1];
                 dr_p[i] = listpre[i - 1];
                 dr_v[i] = listvel[i - 1];
                 dr_t[i] = listtemp[i - 1];
                 dr_de[i] = listden[i - 1];
             }
 
-            datanozzle.Rows.Add(dr_dx);
+           // datanozzle.Rows.Add(dr_dx);
             datanozzle.Rows.Add(dr_p);
             datanozzle.Rows.Add(dr_v);
             datanozzle.Rows.Add(dr_t);

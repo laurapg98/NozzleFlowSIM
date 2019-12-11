@@ -26,7 +26,7 @@ namespace NozzleDisplay
         DataTable AndersonTabla_InitialConditions;
         double Ax;
         double At;
-        Nozzle nozzleI;
+        Nozzle nozzle;
         DataTable NozzleTabla_FirstStep;
         DataTable NozzleTabla_SteadyState;
         DataTable NozzleTabla_InitialConditions;
@@ -34,6 +34,11 @@ namespace NozzleDisplay
         public Anderson()
         {
             InitializeComponent();
+
+            // creamos el nozzle con las condiciones iniciales
+            this.Ax = 0.1;
+            this.nozzle = new Nozzle(30, this.Ax);
+            this.At = this.nozzle.getdt(0.5, this.Ax);
 
             // creamos las tablas
             AndersonTabla_FisrtStep = new DataTable();
@@ -43,30 +48,12 @@ namespace NozzleDisplay
             NozzleTabla_SteadyState = new DataTable();
             NozzleTabla_InitialConditions = new DataTable();
             createAndersonTables();
+            this.CreateSimulationTables();
 
             // por defecto: first step table
             andersongrid.ItemsSource = AndersonTabla_FisrtStep.DefaultView;
             andersongrid.DataContext = AndersonTabla_FisrtStep.DefaultView;
             andersongrid.Items.Refresh();
-            //datasimgrid.ItemsSource = NozzleTabla_FirstStep.DefaultView;
-            //datasimgrid.DataContext = NozzleTabla_FirstStep.DefaultView;
-            //datasimgrid.Items.Refresh();
-        }
-
-        public void GetAx(double Ax) // guarda el incremento de x que le dan
-        {
-            this.Ax = Ax;
-        }
-
-        public void GetAt(double At) // guarda el incremento de t
-        {
-            this.At = At;
-        }
-
-        public void GetEstadoInicial(Nozzle nozzle) // guarda el estado inicial del nozzle
-        {
-            this.nozzleI = new Nozzle(nozzle);
-            this.CreateSimulationTables();
             datasimgrid.ItemsSource = NozzleTabla_FirstStep.DefaultView;
             datasimgrid.DataContext = NozzleTabla_FirstStep.DefaultView;
             datasimgrid.Items.Refresh();
@@ -122,38 +109,38 @@ namespace NozzleDisplay
             AndersonTabla_FisrtStep.Columns.Add(new DataColumn("T To"));
             AndersonTabla_FisrtStep.Columns.Add(new DataColumn("P Po"));
             AndersonTabla_FisrtStep.Columns.Add(new DataColumn("M"));
-
-            AndersonTabla_FisrtStep.Rows.Add(0.0, 5.950, 1.000, 0.099, 1.000, 1.000, 0.099);
-            AndersonTabla_FisrtStep.Rows.Add(0.1, 5.312, 1.000, 0.111, 1.000, 1.000, 0.111);
-            AndersonTabla_FisrtStep.Rows.Add(0.2, 4.718, 1.000, 0.125, 1.000, 1.000, 0.125);
-            AndersonTabla_FisrtStep.Rows.Add(0.3, 4.168, 1.000, 0.141, 1.000, 1.000, 0.141);
-            AndersonTabla_FisrtStep.Rows.Add(0.4, 3.662, 1.000, 0.160, 1.000, 1.000, 0.160);
-            AndersonTabla_FisrtStep.Rows.Add(0.5, 3.200, 0.999, 0.187, 1.000, 0.999, 0.187);
-            AndersonTabla_FisrtStep.Rows.Add(0.6, 2.782, 0.963, 0.228, 0.983, 0.947, 0.230);
-            AndersonTabla_FisrtStep.Rows.Add(0.7, 2.408, 0.927, 0.271, 0.967, 0.897, 0.276);
-            AndersonTabla_FisrtStep.Rows.Add(0.8, 2.078, 0.891, 0.325, 0.950, 0.846, 0.333);
-            AndersonTabla_FisrtStep.Rows.Add(0.9, 1.792, 0.854, 0.389, 0.934, 0.798, 0.403);
-            AndersonTabla_FisrtStep.Rows.Add(1.0, 1.550, 0.818, 0.467, 0.917, 0.750, 0.487);
-            AndersonTabla_FisrtStep.Rows.Add(1.1, 1.352, 0.781, 0.557, 0.900, 0.703, 0.587);
-            AndersonTabla_FisrtStep.Rows.Add(1.2, 1.198, 0.744, 0.656, 0.883, 0.657, 0.698);
-            AndersonTabla_FisrtStep.Rows.Add(1.3, 1.088, 0.707, 0.759, 0.866, 0.613, 0.815);
-            AndersonTabla_FisrtStep.Rows.Add(1.4, 1.022, 0.670, 0.854, 0.849, 0.569, 0.927);
-            AndersonTabla_FisrtStep.Rows.Add(1.5, 1.000, 0.633, 0.930, 0.833, 0.527, 1.018);
-            AndersonTabla_FisrtStep.Rows.Add(1.6, 1.022, 0.594, 0.979, 0.800, 0.475, 1.094);
-            AndersonTabla_FisrtStep.Rows.Add(1.7, 1.088, 0.555, 0.992, 0.766, 0.425, 1.134);
-            AndersonTabla_FisrtStep.Rows.Add(1.8, 1.198, 0.517, 0.975, 0.731, 0.377, 1.141);
-            AndersonTabla_FisrtStep.Rows.Add(1.9, 1.352, 0.478, 0.939, 0.695, 0.333, 1.126);
-            AndersonTabla_FisrtStep.Rows.Add(2.0, 1.550, 0.440, 0.893, 0.660, 0.290, 1.099);
-            AndersonTabla_FisrtStep.Rows.Add(2.1, 1.792, 0.401, 0.848, 0.625, 0.251, 1.073);
-            AndersonTabla_FisrtStep.Rows.Add(2.2, 2.078, 0.362, 0.809, 0.590, 0.214, 1.054);
-            AndersonTabla_FisrtStep.Rows.Add(2.3, 2.408, 0.324, 0.781, 0.554, 0.179, 1.049);
-            AndersonTabla_FisrtStep.Rows.Add(2.4, 2.782, 0.285, 0.766, 0.519, 0.148, 1.063);
-            AndersonTabla_FisrtStep.Rows.Add(2.5, 3.200, 0.246, 0.768, 0.484, 0.119, 1.104);
-            AndersonTabla_FisrtStep.Rows.Add(2.6, 3.662, 0.208, 0.791, 0.448, 0.093, 1.182);
-            AndersonTabla_FisrtStep.Rows.Add(2.7, 4.168, 0.169, 0.846, 0.412, 0.070, 1.318);
-            AndersonTabla_FisrtStep.Rows.Add(2.8, 4.718, 0.131, 0.949, 0.375, 0.049, 1.551);
-            AndersonTabla_FisrtStep.Rows.Add(2.9, 5.312, 0.093, 1.133, 0.324, 0.030, 1.990);
-            AndersonTabla_FisrtStep.Rows.Add(3.0, 5.950, 0.063, 1.438, 0.200, 0.013, 3.217);
+                                                                // FALTA CAMBIAR COLUMNAS DE VEL Y TEMP (LAS 2 DE ENMEDIO) --> ENTERAS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            AndersonTabla_FisrtStep.Rows.Add(0.0, 5.950, 1.000, 0.111, 1.000, 1.000, 0.111);
+            AndersonTabla_FisrtStep.Rows.Add(0.1, 5.312, 0.955, 0.212, 0.972, 0.928, 0.215);
+            AndersonTabla_FisrtStep.Rows.Add(0.2, 4.718, 1.000, 0.125, 1.000, 0.881, 0.320);
+            AndersonTabla_FisrtStep.Rows.Add(0.3, 4.168, 1.000, 0.141, 1.000, 0.836, 0.427);
+            AndersonTabla_FisrtStep.Rows.Add(0.4, 3.662, 1.000, 0.160, 1.000, 0.791, 0.534);
+            AndersonTabla_FisrtStep.Rows.Add(0.5, 3.200, 0.999, 0.187, 1.000, 0.748, 0.640);
+            AndersonTabla_FisrtStep.Rows.Add(0.6, 2.782, 0.963, 0.228, 0.983, 0.706, 0.747);
+            AndersonTabla_FisrtStep.Rows.Add(0.7, 2.408, 0.927, 0.271, 0.967, 0.665, 0.854);
+            AndersonTabla_FisrtStep.Rows.Add(0.8, 2.078, 0.891, 0.325, 0.950, 0.625, 0.960);
+            AndersonTabla_FisrtStep.Rows.Add(0.9, 1.792, 0.854, 0.389, 0.934, 0.585, 1.067);
+            AndersonTabla_FisrtStep.Rows.Add(1.0, 1.550, 0.818, 0.467, 0.917, 0.545, 1.174);
+            AndersonTabla_FisrtStep.Rows.Add(1.1, 1.352, 0.781, 0.557, 0.900, 0.506, 1.281);
+            AndersonTabla_FisrtStep.Rows.Add(1.2, 1.198, 0.744, 0.656, 0.883, 0.466, 1.389);
+            AndersonTabla_FisrtStep.Rows.Add(1.3, 1.088, 0.707, 0.759, 0.866, 0.426, 1.498);
+            AndersonTabla_FisrtStep.Rows.Add(1.4, 1.022, 0.670, 0.854, 0.849, 0.387, 1.609);
+            AndersonTabla_FisrtStep.Rows.Add(1.5, 1.000, 0.633, 0.930, 0.833, 0.349, 1.720);
+            AndersonTabla_FisrtStep.Rows.Add(1.6, 1.022, 0.594, 0.979, 0.800, 0.312, 1.833);
+            AndersonTabla_FisrtStep.Rows.Add(1.7, 1.088, 0.555, 0.992, 0.766, 0.278, 1.945);
+            AndersonTabla_FisrtStep.Rows.Add(1.8, 1.198, 0.517, 0.975, 0.731, 0.247, 2.058);
+            AndersonTabla_FisrtStep.Rows.Add(1.9, 1.352, 0.478, 0.939, 0.695, 0.218, 2.171);
+            AndersonTabla_FisrtStep.Rows.Add(2.0, 1.550, 0.440, 0.893, 0.660, 0.192, 2.282);
+            AndersonTabla_FisrtStep.Rows.Add(2.1, 1.792, 0.401, 0.848, 0.625, 0.168, 2.393);
+            AndersonTabla_FisrtStep.Rows.Add(2.2, 2.078, 0.362, 0.809, 0.590, 0.146, 2.504);
+            AndersonTabla_FisrtStep.Rows.Add(2.3, 2.408, 0.324, 0.781, 0.554, 0.126, 2.614);
+            AndersonTabla_FisrtStep.Rows.Add(2.4, 2.782, 0.285, 0.766, 0.519, 0.107, 2.724);
+            AndersonTabla_FisrtStep.Rows.Add(2.5, 3.200, 0.246, 0.768, 0.484, 0.090, 2.834);
+            AndersonTabla_FisrtStep.Rows.Add(2.6, 3.662, 0.208, 0.791, 0.448, 0.073, 2.944);
+            AndersonTabla_FisrtStep.Rows.Add(2.7, 4.168, 0.169, 0.846, 0.412, 0.058, 3.055);
+            AndersonTabla_FisrtStep.Rows.Add(2.8, 4.718, 0.131, 0.949, 0.375, 0.044, 3.167);
+            AndersonTabla_FisrtStep.Rows.Add(2.9, 5.312, 0.093, 1.133, 0.324, 0.032, 3.281);
+            AndersonTabla_FisrtStep.Rows.Add(3.0, 5.950, 0.063, 1.438, 0.200, 0.020, 3.406);
 
 
             // STEADY STATE
@@ -216,26 +203,26 @@ namespace NozzleDisplay
             AndersonTabla_InitialConditions.Rows.Add(0.8, 2.078, 0.748, 0.877, 0.815);
             AndersonTabla_InitialConditions.Rows.Add(0.9, 1.792, 0.717, 0.962, 0.792);
             AndersonTabla_InitialConditions.Rows.Add(1.0, 1.550, 0.685, 1.043, 0.769);
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
-            AndersonTabla_InitialConditions.Rows.Add();
+            AndersonTabla_InitialConditions.Rows.Add(1.1, 1.352, 0.654, 1.122, 0.745);
+            AndersonTabla_InitialConditions.Rows.Add(1.2, 1.198, 0.622, 1.197, 0.722);
+            AndersonTabla_InitialConditions.Rows.Add(1.3, 1.088, 0.591, 1.268, 0.699);
+            AndersonTabla_InitialConditions.Rows.Add(1.4, 1.022, 0.560, 1.337, 0.676);
+            AndersonTabla_InitialConditions.Rows.Add(1.5, 1.000, 0.528, 1.402, 0.653);
+            AndersonTabla_InitialConditions.Rows.Add(1.6, 1.022, 0.497, 1.463, 0.630);
+            AndersonTabla_InitialConditions.Rows.Add(1.7, 1.088, 0.465, 1.521, 0.607);
+            AndersonTabla_InitialConditions.Rows.Add(1.8, 1.198, 0.434, 1.575, 0.583);
+            AndersonTabla_InitialConditions.Rows.Add(1.9, 1.352, 0.402, 1.625, 0.560);
+            AndersonTabla_InitialConditions.Rows.Add(2.0, 1.550, 0.371, 1.671, 0.537);
+            AndersonTabla_InitialConditions.Rows.Add(2.1, 1.792, 0.339, 1.713, 0.514);
+            AndersonTabla_InitialConditions.Rows.Add(2.2, 2.078, 0.308, 1.750, 0.491);
+            AndersonTabla_InitialConditions.Rows.Add(2.3, 2.408, 0.276, 1.783, 0.468);
+            AndersonTabla_InitialConditions.Rows.Add(2.4, 2.782, 0.245, 1.811, 0.445);
+            AndersonTabla_InitialConditions.Rows.Add(2.5, 3.200, 0.214, 1.834, 0.422);
+            AndersonTabla_InitialConditions.Rows.Add(2.6, 3.662, 0.182, 1.852, 0.398);
+            AndersonTabla_InitialConditions.Rows.Add(2.7, 4.168, 0.151, 1.864, 0.375);
+            AndersonTabla_InitialConditions.Rows.Add(2.8, 4.718, 0.119, 1.870, 0.352);
+            AndersonTabla_InitialConditions.Rows.Add(2.9, 5.312, 0.088, 1.870, 0.329);
+            AndersonTabla_InitialConditions.Rows.Add(3.0, 5.950, 0.056, 1.864, 0.306);
         }
 
         private void CreateSimulationTables()
@@ -247,12 +234,12 @@ namespace NozzleDisplay
             NozzleTabla_SteadyState = this.SimularHastaSteady();
 
             // INITIAL CONDITIONS 
-            NozzleTabla_InitialConditions = this.nozzleI.GetEstado(this.Ax);
+            NozzleTabla_InitialConditions = this.nozzle.GetEstado(this.Ax);
         }
 
         public DataTable SimularHastaSteady()
         {
-            Nozzle newnozzle = new Nozzle(this.nozzleI);
+            Nozzle newnozzle = new Nozzle(this.nozzle);
 
             // hacer simulacion -------------------------- FALTA HACER !!!!!!!!!!!!!
 
@@ -261,7 +248,7 @@ namespace NozzleDisplay
 
         public DataTable SimularUnCiclo()
         {
-            Nozzle newnozzle = new Nozzle(this.nozzleI);
+            Nozzle newnozzle = new Nozzle(this.nozzle);
 
             newnozzle.EjecutarCiclo(this.At, this.Ax, 1.4);
             newnozzle.ActualizarEstados();
