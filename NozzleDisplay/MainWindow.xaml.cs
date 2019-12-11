@@ -42,6 +42,7 @@ namespace NozzleDisplay
         public MainWindow()
         {
             InitializeComponent();
+            this.WindowState = WindowState.Maximized;
 
             //escondemos botones etc --> control de errores
             playbut.Visibility = Visibility.Hidden;
@@ -51,6 +52,7 @@ namespace NozzleDisplay
             comboboxcolor.Visibility = Visibility.Hidden;
             PlotsTabControl.Visibility = Visibility.Hidden;
             stepback.Visibility = Visibility.Hidden;
+
         }
 
         public void fillCanvasNozzle() // crea el nozzle
@@ -195,6 +197,16 @@ namespace NozzleDisplay
 
                             // enseñamos el botón que genera un nuevo nozzle
                             parambut.Visibility = Visibility.Hidden;
+
+                            //actualizamos el slider
+                            sliderthroat.Maximum = this.numR;
+                            sliderthroat.Minimum = 0;
+                            sliderthroat.Value = this.numR / 2;
+                            for (int i = 0; i < this.numR; i++)
+                            {
+                                sliderthroat.Ticks.Add(Convert.ToDouble(i));
+                            }
+                                    
                         }
                     }
                 }
@@ -420,7 +432,7 @@ namespace NozzleDisplay
 
             for (int i = 0; i < this.numR; i++)
             {
-                datanozzle.Columns.Add(new DataColumn(Convert.ToString((i + 1)*this.dx)));
+                datanozzle.Columns.Add(new DataColumn(((i)*this.dx).ToString()));
             }
 
             DataRow dr_p = datanozzle.NewRow(); dr_p[0] = ("P Po");
@@ -430,10 +442,10 @@ namespace NozzleDisplay
 
             for (int i = 1; i < datanozzle.Columns.Count; i++)
             {
-                dr_p[i] = listpre[i - 1];
-                dr_v[i] = listvel[i - 1];
-                dr_t[i] = listtemp[i - 1];
-                dr_de[i] = listden[i - 1];
+                dr_p[i] = listpre[i - 1].ToString();
+                dr_v[i] = listvel[i - 1].ToString();
+                dr_t[i] = listtemp[i - 1].ToString();
+                dr_de[i] = listden[i - 1].ToString();
             }
 
             datanozzle.Rows.Add(dr_p);
@@ -503,7 +515,6 @@ namespace NozzleDisplay
 
         public void refreshplotstime()
         {
-
             pressureplotdt.Children.Clear();
             var lg = new LineGraph();
             pressureplotdt.Children.Add(lg);
@@ -536,6 +547,5 @@ namespace NozzleDisplay
             lg.StrokeThickness = 2;
             lg.Plot(this.listdt.ToArray(), this.listdendt.ToArray());
         }
-
     }
 }

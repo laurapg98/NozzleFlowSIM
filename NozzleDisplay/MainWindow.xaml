@@ -38,15 +38,15 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Menu IsMainMenu="True" Background="{x:Null}" Width="1350" Height="25" Grid.ColumnSpan="8" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <MenuItem Header="_File"></MenuItem> 
+            <MenuItem Header="_File"></MenuItem>
             <MenuItem Header="_Anderson" Click="MenuItem_Click"></MenuItem>
             <MenuItem Header="_Help"></MenuItem>
             <MenuItem Header="_About Us" Click="Click_Aboutus" ></MenuItem>
         </Menu>
-        <ItemsControl x:Name="nozzelcontrol" Grid.Column="4" Grid.Row="1" Width="800" Height="300" Grid.RowSpan="4" Grid.ColumnSpan="3" HorizontalAlignment="Center" Background="Transparent" Margin="20,20,0,0">
-            <Canvas HorizontalAlignment="Left" x:Name="canvasNozzle" Width="800" Height="300" Background="DarkGray" Margin="0"/>
+        <ItemsControl x:Name="nozzelcontrol" Grid.Column="4" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="Transparent" Margin="20,15,0,20" Width="800" HorizontalAlignment="Left" Height="300">
+            <Canvas x:Name="canvasNozzle" Background="DarkGray" Height="300"/>
         </ItemsControl>
-        <Rectangle x:Name="rectanglescale" Height="300" Grid.Column="7" Grid.RowSpan="4" Grid.ColumnSpan="1" Width="25" Grid.Row="1" Fill="DarkGray" Margin="0,20,0,0"/>
+        <Rectangle x:Name="rectanglescale" Height="300" Grid.Column="7" Grid.RowSpan="4" Grid.ColumnSpan="1" Grid.Row="1" Fill="DarkGray" Margin="0,10,42,10" HorizontalAlignment="Center" Width="20"/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="1" Width="200" Height="300" Margin="0,20,0,0">
             <Grid>
                 <TextBox x:Name="cbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="30,40,68.333,230.333"></TextBox>
@@ -73,35 +73,61 @@
                 <Button x:Name="stepback" Content="Step back" HorizontalAlignment="Left" Margin="119,177,0,0" VerticalAlignment="Top" Width="75" Click="stepback_Click"/>
             </Grid>
         </Border>
-        <TabControl x:Name="PlotsTabControl" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="8" Grid.RowSpan="3" Grid.ColumnSpan="7" Height="300" Width="1250" Margin="10,20,10,10" VerticalAlignment="Bottom">
+        <TabControl x:Name="PlotsTabControl" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="8" Grid.RowSpan="8" Grid.ColumnSpan="7" Margin="10,10,10,20">
             <TabItem Header="Plots X/L">
                 <Grid>
-                    <d3:Chart BottomTitle="X/L" LeftTitle="P/Po" Margin="9,29,936.333,2.667">
-                        <d3:LineGraph x:Name="pressureplot" d3:Plot.X1="0" d3:Plot.X2="3" d3:Plot.Y1="0" d3:Plot.Y2="1"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+                    <d3:Chart BottomTitle="X/L" LeftTitle="P/Po" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1">
+                        <d3:LineGraph x:Name="pressureplot"/>
                     </d3:Chart>
-                    <d3:Chart BottomTitle="X/L" LeftTitle="V/Vo" Margin="314,29,631.333,2.667">
-                        <d3:LineGraph x:Name="velocityplot" />
+                    <d3:Chart BottomTitle="X/L" LeftTitle="V/Vo" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1">
+                        <d3:LineGraph x:Name="velocityplot" MinWidth="200" MinHeight="200" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </d3:Chart>
-                    <d3:Chart BottomTitle="X/L" LeftTitle="T/To" Margin="613,30,332.333,1.667">
+                    <d3:Chart BottomTitle="X/L" LeftTitle="T/To" VerticalAlignment="Top" Grid.Column="3" Grid.Row="1">
                         <d3:LineGraph x:Name="temperatureplot" />
                     </d3:Chart>
-                    <d3:Chart BottomTitle="X/L" LeftTitle="p/po" Margin="912,32,33.333,-0.333">
+                    <d3:Chart BottomTitle="X/L" LeftTitle="p/po" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="4" Grid.Row="1">
                         <d3:LineGraph x:Name="densityplot"/>
                     </d3:Chart>
                 </Grid>
             </TabItem>
             <TabItem Header="Plots ^t">
                 <Grid>
-                    <d3:Chart BottomTitle="t" LeftTitle="P/Po" Margin="8,15,937.333,16.667">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+                    <d3:Chart BottomTitle="t" LeftTitle="P/Po" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1">
                         <d3:LineGraph x:Name="pressureplotdt"/>
                     </d3:Chart>
-                    <d3:Chart BottomTitle="t" LeftTitle="V/Vo" Margin="314,11,631.333,20.667">
+                    <d3:Chart BottomTitle="t" LeftTitle="V/Vo" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1">
                         <d3:LineGraph x:Name="velocityplotdt"/>
                     </d3:Chart>
-                    <d3:Chart BottomTitle="t" LeftTitle="T/To" Margin="625,12,320.333,19.667">
+                    <d3:Chart BottomTitle="t" LeftTitle="T/To" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" Grid.Row="1">
                         <d3:LineGraph x:Name="temperatureplotdt"/>
                     </d3:Chart>
-                    <d3:Chart BottomTitle="t" LeftTitle="p/po" Margin="937,14,8.333,17.667">
+                    <d3:Chart BottomTitle="t" LeftTitle="p/po" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="4" Grid.Row="1">
                         <d3:LineGraph x:Name="densityplotdt"/>
                     </d3:Chart>
                 </Grid>
@@ -110,10 +136,21 @@
             </TabItem>
             <TabItem Header="Data">
                 <Grid>
-                    <DataGrid x:Name="gridnozzle" CanUserSortColumns="False" ItemsSource="{Binding}" IsReadOnly="True" CanUserAddRows="False">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid x:Name="gridnozzle" CanUserSortColumns="False" ItemsSource="{Binding}" IsReadOnly="True" CanUserAddRows="False" Grid.Column="1" Grid.Row="1">
                     </DataGrid>
                 </Grid>
             </TabItem>
         </TabControl>
+        <Slider x:Name="sliderthroat" Margin="25,0,5,0"  VerticalAlignment="Top"  Grid.Column="4" Grid.Row="5" Grid.ColumnSpan="3" IsSnapToTickEnabled="True" TickPlacement="TopLeft" />
     </Grid>
 </Window>
