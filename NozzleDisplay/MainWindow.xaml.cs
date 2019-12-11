@@ -34,7 +34,7 @@ namespace NozzleDisplay
         List<double> listtemp, listdx, listvel, listpre, listden, listtempdt, listdt, listveldt, listpredt, listdendt;
         Stack<Nozzle> pilaNozzle;
         System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer(); //Para el tick del timer
-        int milisecs = 1000;
+        int milisecs = 500;
         Nozzle nozzle_CI;
 
         int positionThroat;
@@ -73,7 +73,7 @@ namespace NozzleDisplay
 
         public Color GetColorMach(double rangeStart, double rangeEnd, double actualValue) // escala de color de la velocidad (Mach)
         {
-            if (rangeStart >= rangeEnd) return Colors.Black;
+            if (actualValue >= rangeEnd) return Colors.Red;
 
             double max = rangeEnd - rangeStart; // make the scale start from 0
             double value = actualValue - rangeStart; // adjust the value accordingly
@@ -101,7 +101,7 @@ namespace NozzleDisplay
 
         public Color GetColorPressure(double rangeStart, double rangeEnd, double actualValue) // escala de color de la presión
         {
-            if (rangeStart >= rangeEnd) return Colors.Black;
+            if (actualValue >= rangeEnd) return Colors.Blue;
 
             double max = rangeEnd - rangeStart; // make the scale start from 0
             double value = actualValue - rangeStart; // adjust the value accordingly
@@ -246,7 +246,7 @@ namespace NozzleDisplay
                 {
                     Rectangle rect_canvas = this.nozzlerectangles[i];
                     Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i + 1);
-                    rect_canvas.Fill = new SolidColorBrush(GetColorMach(0, 4, rect_nozzle.GetVelP()));
+                    rect_canvas.Fill = new SolidColorBrush(GetColorMach(0, 2.5, rect_nozzle.GetVelP()));
                 }
 
                 LinearGradientBrush lgb = new LinearGradientBrush(GetColorMach(0, 2.5, 2.5), GetColorMach(0, 2.5, 0), 90);
@@ -436,12 +436,10 @@ namespace NozzleDisplay
                 dr_de[i] = listden[i - 1];
             }
 
-           // datanozzle.Rows.Add(dr_dx);
             datanozzle.Rows.Add(dr_p);
             datanozzle.Rows.Add(dr_v);
             datanozzle.Rows.Add(dr_t);
             datanozzle.Rows.Add(dr_de);
-
 
             gridnozzle.ItemsSource = datanozzle.DefaultView;
             gridnozzle.DataContext = datanozzle.DefaultView;
