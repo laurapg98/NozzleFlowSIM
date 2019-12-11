@@ -14,7 +14,5 @@
             <ComboBoxItem IsSelected="False">Steady State</ComboBoxItem>
             <ComboBoxItem IsSelected="False">Initial Conditions</ComboBoxItem>
         </ComboBox>
-        <ComboBox HorizontalAlignment="Left" Margin="455,5,0,0" VerticalAlignment="Top" Width="120"/>
-
     </Grid>
 </Window>

@@ -47,8 +47,7 @@ namespace NozzleDisplay
             NozzleTabla_FirstStep = new DataTable();
             NozzleTabla_SteadyState = new DataTable();
             NozzleTabla_InitialConditions = new DataTable();
-            createAndersonTables();
-            this.CreateSimulationTables();
+            this.createTables();
 
             // por defecto: first step table
             andersongrid.ItemsSource = AndersonTabla_FisrtStep.DefaultView;
@@ -99,9 +98,9 @@ namespace NozzleDisplay
             }
         }
 
-        private void createAndersonTables()
+        private void createTables()
         {
-            // FIRST STEP
+            // FIRST STEP - ANDERSON
             AndersonTabla_FisrtStep.Columns.Add(new DataColumn("x L"));
             AndersonTabla_FisrtStep.Columns.Add(new DataColumn("A A*"));
             AndersonTabla_FisrtStep.Columns.Add(new DataColumn("ρ ρo"));
@@ -109,41 +108,41 @@ namespace NozzleDisplay
             AndersonTabla_FisrtStep.Columns.Add(new DataColumn("T To"));
             AndersonTabla_FisrtStep.Columns.Add(new DataColumn("P Po"));
             AndersonTabla_FisrtStep.Columns.Add(new DataColumn("M"));
-                                                                // FALTA CAMBIAR COLUMNAS DE VEL Y TEMP (LAS 2 DE ENMEDIO) --> ENTERAS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                                                
             AndersonTabla_FisrtStep.Rows.Add(0.0, 5.950, 1.000, 0.111, 1.000, 1.000, 0.111);
             AndersonTabla_FisrtStep.Rows.Add(0.1, 5.312, 0.955, 0.212, 0.972, 0.928, 0.215);
-            AndersonTabla_FisrtStep.Rows.Add(0.2, 4.718, 1.000, 0.125, 1.000, 0.881, 0.320);
-            AndersonTabla_FisrtStep.Rows.Add(0.3, 4.168, 1.000, 0.141, 1.000, 0.836, 0.427);
-            AndersonTabla_FisrtStep.Rows.Add(0.4, 3.662, 1.000, 0.160, 1.000, 0.791, 0.534);
-            AndersonTabla_FisrtStep.Rows.Add(0.5, 3.200, 0.999, 0.187, 1.000, 0.748, 0.640);
-            AndersonTabla_FisrtStep.Rows.Add(0.6, 2.782, 0.963, 0.228, 0.983, 0.706, 0.747);
-            AndersonTabla_FisrtStep.Rows.Add(0.7, 2.408, 0.927, 0.271, 0.967, 0.665, 0.854);
-            AndersonTabla_FisrtStep.Rows.Add(0.8, 2.078, 0.891, 0.325, 0.950, 0.625, 0.960);
-            AndersonTabla_FisrtStep.Rows.Add(0.9, 1.792, 0.854, 0.389, 0.934, 0.585, 1.067);
-            AndersonTabla_FisrtStep.Rows.Add(1.0, 1.550, 0.818, 0.467, 0.917, 0.545, 1.174);
-            AndersonTabla_FisrtStep.Rows.Add(1.1, 1.352, 0.781, 0.557, 0.900, 0.506, 1.281);
-            AndersonTabla_FisrtStep.Rows.Add(1.2, 1.198, 0.744, 0.656, 0.883, 0.466, 1.389);
-            AndersonTabla_FisrtStep.Rows.Add(1.3, 1.088, 0.707, 0.759, 0.866, 0.426, 1.498);
-            AndersonTabla_FisrtStep.Rows.Add(1.4, 1.022, 0.670, 0.854, 0.849, 0.387, 1.609);
-            AndersonTabla_FisrtStep.Rows.Add(1.5, 1.000, 0.633, 0.930, 0.833, 0.349, 1.720);
-            AndersonTabla_FisrtStep.Rows.Add(1.6, 1.022, 0.594, 0.979, 0.800, 0.312, 1.833);
-            AndersonTabla_FisrtStep.Rows.Add(1.7, 1.088, 0.555, 0.992, 0.766, 0.278, 1.945);
-            AndersonTabla_FisrtStep.Rows.Add(1.8, 1.198, 0.517, 0.975, 0.731, 0.247, 2.058);
-            AndersonTabla_FisrtStep.Rows.Add(1.9, 1.352, 0.478, 0.939, 0.695, 0.218, 2.171);
-            AndersonTabla_FisrtStep.Rows.Add(2.0, 1.550, 0.440, 0.893, 0.660, 0.192, 2.282);
-            AndersonTabla_FisrtStep.Rows.Add(2.1, 1.792, 0.401, 0.848, 0.625, 0.168, 2.393);
-            AndersonTabla_FisrtStep.Rows.Add(2.2, 2.078, 0.362, 0.809, 0.590, 0.146, 2.504);
-            AndersonTabla_FisrtStep.Rows.Add(2.3, 2.408, 0.324, 0.781, 0.554, 0.126, 2.614);
-            AndersonTabla_FisrtStep.Rows.Add(2.4, 2.782, 0.285, 0.766, 0.519, 0.107, 2.724);
-            AndersonTabla_FisrtStep.Rows.Add(2.5, 3.200, 0.246, 0.768, 0.484, 0.090, 2.834);
-            AndersonTabla_FisrtStep.Rows.Add(2.6, 3.662, 0.208, 0.791, 0.448, 0.073, 2.944);
-            AndersonTabla_FisrtStep.Rows.Add(2.7, 4.168, 0.169, 0.846, 0.412, 0.058, 3.055);
-            AndersonTabla_FisrtStep.Rows.Add(2.8, 4.718, 0.131, 0.949, 0.375, 0.044, 3.167);
-            AndersonTabla_FisrtStep.Rows.Add(2.9, 5.312, 0.093, 1.133, 0.324, 0.032, 3.281);
-            AndersonTabla_FisrtStep.Rows.Add(3.0, 5.950, 0.063, 1.438, 0.200, 0.020, 3.406);
+            AndersonTabla_FisrtStep.Rows.Add(0.2, 4.718, 0.927, 0.312, 0.950, 0.881, 0.320);
+            AndersonTabla_FisrtStep.Rows.Add(0.3, 4.168, 0.900, 0.411, 0.929, 0.836, 0.427);
+            AndersonTabla_FisrtStep.Rows.Add(0.4, 3.662, 0.872, 0.508, 0.908, 0.791, 0.534);
+            AndersonTabla_FisrtStep.Rows.Add(0.5, 3.200, 0.844, 0.603, 0.886, 0.748, 0.640);
+            AndersonTabla_FisrtStep.Rows.Add(0.6, 2.782, 0.817, 0.695, 0.865, 0.706, 0.747);
+            AndersonTabla_FisrtStep.Rows.Add(0.7, 2.408, 0.789, 0.784, 0.843, 0.665, 0.854);
+            AndersonTabla_FisrtStep.Rows.Add(0.8, 2.078, 0.760, 0.870, 0.822, 0.625, 0.960);
+            AndersonTabla_FisrtStep.Rows.Add(0.9, 1.792, 0.731, 0.954, 0.800, 0.585, 1.067);
+            AndersonTabla_FisrtStep.Rows.Add(1.0, 1.550, 0.701, 1.035, 0.778, 0.545, 1.174);
+            AndersonTabla_FisrtStep.Rows.Add(1.1, 1.352, 0.670, 1.113, 0.755, 0.506, 1.281);
+            AndersonTabla_FisrtStep.Rows.Add(1.2, 1.198, 0.637, 1.188, 0.731, 0.466, 1.389);
+            AndersonTabla_FisrtStep.Rows.Add(1.3, 1.088, 0.603, 1.260, 0.707, 0.426, 1.498);
+            AndersonTabla_FisrtStep.Rows.Add(1.4, 1.022, 0.567, 1.328, 0.682, 0.387, 1.609);
+            AndersonTabla_FisrtStep.Rows.Add(1.5, 1.000, 0.531, 1.394, 0.656, 0.349, 1.720);
+            AndersonTabla_FisrtStep.Rows.Add(1.6, 1.022, 0.494, 1.455, 0.631, 0.312, 1.833);
+            AndersonTabla_FisrtStep.Rows.Add(1.7, 1.088, 0.459, 1.514, 0.605, 0.278, 1.945);
+            AndersonTabla_FisrtStep.Rows.Add(1.8, 1.198, 0.425, 1.568, 0.581, 0.247, 2.058);
+            AndersonTabla_FisrtStep.Rows.Add(1.9, 1.352, 0.392, 1.619, 0.556, 0.218, 2.171);
+            AndersonTabla_FisrtStep.Rows.Add(2.0, 1.550, 0.361, 1.666, 0.533, 0.192, 2.282);
+            AndersonTabla_FisrtStep.Rows.Add(2.1, 1.792, 0.330, 1.709, 0.510, 0.168, 2.393);
+            AndersonTabla_FisrtStep.Rows.Add(2.2, 2.078, 0.301, 1.748, 0.487, 0.146, 2.504);
+            AndersonTabla_FisrtStep.Rows.Add(2.3, 2.408, 0.271, 1.782, 0.465, 0.126, 2.614);
+            AndersonTabla_FisrtStep.Rows.Add(2.4, 2.782, 0.242, 1.813, 0.443, 0.107, 2.724);
+            AndersonTabla_FisrtStep.Rows.Add(2.5, 3.200, 0.213, 1.838, 0.421, 0.090, 2.834);
+            AndersonTabla_FisrtStep.Rows.Add(2.6, 3.662, 0.184, 1.858, 0.398, 0.073, 2.944);
+            AndersonTabla_FisrtStep.Rows.Add(2.7, 4.168, 0.154, 1.874, 0.376, 0.058, 3.055);
+            AndersonTabla_FisrtStep.Rows.Add(2.8, 4.718, 0.125, 1.884, 0.354, 0.044, 3.167);
+            AndersonTabla_FisrtStep.Rows.Add(2.9, 5.312, 0.095, 1.890, 0.332, 0.032, 3.281);
+            AndersonTabla_FisrtStep.Rows.Add(3.0, 5.950, 0.066, 1.895, 0.309, 0.020, 3.406);
 
 
-            // STEADY STATE
+            // STEADY STATE - ANDERSON                                                
             AndersonTabla_SteadyState.Columns.Add(new DataColumn("x L"));
             AndersonTabla_SteadyState.Columns.Add(new DataColumn("A A*"));
             AndersonTabla_SteadyState.Columns.Add(new DataColumn("ρ ρo"));
@@ -152,40 +151,40 @@ namespace NozzleDisplay
             AndersonTabla_SteadyState.Columns.Add(new DataColumn("P Po"));
             AndersonTabla_SteadyState.Columns.Add(new DataColumn("M"));
 
-            AndersonTabla_SteadyState.Rows.Add(0.0, 5.950, 1.000, 0.098, 1.000, 1.000, 0.098);
-            AndersonTabla_SteadyState.Rows.Add(0.1, 5.312, 0.999, 0.110, 0.999, 0.998, 0.110);
-            AndersonTabla_SteadyState.Rows.Add(0.2, 4.718, 0.997, 0.124, 0.999, 0.996, 0.124);
-            AndersonTabla_SteadyState.Rows.Add(0.3, 4.168, 0.995, 0.141, 0.998, 0.993, 0.141);
-            AndersonTabla_SteadyState.Rows.Add(0.4, 3.662, 0.992, 0.161, 0.997, 0.989, 0.161);
-            AndersonTabla_SteadyState.Rows.Add(0.5, 3.200, 0.988, 0.184, 0.995, 0.983, 0.185);
-            AndersonTabla_SteadyState.Rows.Add(0.6, 2.782, 0.982, 0.213, 0.993, 0.975, 0.214);
-            AndersonTabla_SteadyState.Rows.Add(0.7, 2.408, 0.974, 0.249, 0.989, 0.964, 0.250);
-            AndersonTabla_SteadyState.Rows.Add(0.8, 2.078, 0.962, 0.292, 0.985, 0.948, 0.294);
-            AndersonTabla_SteadyState.Rows.Add(0.9, 1.792, 0.946, 0.344, 0.978, 0.926, 0.348);
-            AndersonTabla_SteadyState.Rows.Add(1.0, 1.550, 0.923, 0.408, 0.969, 0.894, 0.415);
-            AndersonTabla_SteadyState.Rows.Add(1.1, 1.352, 0.891, 0.485, 0.955, 0.851, 0.496);
-            AndersonTabla_SteadyState.Rows.Add(1.2, 1.198, 0.847, 0.577, 0.935, 0.792, 0.596);
-            AndersonTabla_SteadyState.Rows.Add(1.3, 1.088, 0.789, 0.682, 0.909, 0.718, 0.715);
-            AndersonTabla_SteadyState.Rows.Add(1.4, 1.022, 0.718, 0.798, 0.874, 0.628, 0.854);
-            AndersonTabla_SteadyState.Rows.Add(1.5, 1.000, 0.648, 0.904, 0.839, 0.544, 0.987);
-            AndersonTabla_SteadyState.Rows.Add(1.6, 1.022, 0.548, 1.046, 0.783, 0.429, 1.182);
-            AndersonTabla_SteadyState.Rows.Add(1.7, 1.088, 0.462, 1.164, 0.731, 0.338, 1.361);
-            AndersonTabla_SteadyState.Rows.Add(1.8, 1.198, 0.384, 1.272, 0.679, 0.261, 1.544);
-            AndersonTabla_SteadyState.Rows.Add(1.9, 1.352, 0.316, 1.368, 0.628, 0.198, 1.726);
-            AndersonTabla_SteadyState.Rows.Add(2.0, 1.550, 0.260, 1.452, 0.581, 0.151, 1.905);
-            AndersonTabla_SteadyState.Rows.Add(2.1, 1.792, 0.214, 1.524, 0.538, 0.115, 2.077);
-            AndersonTabla_SteadyState.Rows.Add(2.2, 2.078, 0.177, 1.586, 0.500, 0.088, 2.243);
-            AndersonTabla_SteadyState.Rows.Add(2.3, 2.408, 0.148, 1.639, 0.466, 0.069, 2.402);
-            AndersonTabla_SteadyState.Rows.Add(2.4, 2.782, 0.124, 1.685, 0.436, 0.054, 2.544);
-            AndersonTabla_SteadyState.Rows.Add(2.5, 3.200, 0.106, 1.725, 0.409, 0.043, 2.698);
-            AndersonTabla_SteadyState.Rows.Add(2.6, 3.662, 0.090, 1.760, 0.384, 0.035, 2.838);
-            AndersonTabla_SteadyState.Rows.Add(2.7, 4.168, 0.078, 1.790, 0.363, 0.028, 2.969);
-            AndersonTabla_SteadyState.Rows.Add(2.8, 4.718, 0.068, 1.817, 0.344, 0.023, 3.100);
-            AndersonTabla_SteadyState.Rows.Add(2.9, 5.312, 0.060, 1.840, 0.327, 0.019, 3.216);
-            AndersonTabla_SteadyState.Rows.Add(3.0, 5.950, 0.052, 1.863, 0.310, 0.016, 3.345);
+            AndersonTabla_SteadyState.Rows.Add(0.0, 5.950, 1.000, 0.099, 1.000, 1.000, 0.099);
+            AndersonTabla_SteadyState.Rows.Add(0.1, 5.312, 0.998, 0.112, 0.999, 0.997, 0.112);
+            AndersonTabla_SteadyState.Rows.Add(0.2, 4.718, 0.997, 0.125, 0.999, 0.996, 0.125);
+            AndersonTabla_SteadyState.Rows.Add(0.3, 4.168, 0.994, 0.143, 0.998, 0.992, 0.143);
+            AndersonTabla_SteadyState.Rows.Add(0.4, 3.662, 0.992, 0.162, 0.997, 0.988, 0.163);
+            AndersonTabla_SteadyState.Rows.Add(0.5, 3.200, 0.987, 0.187, 0.995, 0.982, 0.187);
+            AndersonTabla_SteadyState.Rows.Add(0.6, 2.782, 0.982, 0.215, 0.993, 0.974, 0.216);
+            AndersonTabla_SteadyState.Rows.Add(0.7, 2.408, 0.974, 0.251, 0.989, 0.963, 0.252);
+            AndersonTabla_SteadyState.Rows.Add(0.8, 2.078, 0.963, 0.294, 0.985, 0.948, 0.296);
+            AndersonTabla_SteadyState.Rows.Add(0.9, 1.792, 0.947, 0.346, 0.978, 0.926, 0.350);
+            AndersonTabla_SteadyState.Rows.Add(1.0, 1.550, 0.924, 0.409, 0.969, 0.895, 0.416);
+            AndersonTabla_SteadyState.Rows.Add(1.1, 1.352, 0.892, 0.485, 0.956, 0.853, 0.496);
+            AndersonTabla_SteadyState.Rows.Add(1.2, 1.198, 0.849, 0.575, 0.937, 0.795, 0.594);
+            AndersonTabla_SteadyState.Rows.Add(1.3, 1.088, 0.792, 0.678, 0.911, 0.722, 0.710);
+            AndersonTabla_SteadyState.Rows.Add(1.4, 1.022, 0.721, 0.793, 0.878, 0.633, 0.846);
+            AndersonTabla_SteadyState.Rows.Add(1.5, 1.000, 0.639, 0.914, 0.836, 0.534, 0.099);
+            AndersonTabla_SteadyState.Rows.Add(1.6, 1.022, 0.551, 1.037, 0.789, 0.434, 1.167);
+            AndersonTabla_SteadyState.Rows.Add(1.7, 1.088, 0.465, 1.155, 0.737, 0.343, 1.345);
+            AndersonTabla_SteadyState.Rows.Add(1.8, 1.198, 0.386, 1.263, 0.684, 0.264, 1.528);
+            AndersonTabla_SteadyState.Rows.Add(1.9, 1.352, 0.318, 1.361, 0.633, 0.201, 1.710);
+            AndersonTabla_SteadyState.Rows.Add(2.0, 1.550, 0.262, 1.446, 0.585, 0.153, 1.890);
+            AndersonTabla_SteadyState.Rows.Add(2.1, 1.792, 0.216, 1.519, 0.541, 0.117, 2.065);
+            AndersonTabla_SteadyState.Rows.Add(2.2, 2.078, 0.179, 1.582, 0.502, 0.090, 2.233);
+            AndersonTabla_SteadyState.Rows.Add(2.3, 2.408, 0.150, 1.636, 0.467, 0.070, 2.394);
+            AndersonTabla_SteadyState.Rows.Add(2.4, 2.782, 0.126, 1.683, 0.436, 0.055, 2.549);
+            AndersonTabla_SteadyState.Rows.Add(2.5, 3.200, 0.107, 1.723, 0.408, 0.044, 2.696);
+            AndersonTabla_SteadyState.Rows.Add(2.6, 3.662, 0.092, 1.759, 0.384, 0.035, 2.839);
+            AndersonTabla_SteadyState.Rows.Add(2.7, 4.168, 0.079, 1.789, 0.362, 0.029, 2.972);
+            AndersonTabla_SteadyState.Rows.Add(2.8, 4.718, 0.069, 1.817, 0.342, 0.024, 3.105);
+            AndersonTabla_SteadyState.Rows.Add(2.9, 5.312, 0.061, 1.839, 0.325, 0.020, 3.225);
+            AndersonTabla_SteadyState.Rows.Add(3.0, 5.950, 0.053, 1.862, 0.308, 0.016, 3.353);
 
 
-            // INITIAL CONDITIONS
+            // INITIAL CONDITIONS - ANDERSON
             AndersonTabla_InitialConditions.Columns.Add(new DataColumn("x L"));
             AndersonTabla_InitialConditions.Columns.Add(new DataColumn("A A*"));
             AndersonTabla_InitialConditions.Columns.Add(new DataColumn("ρ ρo"));
@@ -223,30 +222,34 @@ namespace NozzleDisplay
             AndersonTabla_InitialConditions.Rows.Add(2.8, 4.718, 0.119, 1.870, 0.352);
             AndersonTabla_InitialConditions.Rows.Add(2.9, 5.312, 0.088, 1.870, 0.329);
             AndersonTabla_InitialConditions.Rows.Add(3.0, 5.950, 0.056, 1.864, 0.306);
-        }
 
-        private void CreateSimulationTables()
-        {
-            // FIRST STEP 
+            // FIRST STEP - SIMULATION
             NozzleTabla_FirstStep = this.SimularUnCiclo();
 
-            // STEADY STATE 
+            // STEADY STATE - SIMULATION
             NozzleTabla_SteadyState = this.SimularHastaSteady();
 
-            // INITIAL CONDITIONS 
+            // INITIAL CONDITIONS - SIMULATION
             NozzleTabla_InitialConditions = this.nozzle.GetEstado(this.Ax);
         }
 
-        public DataTable SimularHastaSteady()
+        public DataTable SimularHastaSteady() // simula 1400 ciclos y da la tabla con los resultados
         {
             Nozzle newnozzle = new Nozzle(this.nozzle);
 
-            // hacer simulacion -------------------------- FALTA HACER !!!!!!!!!!!!!
+            int step = 0;
+            while (step <= 1400)
+            {
+                newnozzle.EjecutarCiclo(this.At, this.Ax, 1.4);
+                newnozzle.ActualizarEstados();
+
+                step++;
+            }
 
             return newnozzle.GetEstado(this.Ax);
         }
 
-        public DataTable SimularUnCiclo()
+        public DataTable SimularUnCiclo() // simula un único ciclo y da la tabla con los resultados
         {
             Nozzle newnozzle = new Nozzle(this.nozzle);
 
@@ -255,5 +258,6 @@ namespace NozzleDisplay
 
             return newnozzle.GetEstado(this.Ax);
         }
+
     }
 }
