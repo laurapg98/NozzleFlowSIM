@@ -249,7 +249,6 @@ namespace ClassLibrary
         {
             DataTable estado = new DataTable();
 
-            //estado.Rows.Add("Position", "Area", "Density", "Velocity", "Temperature", "Pressure", "Mach number");
             estado.Columns.Add(new DataColumn("x L"));
             estado.Columns.Add(new DataColumn("A A*"));
             estado.Columns.Add(new DataColumn("ρ ρo"));
@@ -259,7 +258,7 @@ namespace ClassLibrary
             estado.Columns.Add(new DataColumn("M"));
 
             int i = 0;
-            while (i <= this.numRect + 1)
+            while (i <= this.numRect)
             {
                 Rectangulo rect = this.nozzle[i];
 
