@@ -147,6 +147,8 @@ namespace NozzleDisplay
 
         private void parambut_Click(object sender, RoutedEventArgs e) // botón Build
         {
+            //paramos el timer en caso de que se construya un nuevo nozzle durante la simulacion
+            dispatcherTimer.Stop();
 
             // comprobamos que no estén vacíos
             if (dxbox.Text == "" || cbox.Text == "" || numrectbox.Text == "")
@@ -394,6 +396,9 @@ namespace NozzleDisplay
 
         private void resetbut_Click(object sender, RoutedEventArgs e) // botón RESET
         {
+            //Paramos el timer
+            dispatcherTimer.Stop();
+
             // vaciamos los parámetros
             this.nozzle = new Nozzle();
             this.nozzlerectangles = new Rectangle[0];
@@ -468,9 +473,9 @@ namespace NozzleDisplay
 
             datanozzle.Columns.Add(new DataColumn("X L"));
 
-            for (int i = 0; i < this.numR; i++)
+            for (int i = 0; i <= this.numR; i++)
             {
-                datanozzle.Columns.Add(new DataColumn(((i)*this.dx).ToString()));
+                datanozzle.Columns.Add(new DataColumn(((i)*this.dx*10).ToString()));
             }
 
             DataRow dr_p = datanozzle.NewRow(); dr_p[0] = ("P Po");
@@ -478,7 +483,7 @@ namespace NozzleDisplay
             DataRow dr_t = datanozzle.NewRow(); dr_t[0] = ("T To");
             DataRow dr_de = datanozzle.NewRow(); dr_de[0] = ("p po");
 
-            for (int i = 1; i < datanozzle.Columns.Count; i++)
+            for (int i = 1; i < datanozzle.Columns.Count - 1; i++)
             {
                 dr_p[i] = listpre[i - 1].ToString();
                 dr_v[i] = listvel[i - 1].ToString();
@@ -486,13 +491,12 @@ namespace NozzleDisplay
                 dr_de[i] = listden[i - 1].ToString();
             }
 
-            datanozzle.Rows.Add(dr_p);
-            datanozzle.Rows.Add(dr_v);
-            datanozzle.Rows.Add(dr_t);
-            datanozzle.Rows.Add(dr_de);
+            datanozzle.Rows.Add(dr_p.ItemArray);
+            datanozzle.Rows.Add(dr_v.ItemArray);
+            datanozzle.Rows.Add(dr_t.ItemArray);
+            datanozzle.Rows.Add(dr_de.ItemArray);
 
             gridnozzle.ItemsSource = datanozzle.DefaultView;
-            gridnozzle.DataContext = datanozzle.DefaultView;
             gridnozzle.Items.Refresh();
         }
 

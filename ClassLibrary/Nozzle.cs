@@ -349,7 +349,7 @@ namespace ClassLibrary
         {
             List<double> pressures = new List<double>();
 
-            for (int i = 1; i <= this.numRect; i++)
+            for (int i = 0; i <= this.numRect; i++)
             {
                 pressures.Add(this.nozzle[i].GetPresP());
             }
@@ -361,7 +361,7 @@ namespace ClassLibrary
         {
             List<double> velocities = new List<double>();
 
-            for (int i = 1; i <= this.numRect; i++)
+            for (int i = 0; i <= this.numRect; i++)
             {
                 velocities.Add(this.nozzle[i].GetVelP());
             }
@@ -373,7 +373,7 @@ namespace ClassLibrary
         {
             List<double> densities = new List<double>();
 
-            for (int i = 1; i <= this.numRect; i++)
+            for (int i = 0; i <= this.numRect; i++)
             {
                 densities.Add(this.nozzle[i].GetDensP());
             }
@@ -385,7 +385,7 @@ namespace ClassLibrary
         {
             List<double> temperatures = new List<double>();
 
-            for (int i = 1; i <= this.numRect; i++)
+            for (int i = 0; i <= this.numRect; i++)
             {
                 temperatures.Add(this.nozzle[i].GetTempP());
             }
@@ -397,9 +397,9 @@ namespace ClassLibrary
         {
             List<double> dxs = new List<double>();
 
-            for (int i = 0; i < this.numRect; i++)
+            for (int i = 0; i <= this.numRect; i++)
             {
-                dxs.Add(dx * (i + 1));
+                dxs.Add(dx * (i));
             }
 
             return dxs;
