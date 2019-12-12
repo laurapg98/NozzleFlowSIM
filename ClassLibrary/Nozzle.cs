@@ -318,13 +318,13 @@ namespace ClassLibrary
             {
                 Rectangulo rect = this.nozzle[i];
 
-                double position = i * Ax; // coord x
-                double area = rect.GetArea();
-                double density = rect.GetDensP();
-                double velocity = rect.GetVelP();
-                double temperature = rect.GetTempP();
-                double pressure = rect.GetPresP();
-                double mach = velocity / Math.Sqrt(temperature); // M = V / a
+                String position = (i * Ax).ToString(); // coord x
+                String area = rect.GetArea().ToString("0.0000");
+                String density = rect.GetDensP().ToString("0.0000");
+                String velocity = rect.GetVelP().ToString("0.0000");
+                String temperature = rect.GetTempP().ToString("0.0000");
+                String pressure = rect.GetPresP().ToString("0.0000");
+                String mach = (rect.GetVelP() / Math.Sqrt(rect.GetTempP())).ToString("0.0000"); // M = V / a
 
                 estado.Rows.Add(position, area, density, velocity, temperature, pressure, mach);
 
@@ -405,6 +405,18 @@ namespace ClassLibrary
             return dxs;
         }
 
+        public List<double> getNozzleArea()
+        {
+            List<double> As = new List<double>();
+            
+            for(int i = 0; i <= this.numRect; i++)
+            {
+                As.Add(this.nozzle[i].GetArea());
+            }
+
+            return As;
+        }
+
         public bool SimulacionAcabada()
         {
             return false;
@@ -423,6 +435,8 @@ namespace ClassLibrary
             }
             return 0;
         }
+
+        
 
     }
 }

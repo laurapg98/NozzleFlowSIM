@@ -31,7 +31,7 @@ namespace NozzleDisplay
         double C;
         int contadordt;
         int numR;
-        List<double> listtemp, listdx, listvel, listpre, listden, listtempdt, listdt, listveldt, listpredt, listdendt;
+        List<double> listtemp, listdx, listvel, listpre, listden, listtempdt, listdt, listveldt, listpredt, listdendt, listAs;
         Stack<Nozzle> pilaNozzle;
         System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer(); //Para el tick del timer
         int milisecs = 250;
@@ -478,6 +478,7 @@ namespace NozzleDisplay
                 datanozzle.Columns.Add(new DataColumn(((i)*this.dx*10).ToString()));
             }
 
+            DataRow dr_a = datanozzle.NewRow(); dr_a[0] = ("A A*");
             DataRow dr_p = datanozzle.NewRow(); dr_p[0] = ("P Po");
             DataRow dr_v = datanozzle.NewRow(); dr_v[0] = ("V Vo");
             DataRow dr_t = datanozzle.NewRow(); dr_t[0] = ("T To");
@@ -485,12 +486,14 @@ namespace NozzleDisplay
 
             for (int i = 1; i < datanozzle.Columns.Count - 1; i++)
             {
+                dr_a[i] = listAs[i - 1].ToString();
                 dr_p[i] = listpre[i - 1].ToString();
                 dr_v[i] = listvel[i - 1].ToString();
                 dr_t[i] = listtemp[i - 1].ToString();
                 dr_de[i] = listden[i - 1].ToString();
             }
 
+            datanozzle.Rows.Add(dr_a.ItemArray);
             datanozzle.Rows.Add(dr_p.ItemArray);
             datanozzle.Rows.Add(dr_v.ItemArray);
             datanozzle.Rows.Add(dr_t.ItemArray);
@@ -508,6 +511,7 @@ namespace NozzleDisplay
             this.listvel = this.nozzle.getVelocities();
             this.listtemp = this.nozzle.getTemperatures();
             this.listden = this.nozzle.getDensities();
+            this.listAs = this.nozzle.getNozzleArea();
 
             this.listdt.Add(this.contadordt);
             this.listdendt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetDensP());
