@@ -185,7 +185,7 @@ namespace ClassLibrary
             return ders;
         }
 
-        public void ComputeFutureState(double At, double Ax, double gamma, double[] ders, Rectangulo rectI) // PREDICTED-CORRECTION TECHNIQUE: corrije el estado predicted (que está en futuro) usando también el presente (que está en presente)
+        public void ComputeFutureState(double At, double Ax, double gamma, double[] ders, Rectangulo rectI) // PREDICTED-CORRECTION METHOD: corrije el estado predicted (que está en futuro) usando también el presente (que está en presente)
         {
             // Predicted state
             double T_F = this.tempF;

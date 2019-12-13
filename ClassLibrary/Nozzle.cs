@@ -12,7 +12,7 @@ namespace ClassLibrary
         // ATRIBUTS
         int numRect;
         Rectangulo[] nozzle;
-        double k; //parametro para cambiar la posicion de la tubera
+        double k; // nozzle position
 
         // CONSTRUCTORS
         public Nozzle() // constructor vacío
@@ -28,7 +28,7 @@ namespace ClassLibrary
             int pos = 0;
             while (pos <= this.numRect + 1)
             {
-                this.nozzle[pos] = nozzleC.GetRectangulo(pos);
+                this.nozzle[pos] = new Rectangulo(nozzleC.GetRectangulo(pos));
                 pos++;
             }
         }
