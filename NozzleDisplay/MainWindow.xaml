@@ -47,32 +47,53 @@
             <Canvas x:Name="canvasNozzle" Background="DarkGray" Height="300" Width="900" HorizontalAlignment="Left"/>
         </ItemsControl>
         <Rectangle x:Name="rectanglescale" Height="300" Grid.Column="7" Grid.RowSpan="4" Grid.ColumnSpan="1" Grid.Row="1" Fill="DarkGray" VerticalAlignment="Bottom" Width="23" HorizontalAlignment="Left" Margin="15,0,0,0"/>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="1" Width="200" Height="300" Margin="0,20,0,0">
+        <GroupBox BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="1" Width="200" Height="300" Margin="0,20,0,0" Header="Parameter Input" Background="Transparent">
             <Grid>
-                <TextBox x:Name="cbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="30,40,68.333,230.333"></TextBox>
-                <TextBox x:Name="dxbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="30,92,70.333,182.333" ></TextBox>
-                <Button x:Name="parambut" Content="Build" Margin="20,253,104.333,17.333" Click="parambut_Click"></Button>
-                <TextBox x:Name="numrectbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="30,144,71.333,128.333" />
-                <TextBlock HorizontalAlignment="Left" Margin="30,19,0,0" TextWrapping="Wrap" Text="C" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="30,72,0,0" TextWrapping="Wrap" Text="^x" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="30,122,0,0" TextWrapping="Wrap" Text="Num Rect" VerticalAlignment="Top"/>
+                <TextBox x:Name="cbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="23,40,75,214" Height="20" Width="90"></TextBox>
+                <TextBox x:Name="dxbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="22,94,76,160" Height="20" Width="90"></TextBox>
+                <Button x:Name="parambut" Content="Build" Margin="10,235,103,12" Click="parambut_Click" Width="75" Height="27"></Button>
+                <TextBox x:Name="numrectbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="22,142,76,112" Height="20" Width="90" />
+                <TextBlock HorizontalAlignment="Left" Margin="23,19,0,0" TextWrapping="Wrap" Text="C" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="23,72,0,0" TextWrapping="Wrap" Text="^x" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="23,122,0,0" TextWrapping="Wrap" Text="Num Rect" VerticalAlignment="Top"/>
+                <Button x:Name="Defaultbut" Content="Default" HorizontalAlignment="Left" Margin="104,236,0,0" VerticalAlignment="Top" Width="75" Height="27" Click="Defaultbut_Click"/>
             </Grid>
-        </Border>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="1" Grid.RowSpan="4" Width="200" Height="300" Grid.ColumnSpan="1" Margin="0,20,0,0">
+        </GroupBox>
+        <GroupBox BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="1" Grid.RowSpan="4" Width="200" Height="300" Grid.ColumnSpan="1" Margin="0,20,0,0" Header="Simulation Controls">
             <Grid>
-                <ComboBox x:Name="comboboxcolor" Margin="7,9,72.333,261.333" SelectionChanged="comboboxcolor_SelectionChanged">
+                <ComboBox x:Name="comboboxcolor" Margin="12,20,76,229" SelectionChanged="comboboxcolor_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="Black" Width="100" Height="25">
                     <ComboBoxItem x:Name="pressure" Content="Pressure" IsSelected="True"></ComboBoxItem>
                     <ComboBoxItem x:Name="velocity" Content="Velocity" IsSelected="False"></ComboBoxItem>
                     <ComboBoxItem x:Name="temperature" Content="Temperature" IsSelected="False"></ComboBoxItem>
                     <ComboBoxItem x:Name="density" Content="Density" IsSelected="False"></ComboBoxItem>
                 </ComboBox>
-                <Button x:Name="playbut" Content="Play" Margin="119,45,5.333,225.333" Click="playbut_Click"></Button>
-                <Button x:Name="pausebut" Content="Pause" Margin="120,79,4.333,191.333" Click="pausebut_Click"></Button>
-                <Button x:Name="resetbut" Content="Reset" Margin="33,212,91.333,58.333" Click="resetbut_Click"></Button>
-                <Button x:Name="onestepbut" Content="Step" Margin="117,111,7.333,159.333" Click="onestepbut_Click"></Button>
-                <Button x:Name="stepback" Content="Step back" HorizontalAlignment="Left" Margin="119,177,0,0" VerticalAlignment="Top" Width="75" Click="stepback_Click"/>
+                <Button x:Name="playbut" Content="Play" Margin="66,80,72,142" Click="playbut_Click" Width="50" Height="50" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                    <Button.Background>
+                        <ImageBrush ImageSource="Resources/play.png"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="pausebut" Content="Pause" Margin="94,135,44,88" Click="pausebut_Click" RenderTransformOrigin="-0.785,2.763" Width="50" Height="50" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                    <Button.Background>
+                        <ImageBrush ImageSource="Resources/pause.png"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="resetbut" Content="Reset" Margin="39,135,99,88" Click="resetbut_Click" Width="50" Height="50" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                    <Button.Background>
+                        <ImageBrush ImageSource="Resources/refresh.png"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="onestepbut" Content="Step" Margin="122,80,16,143" Click="onestepbut_Click" Width="50" Height="50" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                    <Button.Background>
+                        <ImageBrush ImageSource="Resources/skip (1).png"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="stepback" Content="Step back" HorizontalAlignment="Left" Margin="11,80,0,0" VerticalAlignment="Top" Width="50" Click="stepback_Click" Height="50" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                    <Button.Background>
+                        <ImageBrush ImageSource="Resources/skip.png"/>
+                    </Button.Background>
+                </Button>
             </Grid>
-        </Border>
+        </GroupBox>
         <TabControl x:Name="PlotsTabControl" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="8" Grid.RowSpan="8" Grid.ColumnSpan="7" Margin="10,10,10,20">
             <TabItem Header="Plots X/L">
                 <Grid>

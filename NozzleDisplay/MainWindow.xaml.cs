@@ -397,6 +397,13 @@ namespace NozzleDisplay
             dispatcherTimer.Stop();
         }
 
+        private void Defaultbut_Click(object sender, RoutedEventArgs e)
+        {
+            cbox.Text= (0.5).ToString();
+            dxbox.Text = (0.1).ToString();
+            numrectbox.Text = (30).ToString();
+        }
+
         private void resetbut_Click(object sender, RoutedEventArgs e) // botón RESET
         {
             //Paramos el timer
