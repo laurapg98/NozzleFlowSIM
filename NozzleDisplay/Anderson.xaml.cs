@@ -30,6 +30,10 @@ namespace NozzleDisplay
         DataTable NozzleTabla_FirstStep;
         DataTable NozzleTabla_SteadyState;
         DataTable NozzleTabla_InitialConditions;
+        DataTable ErrorDataTable_FirstStep;
+        DataTable ErrorDataTable_SteadyState;
+        DataTable ErrorDataTable_InitialConditions;
+
 
         public Anderson()
         {
@@ -47,6 +51,9 @@ namespace NozzleDisplay
             NozzleTabla_FirstStep = new DataTable();
             NozzleTabla_SteadyState = new DataTable();
             NozzleTabla_InitialConditions = new DataTable();
+            ErrorDataTable_FirstStep = new DataTable();
+            ErrorDataTable_SteadyState = new DataTable();
+            ErrorDataTable_InitialConditions = new DataTable();
             this.createTables();
 
             // por defecto: first step table
@@ -70,6 +77,10 @@ namespace NozzleDisplay
                     // SIMULATION
                     datasimgrid.ItemsSource = NozzleTabla_FirstStep.DefaultView;
                     datasimgrid.DataContext = NozzleTabla_FirstStep.DefaultView;
+                    //ERRORS
+                    errorgrid.ItemsSource = ErrorDataTable_FirstStep.DefaultView;
+                    errorgrid.DataContext = ErrorDataTable_FirstStep.DefaultView;
+
                 }
                 if (andersoncombobox.SelectedIndex == 1) // STEADY STATE
                 {
@@ -79,6 +90,10 @@ namespace NozzleDisplay
                     // SIMULATION
                     datasimgrid.ItemsSource = NozzleTabla_SteadyState.DefaultView;
                     datasimgrid.DataContext = NozzleTabla_SteadyState.DefaultView;
+                    //ERRORS
+                    errorgrid.ItemsSource = ErrorDataTable_SteadyState.DefaultView;
+                    errorgrid.DataContext = ErrorDataTable_SteadyState.DefaultView;
+
                 }
                 if (andersoncombobox.SelectedIndex == 2) // INITIAL CONDITIONS
                 {
@@ -88,6 +103,9 @@ namespace NozzleDisplay
                     // SIMULATION
                     datasimgrid.ItemsSource = NozzleTabla_InitialConditions.DefaultView;
                     datasimgrid.DataContext = NozzleTabla_InitialConditions.DefaultView;
+                    //ERRORS
+                    errorgrid.ItemsSource = ErrorDataTable_InitialConditions.DefaultView;
+                    errorgrid.DataContext = ErrorDataTable_InitialConditions.DefaultView;
                 }
 
                 andersongrid.Items.Refresh();
@@ -231,6 +249,13 @@ namespace NozzleDisplay
 
             // INITIAL CONDITIONS - SIMULATION
             NozzleTabla_InitialConditions = this.nozzle.GetEstado(this.Ax);
+
+
+            //TABLAS ERRORES
+            ErrorDataTable_FirstStep = getErrorTables(AndersonTabla_FisrtStep, NozzleTabla_FirstStep);
+            ErrorDataTable_InitialConditions = getErrorTables(AndersonTabla_InitialConditions, NozzleTabla_InitialConditions);
+            ErrorDataTable_SteadyState = getErrorTables(AndersonTabla_SteadyState, NozzleTabla_SteadyState);
+
         }
 
         public DataTable SimularHastaSteady() // simula 1400 ciclos y da la tabla con los resultados
@@ -258,6 +283,43 @@ namespace NozzleDisplay
 
             return newnozzle.GetEstado(this.Ax);
         }
+
+        
+        public DataTable getErrorTables(DataTable Anderson, DataTable Simulated)
+        {
+            DataTable et = new DataTable();
+            et.Columns.Add(new DataColumn("x L"));
+            et.Columns.Add(new DataColumn("e (%)"));
+            for (int i = 0; i < Simulated.Rows.Count; i++)
+            {
+                double error_average;
+                try
+                {
+                    double error_pressure = ((Convert.ToDouble(Anderson.Rows[i][5]) - Convert.ToDouble(Simulated.Rows[i][5])) / (Convert.ToDouble(Anderson.Rows[i][5]))) * 100;
+                    double error_density = ((Convert.ToDouble(Anderson.Rows[i][2]) - Convert.ToDouble(Simulated.Rows[i][2])) / (Convert.ToDouble(Anderson.Rows[i][2]))) * 100;
+                    double error_velocity = ((Convert.ToDouble(Anderson.Rows[i][3]) - Convert.ToDouble(Simulated.Rows[i][3])) / (Convert.ToDouble(Anderson.Rows[i][3]))) * 100;
+                    double error_temperature = ((Convert.ToDouble(Anderson.Rows[i][4]) - Convert.ToDouble(Simulated.Rows[i][4])) / (Convert.ToDouble(Anderson.Rows[i][4]))) * 100;
+
+                    error_average = (error_pressure + error_density + error_velocity + error_temperature) / 4;
+                }
+
+                catch
+                {
+                    double error_density = ((Convert.ToDouble(Anderson.Rows[i][2]) - Convert.ToDouble(Simulated.Rows[i][2])) / (Convert.ToDouble(Anderson.Rows[i][2]))) * 100;
+                    double error_velocity = ((Convert.ToDouble(Anderson.Rows[i][3]) - Convert.ToDouble(Simulated.Rows[i][3])) / (Convert.ToDouble(Anderson.Rows[i][3]))) * 100;
+                    double error_temperature = ((Convert.ToDouble(Anderson.Rows[i][4]) - Convert.ToDouble(Simulated.Rows[i][4])) / (Convert.ToDouble(Anderson.Rows[i][4]))) * 100;
+
+                    error_average = (error_density + error_velocity + error_temperature) / 3;
+                }
+
+                et.Rows.Add(Simulated.Rows[i][0], error_average.ToString("0.000"));
+            }
+
+            return et;
+        }
+        
+
+        
 
     }
 }

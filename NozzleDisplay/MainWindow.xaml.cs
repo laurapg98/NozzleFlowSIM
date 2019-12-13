@@ -51,6 +51,7 @@ namespace NozzleDisplay
             comboboxcolor.Visibility = Visibility.Hidden;
             PlotsTabControl.Visibility = Visibility.Hidden;
             stepback.Visibility = Visibility.Hidden;
+            padlockimg.Visibility = Visibility.Hidden;
 
         }
 
@@ -215,6 +216,7 @@ namespace NozzleDisplay
 
                             //ajustamos el slider
                             sliderthroat.Value = this.numR / 2;
+                            unlockSlider();
                         }
                     }
                 }
@@ -343,6 +345,7 @@ namespace NozzleDisplay
 
             //iniciamos timer
             dispatcherTimer.Start();
+            lockSlider();
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e) // lo que hace cada interval del timer
@@ -434,6 +437,8 @@ namespace NozzleDisplay
 
             // enseñamos el botón que genera un nuevo nozzle
             parambut.Visibility = Visibility.Visible;
+
+            unlockSlider();
         }
 
         private void Click_Aboutus(object sender, RoutedEventArgs e) // botón ABOUT US
@@ -465,6 +470,8 @@ namespace NozzleDisplay
             else // si no:
 
                 this.EjecutarUnCiclo();
+
+            lockSlider();
         }
 
         private void crearDataTable() // crea la tabla de la pestaña 'Data' del tabcontrol
@@ -475,9 +482,10 @@ namespace NozzleDisplay
 
             for (int i = 0; i <= this.numR; i++)
             {
-                datanozzle.Columns.Add(new DataColumn(((i)*this.dx*10).ToString()));
+                datanozzle.Columns.Add(new DataColumn(((i)).ToString()));
             }
 
+            DataRow dr_xl = datanozzle.NewRow(); dr_xl[0] = ("X L");
             DataRow dr_a = datanozzle.NewRow(); dr_a[0] = ("A A*");
             DataRow dr_p = datanozzle.NewRow(); dr_p[0] = ("P Po");
             DataRow dr_v = datanozzle.NewRow(); dr_v[0] = ("V Vo");
@@ -486,6 +494,7 @@ namespace NozzleDisplay
 
             for (int i = 1; i < datanozzle.Columns.Count - 1; i++)
             {
+                dr_xl[i] = listdx[i - 1].ToString();
                 dr_a[i] = listAs[i - 1].ToString();
                 dr_p[i] = listpre[i - 1].ToString();
                 dr_v[i] = listvel[i - 1].ToString();
@@ -493,6 +502,7 @@ namespace NozzleDisplay
                 dr_de[i] = listden[i - 1].ToString();
             }
 
+            datanozzle.Rows.Add(dr_xl.ItemArray);
             datanozzle.Rows.Add(dr_a.ItemArray);
             datanozzle.Rows.Add(dr_p.ItemArray);
             datanozzle.Rows.Add(dr_v.ItemArray);
@@ -592,6 +602,18 @@ namespace NozzleDisplay
             lg.Description = String.Format("Density");
             lg.StrokeThickness = 2;
             lg.Plot(this.listdt.ToArray(), this.listdendt.ToArray());
+        }
+
+        public void lockSlider()
+        {
+            sliderthroat.IsEnabled = false;
+            padlockimg.Visibility = Visibility.Visible;
+        }
+
+        public void unlockSlider()
+        {
+            sliderthroat.IsEnabled = true;
+            padlockimg.Visibility = Visibility.Hidden;
         }
     }
 }

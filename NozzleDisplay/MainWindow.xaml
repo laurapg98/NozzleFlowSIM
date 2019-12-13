@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:NozzleDisplay"
         xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1350" FontFamily="Lucida Sans Unicode">
+        Title="MainWindow" Height="720" Width="1500" FontFamily="Lucida Sans Unicode">
     <Grid Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
@@ -43,10 +43,10 @@
             <MenuItem Header="_Help"></MenuItem>
             <MenuItem Header="_About Us" Click="Click_Aboutus" ></MenuItem>
         </Menu>
-        <ItemsControl x:Name="nozzelcontrol" Grid.Column="4" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="Transparent" Margin="20,15,0,20" Width="950" Height="300">
-            <Canvas x:Name="canvasNozzle" Background="DarkGray" Height="300" Width="950"/>
+        <ItemsControl x:Name="nozzelcontrol" Grid.Column="4" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="Transparent" Margin="20,15,0,20" Width="900" Height="300">
+            <Canvas x:Name="canvasNozzle" Background="DarkGray" Height="300" Width="900" HorizontalAlignment="Left"/>
         </ItemsControl>
-        <Rectangle x:Name="rectanglescale" Height="300" Grid.Column="7" Grid.RowSpan="4" Grid.ColumnSpan="1" Grid.Row="1" Fill="DarkGray" Margin="0,10,42,10" HorizontalAlignment="Center" Width="20"/>
+        <Rectangle x:Name="rectanglescale" Height="300" Grid.Column="7" Grid.RowSpan="4" Grid.ColumnSpan="1" Grid.Row="1" Fill="DarkGray" VerticalAlignment="Bottom" Width="23" HorizontalAlignment="Left" Margin="15,0,0,0"/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="1" Width="200" Height="300" Margin="0,20,0,0">
             <Grid>
                 <TextBox x:Name="cbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="30,40,68.333,230.333"></TextBox>
@@ -152,5 +152,6 @@
             </TabItem>
         </TabControl>
         <Slider x:Name="sliderthroat" Margin="30,0,10,0"  VerticalAlignment="Top"  Grid.Column="4" Grid.Row="5" Grid.ColumnSpan="3" IsSnapToTickEnabled="True" TickPlacement="TopLeft" ValueChanged="sliderthroat_ValueChanged"/>
+        <Image x:Name="padlockimg" Grid.Column="7" HorizontalAlignment="Left" Height="15" Margin="0" Grid.Row="5" VerticalAlignment="Center" Width="15" Source="Resources/padlock.png"/>
     </Grid>
 </Window>

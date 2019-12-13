@@ -5,14 +5,46 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NozzleDisplay"
         mc:Ignorable="d"
-        Title="Anderson" Height="747.078" Width="857.24">
+        Title="Anderson" Height="750" Width="1000">
     <Grid>
-        <DataGrid x:Name="andersongrid" HorizontalAlignment="Left" Height="650" Margin="20,20,0,20" VerticalAlignment="Center" Width="375" CanUserReorderColumns="False" CanUserSortColumns="False" ColumnWidth = "*" ItemsSource="{Binding Path=.}" IsReadOnly="True" CanUserAddRows="False"/>
-        <DataGrid x:Name="datasimgrid" HorizontalAlignment="Center" Height="650" Margin="450,20,20,20" VerticalAlignment="Center" Width="375" CanUserReorderColumns="False" CanUserSortColumns="False" ColumnWidth="*" ItemsSource="{Binding}"/>
-        <ComboBox HorizontalAlignment="Left" Margin="21,6,0,0" VerticalAlignment="Top" Width="120" x:Name="andersoncombobox" SelectionChanged ="andersoncombobox_SelectionChanged">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <DataGrid x:Name="andersongrid" HorizontalAlignment="Left" Height="650" Margin="20,20,0,20" VerticalAlignment="Center" Width="375" CanUserReorderColumns="False" CanUserSortColumns="False" ColumnWidth = "*" ItemsSource="{Binding Path=.}" IsReadOnly="True" CanUserAddRows="False" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="10"/>
+        <DataGrid x:Name="datasimgrid" HorizontalAlignment="Right" Height="650" Margin="15,22,0.333,21.067" VerticalAlignment="Center" Width="375" CanUserReorderColumns="False" CanUserSortColumns="False" ColumnWidth="*" ItemsSource="{Binding}" Grid.Column="3" Grid.Row="1" Grid.RowSpan="10" Grid.ColumnSpan="2"/>
+        <ComboBox HorizontalAlignment="Left" Margin="15,0,0,0" VerticalAlignment="Top" Width="120" x:Name="andersoncombobox" SelectionChanged ="andersoncombobox_SelectionChanged" Grid.ColumnSpan="2" Grid.Row="1">
             <ComboBoxItem IsSelected="True">First Step</ComboBoxItem>
             <ComboBoxItem IsSelected="False">Steady State</ComboBoxItem>
             <ComboBoxItem IsSelected="False">Initial Conditions</ComboBoxItem>
         </ComboBox>
+        <TextBlock Grid.Column="2" HorizontalAlignment="Left" Margin="0.333,0,0,0" TextWrapping="Wrap" Text="Anderson" VerticalAlignment="Top" Grid.Row="1"/>
+        <TextBlock Grid.Column="3" HorizontalAlignment="Left" Margin="0.333,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1"><Run Text="Simulated"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="6" Margin="13.333,4,0,0" Grid.Row="1"/>
+        <DataGrid x:Name="errorgrid" Grid.Column="5" Height="649" Margin="15,22,0,0" Grid.Row="1" Grid.RowSpan="10" VerticalAlignment="Top" Width="150" HorizontalAlignment="Left" CanUserReorderColumns="False" CanUserSortColumns="False" ColumnWidth = "*" ItemsSource="{Binding Path=.}" IsReadOnly="True" CanUserAddRows="False"/>
     </Grid>
 </Window>
