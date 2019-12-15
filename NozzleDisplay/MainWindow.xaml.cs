@@ -11,6 +11,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ClassLibrary;
@@ -448,6 +449,44 @@ namespace NozzleDisplay
             unlockSlider();
         }
 
+        private void Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) //Cambio al 3D
+        {
+            //Controles para restablecer el viewport3d para ir borrando las anteriores tuberas
+            myViewport.Children.Clear();
+            DirectionalLight dl = new DirectionalLight();
+            dl.Color = Colors.White;
+            dl.Direction = new Vector3D(-1, -1, -1);
+            DirectionalLight dl_2 = new DirectionalLight();
+            dl_2.Color = Colors.White;
+            dl_2.Direction = new Vector3D(1, 1, 1);
+            Model3DGroup myModel3DGroup = new Model3DGroup();
+            myModel3DGroup.Children.Add(dl);
+            myModel3DGroup.Children.Add(dl_2);
+            ModelVisual3D myModelVisual3D = new ModelVisual3D();
+            myModelVisual3D.Content = (myModel3DGroup);
+            myViewport.Children.Add(myModelVisual3D);
+
+            ParametricCurve3D ps = new ParametricCurve3D();
+            ps.IsHiddenLine = false;
+            ps.Viewport3d = myViewport;
+
+            ps.Vmin = -1.5;
+            ps.Vmax = 1.5;
+            ps.Umin = 0;
+            ps.Umax = 2 * Math.PI;
+            ps.Nu = 30;
+            ps.Nv = 30;
+            ps.CreateSurface(Hyperboloid);
+        }
+
+        private Point3D Hyperboloid(double u, double v) //Funcion de nuestra tubera 3D (hiperboloide de una hoja)
+        {
+            double x = Math.Cosh(v) * Math.Cos(u);
+            double y = Math.Cosh(v) * Math.Sin(u);
+            double z = 2.2 * Math.Sinh(v);
+            return new Point3D(x, y, z);
+        }
+
         private void Click_Aboutus(object sender, RoutedEventArgs e) // botón ABOUT US
         {
             Aboutus au = new Aboutus();
@@ -622,5 +661,18 @@ namespace NozzleDisplay
             sliderthroat.IsEnabled = true;
             padlockimg.Visibility = Visibility.Hidden;
         }
+
+        private void ScrollBar_ValueChanged_1(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            for (int i = 0; i < myViewport.Children.Count; i++)
+            {
+                myViewport.Children[i].Transform = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), scrolh.Value));
+
+            }
+            
+        }
+
+
+
     }
 }

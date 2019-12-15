@@ -43,9 +43,29 @@
             <MenuItem Header="_Help"></MenuItem>
             <MenuItem Header="_About Us" Click="Click_Aboutus" ></MenuItem>
         </Menu>
-        <ItemsControl x:Name="nozzelcontrol" Grid.Column="4" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="Transparent" Margin="20,15,0,20" Width="900" Height="300">
-            <Canvas x:Name="canvasNozzle" Background="DarkGray" Height="300" Width="900" HorizontalAlignment="Left"/>
-        </ItemsControl>
+        <TabControl Grid.Column="4" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="Transparent" Margin="20,15,0,20">
+            <TabItem Header="2D">
+                <ItemsControl x:Name="nozzelcontrol" Width="900" Height="300">
+                    <Canvas x:Name="canvasNozzle" Background="DarkGray" Height="300" Width="900" HorizontalAlignment="Left"/>
+                </ItemsControl>
+            </TabItem>
+            <TabItem x:Name="_3dtab">
+                <TabItem.Header>
+                    <Label Content="3D" MouseLeftButtonDown ="Label_MouseLeftButtonDown"></Label>
+                </TabItem.Header>
+                <Grid>
+                    <Viewport3D Name="myViewport" MinWidth="800" MinHeight="300">
+                        <Viewport3D.Camera>
+                            <PerspectiveCamera x:Name="camera" Position="20,20,20" LookDirection="-10,-10,-10" UpDirection="0,1,0"/>
+                        </Viewport3D.Camera>
+                        <ModelUIElement3D>
+                            <DirectionalLight x:Name="light"  Color="White" Direction="-1,-1,-1" />
+                        </ModelUIElement3D>
+                    </Viewport3D>
+                    <ScrollBar x:Name="scrolh" VerticalAlignment="Bottom" Orientation="Horizontal" Minimum="-360" Maximum="360" LargeChange="10" SmallChange="1" Value="0" Height="20" ValueChanged="ScrollBar_ValueChanged_1"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
         <Rectangle x:Name="rectanglescale" Height="300" Grid.Column="7" Grid.RowSpan="4" Grid.ColumnSpan="1" Grid.Row="1" Fill="DarkGray" VerticalAlignment="Bottom" Width="23" HorizontalAlignment="Left" Margin="15,0,0,0"/>
         <GroupBox BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="1" Width="200" Height="300" Margin="0,20,0,0" Header="Parameter Input" Background="Transparent">
             <Grid>

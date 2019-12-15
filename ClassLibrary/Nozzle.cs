@@ -152,6 +152,11 @@ namespace ClassLibrary
             this.nozzle[pos] = rect;
         }
 
+        public void setK(double k)
+        {
+            this.k = k;
+        }
+
         // GETTERS
         public int GetNumRects()
         {
@@ -166,6 +171,11 @@ namespace ClassLibrary
         public Rectangulo[] GetNozzle()
         {
             return this.nozzle;
+        }
+
+        public double getK()
+        {
+            return this.k;
         }
 
         // ALTRES MÈTODES
