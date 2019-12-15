@@ -26,7 +26,7 @@ namespace ClassLibrary
         private double zmin = -1;
         private double zmax = 1;
         private Color lineColor = Colors.Black;
-        private Color surfaceColor = Colors.LightBlue;
+        private Color surfaceColor;
         private Point3D center = new Point3D();
         private bool isHiddenLine = false;
         private bool isWireframe = true;
@@ -188,6 +188,25 @@ namespace ClassLibrary
             pt.Y = -1 + 2 * (pt.Y - ymin) / (ymax - ymin);
             pt.Z = -1 + 2 * (pt.Z - zmin) / (zmax - zmin);
             return pt;
+        }
+
+        public static void CreateTriangleFace(Point3D p0, Point3D p1, Point3D p2, Color color, bool isWireframe, Viewport3D viewport)
+        {
+            MeshGeometry3D mesh = new MeshGeometry3D();
+            mesh.Positions.Add(p0);
+            mesh.Positions.Add(p1);
+            mesh.Positions.Add(p2);
+            mesh.TriangleIndices.Add(0);
+            mesh.TriangleIndices.Add(1);
+            mesh.TriangleIndices.Add(2);
+            SolidColorBrush brush = new SolidColorBrush();
+            brush.Color = color;
+            Material material = new DiffuseMaterial(brush);
+            GeometryModel3D geometry = new GeometryModel3D(mesh, material);
+            ModelUIElement3D model = new ModelUIElement3D();
+            model.Model = geometry;
+            viewport.Children.Add(model);
+
         }
     }
 

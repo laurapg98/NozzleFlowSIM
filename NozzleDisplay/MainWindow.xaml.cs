@@ -471,11 +471,12 @@ namespace NozzleDisplay
                 myViewport.Children.Add(myModelVisual3D);
 
                 ParametricCurve3D ps = new ParametricCurve3D();
+                ps.SurfaceColor = Colors.LightBlue;
                 ps.IsHiddenLine = false;
                 ps.Viewport3d = myViewport;
 
-                ps.Vmin = -1.5;
-                ps.Vmax = 1.5;
+                ps.Vmin = -this.nozzle.getK();
+                ps.Vmax = 3 - this.nozzle.getK();
                 ps.Umin = 0;
                 ps.Umax = 2 * Math.PI;
                 ps.Nu = 30;

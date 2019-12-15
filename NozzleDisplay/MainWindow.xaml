@@ -43,11 +43,20 @@
             <MenuItem Header="_Help"></MenuItem>
             <MenuItem Header="_About Us" Click="Click_Aboutus" ></MenuItem>
         </Menu>
-        <TabControl Grid.Column="4" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="Transparent" Margin="20,15,0,20">
+        <TabControl Grid.Column="4" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="4" Background="Transparent" Margin="20,15,20,20">
             <TabItem x:Name="tab2d" Header="2D">
-                <ItemsControl x:Name="nozzelcontrol" Width="900" Height="300">
-                    <Canvas x:Name="canvasNozzle" Background="DarkGray" Height="300" Width="900" HorizontalAlignment="Left"/>
-                </ItemsControl>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ItemsControl x:Name="nozzelcontrol" Width="950" Height="300" Grid.Column="0">
+                        <Canvas x:Name="canvasNozzle" Background="DarkGray" Height="300" Width="950"/>
+                    </ItemsControl>
+                    <Rectangle x:Name="rectanglescale" Height="300"  VerticalAlignment="Bottom" Width="23" HorizontalAlignment="Right" Margin="15,0,0,0" Grid.Column="1"/>
+                    <Slider x:Name="sliderthroat" Margin="0,277,0,-0.333"  VerticalAlignment="Top" IsSnapToTickEnabled="True" TickPlacement="TopLeft" ValueChanged="sliderthroat_ValueChanged" HorizontalAlignment="Left" Width="950"/>
+                    <Image x:Name="padlockimg" HorizontalAlignment="Left" Height="15" Margin="10,0,0,5" VerticalAlignment="Bottom" Width="15" Source="Resources/padlock.png" Grid.Column="1"/>
+                </Grid>
             </TabItem>
             <TabItem x:Name="tab3d">
                 <TabItem.Header>
@@ -56,7 +65,7 @@
                 <Grid>
                     <Viewport3D Name="myViewport" MinWidth="800" MinHeight="300">
                         <Viewport3D.Camera>
-                            <PerspectiveCamera x:Name="camera" Position="20,20,20" LookDirection="-10,-10,-10" UpDirection="0,1,0"/>
+                            <PerspectiveCamera x:Name="camera" Position="-20,20,20" LookDirection="20,-20,-20" UpDirection="0,1,0"/>
                         </Viewport3D.Camera>
                         <ModelUIElement3D>
                             <DirectionalLight x:Name="light"  Color="White" Direction="-1,-1,-1" />
@@ -66,7 +75,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Rectangle x:Name="rectanglescale" Height="300" Grid.Column="7" Grid.RowSpan="4" Grid.ColumnSpan="1" Grid.Row="1" Fill="DarkGray" VerticalAlignment="Bottom" Width="23" HorizontalAlignment="Left" Margin="15,0,0,0"/>
         <GroupBox BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="1" Width="200" Height="300" Margin="0,20,0,0" Header="Parameter Input" Background="Transparent">
             <Grid>
                 <TextBox x:Name="cbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="20,30,75,214" Height="20" Width="90"></TextBox>
@@ -192,7 +200,5 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Slider x:Name="sliderthroat" Margin="30,0,10,0"  VerticalAlignment="Top"  Grid.Column="4" Grid.Row="5" Grid.ColumnSpan="3" IsSnapToTickEnabled="True" TickPlacement="TopLeft" ValueChanged="sliderthroat_ValueChanged"/>
-        <Image x:Name="padlockimg" Grid.Column="7" HorizontalAlignment="Left" Height="15" Margin="0" Grid.Row="5" VerticalAlignment="Center" Width="15" Source="Resources/padlock.png"/>
     </Grid>
 </Window>
