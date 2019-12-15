@@ -1,0 +1,16 @@
+﻿<Window x:Class="NozzleDisplay.SaveFile"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NozzleDisplay"
+        mc:Ignorable="d"
+        Title="SaveFile" Height="300" Width="300">
+    <Grid>
+        <Label Content="The current state of the nozzle" HorizontalAlignment="Left" Margin="30,50,0,0" VerticalAlignment="Top"/>
+        <Label Content="will be saved in a .txt file." HorizontalAlignment="Left" Margin="40,65,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textbutton_fichero" HorizontalAlignment="Center" Height="23" Margin="0,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="button_savefile" Content="Save file" HorizontalAlignment="Center" Margin="0,180,0,0" Click="click_savefile" VerticalAlignment="Top" Width="75"/>
+        <Label Content="Write the name you want for this file:" HorizontalAlignment="Left" Margin="30,100,0,0" VerticalAlignment="Top"/>
+    </Grid>
+</Window>

@@ -36,7 +36,6 @@ namespace NozzleDisplay
         Stack<Nozzle> pilaNozzle;
         System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer(); //Para el tick del timer
         int milisecs = 250;
-
         int positionThroat;
 
         public MainWindow()
@@ -154,7 +153,7 @@ namespace NozzleDisplay
 
             // comprobamos que no estén vacíos
             if (dxbox.Text == "" || cbox.Text == "" || numrectbox.Text == "")
-                MessageBox.Show("All parameters should be established\n(^t, ^x & number of rectangles)");
+                MessageBox.Show("All parameters should be established\n(Courant parameter, horizontal axis steps & number of rectangles)");
             else
             {
                 // comprobamos que tengan el formato que han de tener
@@ -165,7 +164,7 @@ namespace NozzleDisplay
                     double dx = Convert.ToDouble(dxbox.Text);
                     int numrect = Convert.ToInt32(numrectbox.Text);
                     if (C <= 0 || dx <= 0 || numrect <= 0)
-                        MessageBox.Show("All parameters should be positive and different from 0\n(^t, ^x & number of rectangles)");
+                        MessageBox.Show("All parameters should be positive and different from 0\n(Courant parameter, horizontal axis steps & number of rectangles)");
                     else
                     {
                         // comprobamos que se cumpla la condicion de Courant --> estabilidad
@@ -175,7 +174,6 @@ namespace NozzleDisplay
                         }
                         else
                         {
-
                             // guardamos los parámetros
                             this.C = C;
                             this.dx = dx;
@@ -184,8 +182,6 @@ namespace NozzleDisplay
                             // creamos el nozzle
                             this.nozzle = new Nozzle(this.numR, this.dx);
                             this.pilaNozzle = new Stack<Nozzle>();
-
-                            // guardamos el nozzle solo con las condiciones iniciales
 
                             // Courant condition --> stability
                             this.dt = this.nozzle.getdt(this.C, this.dx);
@@ -498,6 +494,87 @@ namespace NozzleDisplay
             double y = Math.Cosh(v) * Math.Sin(u);
             double z = 2.2 * Math.Sinh(v);
             return new Point3D(x, y, z);
+        }
+
+        private void click_openfile(object sender, RoutedEventArgs e) // click en FILE --> OPEN FILE
+        {
+            //paramos el timer en caso de que se construya un nuevo nozzle durante la simulacion
+            dispatcherTimer.Stop();
+
+            //abrimos el form
+            OpenFile openfilewindow = new OpenFile();
+            openfilewindow.ShowDialog();
+
+            //leemos el nombre del fichero seleccionado en el form
+            string fichero = openfilewindow.getFichero();
+
+            if (fichero == null) //si no lo coge bien o se cierra antes de cogerlo
+                MessageBox.Show("Any file selected. Try again.");
+            else //si no:
+            {
+                // vaciamos nozzle y la pila
+                this.nozzle = new Nozzle();
+                this.pilaNozzle = new Stack<Nozzle>();
+
+                try
+                {
+                    // leemos fichero
+                    double[] param = this.nozzle.CargarEstadoFichero(fichero);
+
+                    // guardamos los parámetros
+                    this.dx = param[0];
+                    this.dt = param[1];
+                    this.contadordt = Convert.ToInt32(param[3]);
+                    this.numR = this.nozzle.GetNumRects();
+                    this.positionThroat = this.nozzle.getthroatpos();
+
+                    nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
+
+                    this.listdt = new List<double>(); this.listdt.Add(this.contadordt);
+                    this.listdendt = new List<double>(); this.listdendt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetDensP());
+                    this.listpredt = new List<double>(); this.listpredt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetPresP());
+                    this.listtempdt = new List<double>(); this.listtempdt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetTempP());
+                    this.listveldt = new List<double>(); this.listveldt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetVelP());
+
+                    fillCanvasNozzle();
+                    refreshCanvas();
+                    updateParameterlist();
+                    crearDataTable();
+
+                    //enseñamos botones etc
+                    playbut.Visibility = Visibility.Visible;
+                    pausebut.Visibility = Visibility.Visible;
+                    resetbut.Visibility = Visibility.Visible;
+                    onestepbut.Visibility = Visibility.Visible;
+                    comboboxcolor.Visibility = Visibility.Visible;
+                    PlotsTabControl.Visibility = Visibility.Visible;
+                    stepback.Visibility = Visibility.Visible;
+
+                    //ajustamos el slider
+                    sliderthroat.Value = this.numR / 2;
+                    unlockSlider();
+                }
+                catch 
+                {
+                    MessageBox.Show("Could not open the file.");
+                }
+            }
+        }
+
+        private void click_savefile(object sender, RoutedEventArgs e) // click en FILE --> SAVE FILE
+        {
+            if (this.nozzle == null) //comprobamos que haya algo
+                MessageBox.Show("There is no state in order to save");
+            else //si hay:
+            {
+                //guardamos los parámetros actuales
+                double[] param = { this.dx, this.dt, 1.4, this.contadordt };
+
+                //abrimos el form y le pasamos los parámetros y el estado actual
+                SaveFile savefilewindow = new SaveFile();
+                savefilewindow.getParametros(param, this.nozzle);
+                savefilewindow.ShowDialog();
+            }
         }
 
         private void Click_Aboutus(object sender, RoutedEventArgs e) // botón ABOUT US

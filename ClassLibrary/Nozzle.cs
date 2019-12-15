@@ -230,7 +230,7 @@ namespace ClassLibrary
             }
         }
 
-        public void GuardarEstadoFichero(string fichero, double Ax, double At, double gamma) // guarda el estado actual del nozzle en un txt
+        public void GuardarEstadoFichero(string fichero, double Ax, double At, double gamma, int contadort) // guarda el estado actual del nozzle en un txt
         {
             //obrim fitxer
             StreamWriter W = new StreamWriter(fichero + ".txt");
@@ -257,6 +257,7 @@ namespace ClassLibrary
             W.WriteLine(Convert.ToString(Ax));
             W.WriteLine(Convert.ToString(At));
             W.WriteLine(Convert.ToString(gamma));
+            W.WriteLine(Convert.ToString(contadort));
 
             //tanquem fitxer
             W.Close();
@@ -271,7 +272,7 @@ namespace ClassLibrary
             this.numRect = Convert.ToInt32(R.ReadLine());
 
             //formem el vector de rectangles 
-            this.nozzle = new Rectangulo[this.numRect];
+            this.nozzle = new Rectangulo[this.numRect + 2];
 
             //agafem les propietats del fluid a cada rectangle
             int i = 0;
@@ -295,10 +296,11 @@ namespace ClassLibrary
             }
 
             //agafem els altres paràmetres
-            double[] parametres = new double[3];
-            parametres[0] = Convert.ToDouble(R.ReadLine());
-            parametres[1] = Convert.ToDouble(R.ReadLine());
-            parametres[2] = Convert.ToDouble(R.ReadLine());
+            double[] parametres = new double[4];
+            parametres[0] = Convert.ToDouble(R.ReadLine()); // Ax
+            parametres[1] = Convert.ToDouble(R.ReadLine()); // At
+            parametres[2] = Convert.ToDouble(R.ReadLine()); // gamma
+            parametres[3] = Convert.ToDouble(R.ReadLine()); // numero de intervalos de tiempo que han pasado
 
             return parametres;
         }
