@@ -447,36 +447,48 @@ namespace NozzleDisplay
             parambut.Visibility = Visibility.Visible;
 
             unlockSlider();
+
+            myViewport.Children.Clear();
         }
 
         private void Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) //Cambio al 3D
         {
-            //Controles para restablecer el viewport3d para ir borrando las anteriores tuberas
-            myViewport.Children.Clear();
-            DirectionalLight dl = new DirectionalLight();
-            dl.Color = Colors.White;
-            dl.Direction = new Vector3D(-1, -1, -1);
-            DirectionalLight dl_2 = new DirectionalLight();
-            dl_2.Color = Colors.White;
-            dl_2.Direction = new Vector3D(1, 1, 1);
-            Model3DGroup myModel3DGroup = new Model3DGroup();
-            myModel3DGroup.Children.Add(dl);
-            myModel3DGroup.Children.Add(dl_2);
-            ModelVisual3D myModelVisual3D = new ModelVisual3D();
-            myModelVisual3D.Content = (myModel3DGroup);
-            myViewport.Children.Add(myModelVisual3D);
+            if (this.nozzle != null)
+            {
+                //Controles para restablecer el viewport3d para ir borrando las anteriores tuberas
+                myViewport.Children.Clear();
+                DirectionalLight dl = new DirectionalLight();
+                dl.Color = Colors.White;
+                dl.Direction = new Vector3D(-1, -1, -1);
+                DirectionalLight dl_2 = new DirectionalLight();
+                dl_2.Color = Colors.White;
+                dl_2.Direction = new Vector3D(1, 1, 1);
+                Model3DGroup myModel3DGroup = new Model3DGroup();
+                myModel3DGroup.Children.Add(dl);
+                myModel3DGroup.Children.Add(dl_2);
+                ModelVisual3D myModelVisual3D = new ModelVisual3D();
+                myModelVisual3D.Content = (myModel3DGroup);
+                myViewport.Children.Add(myModelVisual3D);
 
-            ParametricCurve3D ps = new ParametricCurve3D();
-            ps.IsHiddenLine = false;
-            ps.Viewport3d = myViewport;
+                ParametricCurve3D ps = new ParametricCurve3D();
+                ps.IsHiddenLine = false;
+                ps.Viewport3d = myViewport;
 
-            ps.Vmin = -1.5;
-            ps.Vmax = 1.5;
-            ps.Umin = 0;
-            ps.Umax = 2 * Math.PI;
-            ps.Nu = 30;
-            ps.Nv = 30;
-            ps.CreateSurface(Hyperboloid);
+                ps.Vmin = -1.5;
+                ps.Vmax = 1.5;
+                ps.Umin = 0;
+                ps.Umax = 2 * Math.PI;
+                ps.Nu = 30;
+                ps.Nv = 30;
+                ps.CreateSurface(Hyperboloid);
+            }
+
+            else
+            {
+                MessageBox.Show("No nozzle to mesh 3D", "Error");
+                tab2d.IsSelected = true;
+                tab3d.IsSelected = false;
+            }
         }
 
         private Point3D Hyperboloid(double u, double v) //Funcion de nuestra tubera 3D (hiperboloide de una hoja)

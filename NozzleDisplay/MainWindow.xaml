@@ -44,12 +44,12 @@
             <MenuItem Header="_About Us" Click="Click_Aboutus" ></MenuItem>
         </Menu>
         <TabControl Grid.Column="4" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="Transparent" Margin="20,15,0,20">
-            <TabItem Header="2D">
+            <TabItem x:Name="tab2d" Header="2D">
                 <ItemsControl x:Name="nozzelcontrol" Width="900" Height="300">
                     <Canvas x:Name="canvasNozzle" Background="DarkGray" Height="300" Width="900" HorizontalAlignment="Left"/>
                 </ItemsControl>
             </TabItem>
-            <TabItem x:Name="_3dtab">
+            <TabItem x:Name="tab3d">
                 <TabItem.Header>
                     <Label Content="3D" MouseLeftButtonDown ="Label_MouseLeftButtonDown"></Label>
                 </TabItem.Header>
