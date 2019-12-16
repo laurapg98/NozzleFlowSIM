@@ -52,6 +52,8 @@ namespace NozzleDisplay
             PlotsTabControl.Visibility = Visibility.Hidden;
             stepback.Visibility = Visibility.Hidden;
             padlockimg.Visibility = Visibility.Hidden;
+            contadortxt.Visibility = Visibility.Hidden;
+            unitbox.Visibility = Visibility.Hidden;
 
         }
 
@@ -190,6 +192,7 @@ namespace NozzleDisplay
 
                             this.positionThroat = this.nozzle.getthroatpos();
                             this.contadordt = 0;
+                            contadortxt.Text = " Contador: " + this.contadordt.ToString() + " Δt";
 
                             this.listdt = new List<double>(); this.listdt.Add(this.contadordt);
                             this.listdendt = new List<double>(); this.listdendt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetDensP());
@@ -210,6 +213,8 @@ namespace NozzleDisplay
                             comboboxcolor.Visibility = Visibility.Visible;
                             PlotsTabControl.Visibility = Visibility.Visible;
                             stepback.Visibility = Visibility.Visible;
+                            contadortxt.Visibility = Visibility.Visible;
+                            unitbox.Visibility = Visibility.Visible;
 
                             //ajustamos el slider
                             sliderthroat.Value = this.numR / 2;
@@ -257,6 +262,9 @@ namespace NozzleDisplay
                 gs.Offset = 0.5;
                 lgb.GradientStops.Add(gs);
                 rectanglescale.Fill = lgb;
+                unitbox.Text = "[P/Po]";
+                maxlabel.Text = "1";
+                minlabel.Text = "0";
             }
 
             if (comboboxcolor.SelectedIndex == 1) //Velocity
@@ -274,6 +282,9 @@ namespace NozzleDisplay
                 gs.Offset = 0.5;
                 lgb.GradientStops.Add(gs);
                 rectanglescale.Fill = lgb;
+                unitbox.Text = "[V/Vo]";
+                maxlabel.Text = "2.5";
+                minlabel.Text = "0";
             }
 
             if (comboboxcolor.SelectedIndex == 2) //Temperature
@@ -291,6 +302,9 @@ namespace NozzleDisplay
                 gs.Offset = 0.5;
                 lgb.GradientStops.Add(gs);
                 rectanglescale.Fill = lgb;
+                unitbox.Text = "[T/To]";
+                maxlabel.Text = "1";
+                minlabel.Text = "0";
             }
 
             if (comboboxcolor.SelectedIndex == 3) //Density
@@ -308,6 +322,9 @@ namespace NozzleDisplay
                 gs.Offset = 0.5;
                 lgb.GradientStops.Add(gs);
                 rectanglescale.Fill = lgb;
+                unitbox.Text = "[ρ/ρo]";
+                maxlabel.Text = "1";
+                minlabel.Text = "0";
             }
         }
 
@@ -327,6 +344,7 @@ namespace NozzleDisplay
             this.nozzle.EjecutarCiclo(this.dt, this.dx, 1.4);
             this.nozzle.ActualizarEstados();
             this.contadordt++;
+            contadortxt.Text = " Contador: " + this.contadordt.ToString() + " Δt";
 
             // actualizamos la parte gráfica
             this.refreshCanvas();
@@ -360,8 +378,6 @@ namespace NozzleDisplay
         {
             try
             {
-
-
                 canvasNozzle.Children.Clear();
 
                 double k = sliderthroat.Value / 10;
@@ -373,6 +389,7 @@ namespace NozzleDisplay
 
                 this.positionThroat = this.nozzle.getthroatpos();
                 this.contadordt = 0;
+                contadortxt.Text = " Contador: " + this.contadordt.ToString() + " Δt";
 
                 this.listdt = new List<double>(); this.listdt.Add(this.contadordt);
                 this.listdendt = new List<double>(); this.listdendt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetDensP());
@@ -429,6 +446,8 @@ namespace NozzleDisplay
             comboboxcolor.Visibility = Visibility.Hidden;
             PlotsTabControl.Visibility = Visibility.Hidden;
             stepback.Visibility = Visibility.Hidden;
+            contadortxt.Visibility = Visibility.Hidden;
+            unitbox.Visibility = Visibility.Hidden;
 
             // escondemos canvas
             canvasNozzle.Children.Clear();
