@@ -166,13 +166,13 @@ namespace NozzleDisplay
                     double dx = Convert.ToDouble(dxbox.Text);
                     int numrect = Convert.ToInt32(numrectbox.Text);
                     if (C <= 0 || dx <= 0 || numrect <= 0)
-                        MessageBox.Show("All parameters should be positive and different from 0\n(Courant parameter, horizontal axis steps & number of rectangles)");
+                        MessageBox.Show("All parameters should be positive and different from 0\n(Courant parameter, horizontal axis steps & number of rectangles)", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                     else
                     {
                         // comprobamos que se cumpla la condicion de Courant --> estabilidad
                         if (C > 1)
                         {
-                            MessageBox.Show("In order to get a stable simulation, the parameter C should not be bigger than 1");
+                            MessageBox.Show("In order to get a stable simulation, the parameter C should not be bigger than 1","Warning",MessageBoxButton.OK,MessageBoxImage.Warning);
                         }
                         else
                         {
@@ -226,7 +226,7 @@ namespace NozzleDisplay
 
                 catch
                 {
-                    MessageBox.Show("The parameters ^t and ^x can be decimal numbers, but the number of rectangles not\nPlease check it");
+                    MessageBox.Show("The parameters ^t and ^x can be decimal numbers, but the number of rectangles not\nPlease check it","Error",MessageBoxButton.OK,MessageBoxImage.Error);
                 }
                 
                 
@@ -330,8 +330,15 @@ namespace NozzleDisplay
 
         private void MenuItem_Click(object sender, RoutedEventArgs e) // botón ANDERSON
         {
-            Anderson a = new Anderson();
-            a.ShowDialog();
+            if (this.C == 0.5 && this.dx == 0.1 && this.numR == 30)
+            {
+                Anderson a = new Anderson();
+                a.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Anderson validation only availabe for default values", "Warning",MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private void EjecutarUnCiclo() // función que ejecuta un ciclo
@@ -464,6 +471,7 @@ namespace NozzleDisplay
             unlockSlider();
 
             myViewport.Children.Clear();
+            massflowxlplot.Children.Clear();
         }
 
         private void Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) //Cambio al 3D
@@ -684,9 +692,10 @@ namespace NozzleDisplay
             this.listtempdt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetTempP());
             this.listveldt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetVelP());
 
-            // actualizamos el plot
+            // actualizamos los plots
             refreshplotsxl();
             refreshplotstime();
+            refreshplotmassflow();
         }
 
         private void refreshplotsxl()
@@ -757,6 +766,65 @@ namespace NozzleDisplay
             lg.Description = String.Format("Density");
             lg.StrokeThickness = 2;
             lg.Plot(this.listdt.ToArray(), this.listdendt.ToArray());
+        }
+
+        public void refreshplotmassflow()
+        {
+            if (this.contadordt == 1)
+            {
+                var lg = new LineGraph();
+                massflowxlplot.Children.Add(lg);
+                lg.Stroke = new SolidColorBrush(Colors.Red);
+                lg.Description = String.Format("0 Δt");
+                lg.StrokeThickness = 2;
+                lg.Plot(this.listdx.ToArray(), this.nozzle.getMassFlow());
+            }
+            if (this.contadordt == 50)
+            {
+                var lg = new LineGraph();
+                massflowxlplot.Children.Add(lg);
+                lg.Stroke = new SolidColorBrush(Colors.DarkBlue);
+                lg.Description = String.Format("50 Δt");
+                lg.StrokeThickness = 2;
+                lg.Plot(this.listdx.ToArray(), this.nozzle.getMassFlow());
+            }
+            if (this.contadordt == 100)
+            {
+                var lg = new LineGraph();
+                massflowxlplot.Children.Add(lg);
+                lg.Stroke = new SolidColorBrush(Colors.DarkGreen);
+                lg.Description = String.Format("100 Δt");
+                lg.StrokeThickness = 2;
+                lg.Plot(this.listdx.ToArray(), this.nozzle.getMassFlow());
+            }
+            if (this.contadordt == 150)
+            {
+                var lg = new LineGraph();
+                massflowxlplot.Children.Add(lg);
+                lg.Stroke = new SolidColorBrush(Colors.Purple);
+                lg.Description = String.Format("150 Δt");
+                lg.StrokeThickness = 2;
+                lg.Plot(this.listdx.ToArray(), this.nozzle.getMassFlow());
+            }
+            if (this.contadordt == 200)
+            {
+                var lg = new LineGraph();
+                massflowxlplot.Children.Add(lg);
+                lg.Stroke = new SolidColorBrush(Colors.Orange);
+                lg.Description = String.Format("200 Δt");
+                lg.StrokeThickness = 2;
+                lg.Plot(this.listdx.ToArray(), this.nozzle.getMassFlow());
+            }
+            if (this.contadordt == 700)
+            {
+                var lg = new LineGraph();
+                massflowxlplot.Children.Add(lg);
+                lg.Stroke = new SolidColorBrush(Colors.Yellow);
+                lg.Description = String.Format("700 Δt");
+                lg.StrokeThickness = 2;
+                lg.Plot(this.listdx.ToArray(), this.nozzle.getMassFlow());
+            }
+
         }
 
         public void lockSlider()

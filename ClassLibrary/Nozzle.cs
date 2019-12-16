@@ -429,6 +429,18 @@ namespace ClassLibrary
             return As;
         }
 
+        public List<double> getMassFlow()
+        {
+            List<double> mf = new List<double>();
+
+            for (int i = 0; i <= this.numRect; i++)
+            {
+                mf.Add(this.nozzle[i].GetArea()* this.nozzle[i].GetVelP()* this.nozzle[i].GetDensP());
+            }
+
+            return mf;
+        }
+
         public bool SimulacionAcabada()
         {
             return false;
@@ -447,6 +459,8 @@ namespace ClassLibrary
             }
             return 0;
         }
+
+
 
         
 

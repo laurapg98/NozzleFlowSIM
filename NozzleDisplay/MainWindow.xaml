@@ -179,6 +179,25 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Other Plots">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+                    <d3:Chart BottomTitle="x/L" LeftTitle="Nondimensional mass flow (pVA)" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="1">
+                        <d3:LineGraph x:Name="massflowxlplot" d3:Legend.IsVisible="False"/>
+                    </d3:Chart>
+                    <d3:Chart BottomTitle="x/L" LeftTitle="Nondimensional mass flow (pVA)" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="2" Grid.Row="1">
+                        <d3:LineGraph x:Name="massflowxlplot_2" d3:Legend.IsVisible="False"/>
+                    </d3:Chart>
+                </Grid>
             </TabItem>
             <TabItem Header="Data">
                 <Grid>
