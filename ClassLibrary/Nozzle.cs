@@ -314,23 +314,40 @@ namespace ClassLibrary
             double At = Convert.ToDouble(R.ReadLine()); // At
             double gamma = Convert.ToDouble(R.ReadLine()); // gamma
             int numdt  = Convert.ToInt32(R.ReadLine()); // numero de intervalos de tiempo que han pasado
-            double[,] parametres = new double[9, numdt];
-            parametres[0, 0] = Ax;
-            parametres[1, 0] = At;
-            parametres[2, 0] = gamma;
-            parametres[3, 0] = numdt;
-            int cont = 0;
-            while (cont < numdt)
+            double[,] parametres = new double[2, 2];
+            parametres[0, 0] = numdt;
+            parametres[0, 1] = gamma;
+            parametres[1, 0] = Ax;
+            parametres[1, 1] = At;
+            if (numdt != 0)
             {
-                string linea = R.ReadLine();
-                string[] trozos = linea.Split(';');
+                parametres = new double[7, numdt];
+                parametres[0, 0] = numdt;
+                parametres[0, 1] = gamma;
+                parametres[1, 0] = Ax;
+                parametres[1, 1] = At;
+                int j = 2;
+                while (j < numdt)
+                {
+                    parametres[0, j] = 0;
+                    parametres[1, j] = 0;
+                    j++;
+                }
+                int cont = 0;
+                while (cont < numdt)
+                {
+                    string linea = R.ReadLine();
+                    string[] trozos = linea.Split(';');
 
-                // ORDRE: dt, dens, temp, vel, pres
-                parametres[4, cont] = Convert.ToDouble(trozos[0]);
-                parametres[5, cont] = Convert.ToDouble(trozos[1]);
-                parametres[6, cont] = Convert.ToDouble(trozos[2]);
-                parametres[7, cont] = Convert.ToDouble(trozos[3]);
-                parametres[8, cont] = Convert.ToDouble(trozos[4]);
+                    // ORDRE: dt, dens, temp, vel, pres
+                    parametres[2, cont] = Convert.ToDouble(trozos[0]);
+                    parametres[3, cont] = Convert.ToDouble(trozos[1]);
+                    parametres[4, cont] = Convert.ToDouble(trozos[2]);
+                    parametres[5, cont] = Convert.ToDouble(trozos[3]);
+                    parametres[6, cont] = Convert.ToDouble(trozos[4]);
+
+                    cont++;
+                }
             }
 
             return parametres;

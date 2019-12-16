@@ -549,28 +549,31 @@ namespace NozzleDisplay
                     double[,] param = this.nozzle.CargarEstadoFichero(fichero);
 
                     // guardamos los parámetros
-                    this.dx = param[0, 0];
-                    this.dt = param[1, 0];
-                    this.contadordt = Convert.ToInt32(param[3, 0]);
+                    this.contadordt = Convert.ToInt32(param[0, 0]);
+                    this.dx = param[1, 0];
+                    this.dt = param[1, 1];
                     this.numR = this.nozzle.GetNumRects();
                     this.positionThroat = this.nozzle.getthroatpos();
 
                     nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
 
-                    this.listdt = new List<double>();
-                    this.listdendt = new List<double>();
-                    this.listpredt = new List<double>();
-                    this.listtempdt = new List<double>();
-                    this.listveldt = new List<double>();
-                    int cont = 0;
-                    while (cont < contadordt)
+                    if (this.contadordt != 0)
                     {
-                        listdt.Add(param[4, cont]);
-                        listdendt.Add(param[5, cont]);
-                        listtempdt.Add(param[6, cont]);
-                        listveldt.Add(param[7, cont]);
-                        listpredt.Add(param[8, cont]);
-                        cont++;
+                        this.listdt = new List<double>();
+                        this.listdendt = new List<double>();
+                        this.listpredt = new List<double>();
+                        this.listtempdt = new List<double>();
+                        this.listveldt = new List<double>();
+                        int cont = 0;
+                        while (cont < contadordt)
+                        {
+                            listdt.Add(param[2, cont]);
+                            listdendt.Add(param[3, cont]);
+                            listtempdt.Add(param[4, cont]);
+                            listveldt.Add(param[5, cont]);
+                            listpredt.Add(param[6, cont]);
+                            cont++;
+                        }
                     }
 
                     fillCanvasNozzle();
