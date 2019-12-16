@@ -502,8 +502,8 @@ namespace NozzleDisplay
                 ps.Vmax = 3 - this.nozzle.getK();
                 ps.Umin = 0;
                 ps.Umax = 2 * Math.PI;
-                ps.Nu = 30;
-                ps.Nv = 30;
+                ps.Nu = this.numR;
+                ps.Nv = this.numR;
                 ps.CreateSurface(Hyperboloid);
             }
 
