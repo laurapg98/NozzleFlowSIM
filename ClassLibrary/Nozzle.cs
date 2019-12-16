@@ -230,7 +230,7 @@ namespace ClassLibrary
             }
         }
 
-        public void GuardarEstadoFichero(string fichero, double Ax, double At, double gamma, int contadort) // guarda el estado actual del nozzle en un txt
+        public void GuardarEstadoFichero(string fichero, double Ax, double At, double gamma, int contadort, List<double> listdt, List<double> listdens, List<double> listtemp, List<double> listvel, List<double> listpres) // guarda el estado actual del nozzle en un txt
         {
             //obrim fitxer
             StreamWriter W = new StreamWriter(fichero + ".txt");
@@ -259,11 +259,25 @@ namespace ClassLibrary
             W.WriteLine(Convert.ToString(gamma));
             W.WriteLine(Convert.ToString(contadort));
 
+            //agegim les List
+            int cont = 0;
+            while (cont < contadort)
+            {
+                //recollim les dades de les List, separades per ';'
+                    // ORDRE: dt, dens, temp, vel, pres
+                string data = Convert.ToString(listdt[cont]) + ";" + Convert.ToString(listdens[cont]) + ";" + Convert.ToString(listtemp[cont]) + ";" + Convert.ToString(listvel[cont]) + ";" + Convert.ToString(listpres[cont]);
+
+                //escribim una línea per a cada posició
+                W.WriteLine(data);
+
+                cont++;
+            }
+
             //tanquem fitxer
             W.Close();
         }
 
-        public double[] CargarEstadoFichero(string fichero) // carga como estado actual del nozzle los datos que lee de un fichero txt
+        public double[,] CargarEstadoFichero(string fichero) // carga como estado actual del nozzle los datos que lee de un fichero txt
         {
             //llegim fitxer
             StreamReader R = new StreamReader(fichero);
@@ -295,12 +309,29 @@ namespace ClassLibrary
                 i++;
             }
 
-            //agafem els altres paràmetres
-            double[] parametres = new double[4];
-            parametres[0] = Convert.ToDouble(R.ReadLine()); // Ax
-            parametres[1] = Convert.ToDouble(R.ReadLine()); // At
-            parametres[2] = Convert.ToDouble(R.ReadLine()); // gamma
-            parametres[3] = Convert.ToDouble(R.ReadLine()); // numero de intervalos de tiempo que han pasado
+            //agafem els altres paràmetres i les List
+            double Ax = Convert.ToDouble(R.ReadLine()); // Ax
+            double At = Convert.ToDouble(R.ReadLine()); // At
+            double gamma = Convert.ToDouble(R.ReadLine()); // gamma
+            int numdt  = Convert.ToInt32(R.ReadLine()); // numero de intervalos de tiempo que han pasado
+            double[,] parametres = new double[9, numdt];
+            parametres[0, 0] = Ax;
+            parametres[1, 0] = At;
+            parametres[2, 0] = gamma;
+            parametres[3, 0] = numdt;
+            int cont = 0;
+            while (cont < numdt)
+            {
+                string linea = R.ReadLine();
+                string[] trozos = linea.Split(';');
+
+                // ORDRE: dt, dens, temp, vel, pres
+                parametres[4, cont] = Convert.ToDouble(trozos[0]);
+                parametres[5, cont] = Convert.ToDouble(trozos[1]);
+                parametres[6, cont] = Convert.ToDouble(trozos[2]);
+                parametres[7, cont] = Convert.ToDouble(trozos[3]);
+                parametres[8, cont] = Convert.ToDouble(trozos[4]);
+            }
 
             return parametres;
         }

@@ -546,22 +546,32 @@ namespace NozzleDisplay
                 try
                 {
                     // leemos fichero
-                    double[] param = this.nozzle.CargarEstadoFichero(fichero);
+                    double[,] param = this.nozzle.CargarEstadoFichero(fichero);
 
                     // guardamos los parámetros
-                    this.dx = param[0];
-                    this.dt = param[1];
-                    this.contadordt = Convert.ToInt32(param[3]);
+                    this.dx = param[0, 0];
+                    this.dt = param[1, 0];
+                    this.contadordt = Convert.ToInt32(param[3, 0]);
                     this.numR = this.nozzle.GetNumRects();
                     this.positionThroat = this.nozzle.getthroatpos();
 
                     nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
 
-                    this.listdt = new List<double>(); this.listdt.Add(this.contadordt);
-                    this.listdendt = new List<double>(); this.listdendt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetDensP());
-                    this.listpredt = new List<double>(); this.listpredt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetPresP());
-                    this.listtempdt = new List<double>(); this.listtempdt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetTempP());
-                    this.listveldt = new List<double>(); this.listveldt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetVelP());
+                    this.listdt = new List<double>();
+                    this.listdendt = new List<double>();
+                    this.listpredt = new List<double>();
+                    this.listtempdt = new List<double>();
+                    this.listveldt = new List<double>();
+                    int cont = 0;
+                    while (cont < contadordt)
+                    {
+                        listdt.Add(param[4, cont]);
+                        listdendt.Add(param[5, cont]);
+                        listtempdt.Add(param[6, cont]);
+                        listveldt.Add(param[7, cont]);
+                        listpredt.Add(param[8, cont]);
+                        cont++;
+                    }
 
                     fillCanvasNozzle();
                     refreshCanvas();
@@ -599,7 +609,7 @@ namespace NozzleDisplay
 
                 //abrimos el form y le pasamos los parámetros y el estado actual
                 SaveFile savefilewindow = new SaveFile();
-                savefilewindow.getParametros(param, this.nozzle);
+                savefilewindow.getParametros(param, this.nozzle, listdt, listdendt, listtempdt, listveldt, listpredt);
                 savefilewindow.ShowDialog();
             }
         }
