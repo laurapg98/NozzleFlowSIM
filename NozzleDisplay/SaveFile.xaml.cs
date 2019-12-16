@@ -22,6 +22,11 @@ namespace NozzleDisplay
     {
         double[] parametros;
         Nozzle nozzle;
+        List<double> listdt;
+        List<double> listdens;
+        List<double> listtemp;
+        List<double> listvel;
+        List<double> listpres;
 
         public SaveFile()
         {
@@ -37,7 +42,7 @@ namespace NozzleDisplay
                 try
                 {
                     //guardamos panel 
-                    nozzle.GuardarEstadoFichero(textbutton_fichero.Text, this.parametros[0], this.parametros[1], this.parametros[2], Convert.ToInt32(this.parametros[3]));
+                    nozzle.GuardarEstadoFichero(textbutton_fichero.Text, this.parametros[0], this.parametros[1], this.parametros[2], Convert.ToInt32(this.parametros[3]), this.listdt, this.listdens, this.listtemp, this.listvel, this.listpres);
 
                     //cerramos form
                     this.Close();
@@ -48,11 +53,15 @@ namespace NozzleDisplay
                 }
             }
         }
-
-        public void getParametros(double[] param, Nozzle nozzle) //coge los atributos que necesita
+        public void getParametros(double[] param, Nozzle nozzle, List<double> listdt, List<double> listdens, List<double> listtemp, List<double> listvel, List<double> listpres) //coge los atributos que necesita
         {
             this.parametros = param;
             this.nozzle = nozzle;
+            this.listdt = listdt;
+            this.listdens = listdens;
+            this.listtemp = listtemp;
+            this.listvel = listvel;
+            this.listpres = listpres;
         }
     }
 }
