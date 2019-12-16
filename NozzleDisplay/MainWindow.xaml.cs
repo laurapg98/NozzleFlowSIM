@@ -66,14 +66,14 @@ namespace NozzleDisplay
             {
                 Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i + 1);
                 Rectangle rect_canvas = new Rectangle();
-                rect_canvas.Height = Math.Min(rect_nozzle.GetAltura()*100,canvasNozzle.Height);
-                rect_canvas.Width = canvasNozzle.Width / this.nozzle.GetNumRects();
+                rect_canvas.Height = Math.Min(rect_nozzle.GetAltura()*100,canvasNozzle.ActualHeight);
+                rect_canvas.Width = canvasNozzle.ActualWidth / this.nozzle.GetNumRects();
                 rect_canvas.Fill = new SolidColorBrush(Colors.White);
                 rect_canvas.StrokeThickness = 0.15;
                 rect_canvas.Stroke = Brushes.Black;
                 canvasNozzle.Children.Add(rect_canvas);
                 Canvas.SetLeft(rect_canvas, i * rect_canvas.Width);
-                Canvas.SetTop(rect_canvas, (canvasNozzle.Height / 2) - (rect_canvas.Height / 2));
+                Canvas.SetTop(rect_canvas, (canvasNozzle.ActualWidth / 2) - (rect_canvas.Height / 2));
                 nozzlerectangles[i] = rect_canvas;
 
                 sliderthroat.Ticks.Add(Convert.ToDouble(i));
@@ -85,10 +85,10 @@ namespace NozzleDisplay
             for (int i = 0; i < nozzlerectangles.Length; i++)
             {
                 Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i + 1);
-                nozzlerectangles[i].Height = Math.Min(rect_nozzle.GetAltura() * 100, canvasNozzle.Height);
+                nozzlerectangles[i].Height = Math.Min(rect_nozzle.GetAltura() * 100, canvasNozzle.ActualHeight);
                 canvasNozzle.Children.Add(nozzlerectangles[i]);
                 Canvas.SetLeft(nozzlerectangles[i], i * nozzlerectangles[i].Width);
-                Canvas.SetTop(nozzlerectangles[i], (canvasNozzle.Height / 2) - (nozzlerectangles[i].Height / 2));
+                Canvas.SetTop(nozzlerectangles[i], (canvasNozzle.ActualHeight / 2) - (nozzlerectangles[i].Height / 2));
             }
         }
 
@@ -621,6 +621,12 @@ namespace NozzleDisplay
         {
             Aboutus au = new Aboutus();
             au.ShowDialog();
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            Report r = new Report();
+            r.ShowDialog();
         }
 
         private void stepback_Click(object sender, RoutedEventArgs e) // botón STEP BACK
