@@ -261,7 +261,7 @@ namespace ClassLibrary
 
             //agegim les List
             int cont = 0;
-            while (cont < contadort)
+            while (cont < listdt.Count())
             {
                 //recollim les dades de les List, separades per ';'
                     // ORDRE: dt, dens, temp, vel, pres
@@ -321,20 +321,13 @@ namespace ClassLibrary
             parametres[1, 1] = At;
             if (numdt != 0)
             {
-                parametres = new double[7, numdt];
+                parametres = new double[7, numdt + 2];
                 parametres[0, 0] = numdt;
                 parametres[0, 1] = gamma;
                 parametres[1, 0] = Ax;
                 parametres[1, 1] = At;
-                int j = 2;
-                while (j < numdt)
-                {
-                    parametres[0, j] = 0;
-                    parametres[1, j] = 0;
-                    j++;
-                }
                 int cont = 0;
-                while (cont < numdt)
+                while (cont <= numdt + 1)
                 {
                     string linea = R.ReadLine();
                     string[] trozos = linea.Split(';');

@@ -565,7 +565,7 @@ namespace NozzleDisplay
                         this.listtempdt = new List<double>();
                         this.listveldt = new List<double>();
                         int cont = 0;
-                        while (cont < contadordt)
+                        while (cont <= contadordt)
                         {
                             listdt.Add(param[2, cont]);
                             listdendt.Add(param[3, cont]);
@@ -592,7 +592,7 @@ namespace NozzleDisplay
 
                     //ajustamos el slider
                     sliderthroat.Value = this.numR / 2;
-                    unlockSlider();
+                    lockSlider();
                 }
                 catch 
                 {
@@ -650,7 +650,6 @@ namespace NozzleDisplay
             if (this.nozzle.SimulacionAcabada() == true) // si la simulación ha acabado, no se puede seguir
                 MessageBox.Show("Simulation has finished");
             else // si no:
-
                 this.EjecutarUnCiclo();
 
             lockSlider();
