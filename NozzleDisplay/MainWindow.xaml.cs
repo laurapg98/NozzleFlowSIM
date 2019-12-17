@@ -372,13 +372,7 @@ namespace NozzleDisplay
 
         private void dispatcherTimer_Tick(object sender, EventArgs e) // lo que hace cada interval del timer
         {
-            if (this.nozzle.SimulacionAcabada() == true)
-            {
-                MessageBox.Show("Simulation has finished");
-                dispatcherTimer.Stop();
-            }
-            else
-                this.EjecutarUnCiclo();
+            this.EjecutarUnCiclo();
         }
 
         private void sliderthroat_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) //funcion que cambia la forma de la tubera
@@ -687,10 +681,7 @@ namespace NozzleDisplay
 
         private void onestepbut_Click(object sender, RoutedEventArgs e) // botón STEP
         {
-            if (this.nozzle.SimulacionAcabada() == true) // si la simulación ha acabado, no se puede seguir
-                MessageBox.Show("Simulation has finished");
-            else // si no:
-                this.EjecutarUnCiclo();
+            this.EjecutarUnCiclo();
 
             lockSlider();
         }
@@ -706,7 +697,6 @@ namespace NozzleDisplay
                 datanozzle.Columns.Add(new DataColumn(((i * this.dx)).ToString()));
             }
 
-           // DataRow dr_xl = datanozzle.NewRow(); dr_xl[0] = ("X L");
             DataRow dr_a = datanozzle.NewRow(); dr_a[0] = ("A A*");
             DataRow dr_p = datanozzle.NewRow(); dr_p[0] = ("P Po");
             DataRow dr_v = datanozzle.NewRow(); dr_v[0] = ("V Vo");
@@ -715,7 +705,6 @@ namespace NozzleDisplay
 
             for (int i = 1; i <= datanozzle.Columns.Count - 1; i++)
             {
-               // dr_xl[i] = listdx[i - 1].ToString();
                 dr_a[i] = listAs[i - 1].ToString();
                 dr_p[i] = listpre[i - 1].ToString();
                 dr_v[i] = listvel[i - 1].ToString();
@@ -723,7 +712,6 @@ namespace NozzleDisplay
                 dr_de[i] = listden[i - 1].ToString();
             }
 
-           // datanozzle.Rows.Add(dr_xl.ItemArray);
             datanozzle.Rows.Add(dr_a.ItemArray);
             datanozzle.Rows.Add(dr_p.ItemArray);
             datanozzle.Rows.Add(dr_v.ItemArray);

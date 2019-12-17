@@ -486,11 +486,6 @@ namespace ClassLibrary
             return mf;
         }
 
-        public bool SimulacionAcabada()
-        {
-            return false;
-        }
-
         public int getthroatpos()
         {
             int pt = 0;
