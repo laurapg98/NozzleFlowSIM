@@ -230,7 +230,7 @@ namespace ClassLibrary
             }
         }
 
-        public void GuardarEstadoFichero(string fichero, double Ax, double At, double gamma, int contadort, List<double> listdt, List<double> listdens, List<double> listtemp, List<double> listvel, List<double> listpres) // guarda el estado actual del nozzle en un txt
+        public void GuardarEstadoFichero(string fichero, double Ax, double At, double gamma, int contadort, double C, List<double> listdt, List<double> listdens, List<double> listtemp, List<double> listvel, List<double> listpres) // guarda el estado actual del nozzle en un txt
         {
             //obrim fitxer
             StreamWriter W = new StreamWriter(fichero + ".txt");
@@ -258,6 +258,7 @@ namespace ClassLibrary
             W.WriteLine(Convert.ToString(At));
             W.WriteLine(Convert.ToString(gamma));
             W.WriteLine(Convert.ToString(contadort));
+            W.WriteLine(Convert.ToString(C));
 
             //agegim les List
             int cont = 0;
@@ -314,9 +315,11 @@ namespace ClassLibrary
             double At = Convert.ToDouble(R.ReadLine()); // At
             double gamma = Convert.ToDouble(R.ReadLine()); // gamma
             int numdt  = Convert.ToInt32(R.ReadLine()); // numero de intervalos de tiempo que han pasado
-            double[,] parametres = new double[2, 2];
+            double C = Convert.ToDouble(R.ReadLine()); // courant parameter
+            double[,] parametres = new double[2, 3];
             parametres[0, 0] = numdt;
             parametres[0, 1] = gamma;
+            parametres[0, 2] = C;
             parametres[1, 0] = Ax;
             parametres[1, 1] = At;
             if (numdt != 0)
@@ -324,6 +327,7 @@ namespace ClassLibrary
                 parametres = new double[7, numdt + 2];
                 parametres[0, 0] = numdt;
                 parametres[0, 1] = gamma;
+                parametres[0, 2] = C;
                 parametres[1, 0] = Ax;
                 parametres[1, 1] = At;
                 int cont = 0;

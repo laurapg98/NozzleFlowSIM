@@ -42,7 +42,7 @@ namespace NozzleDisplay
                 try
                 {
                     //guardamos panel 
-                    nozzle.GuardarEstadoFichero(textbutton_fichero.Text, this.parametros[0], this.parametros[1], this.parametros[2], Convert.ToInt32(this.parametros[3]), this.listdt, this.listdens, this.listtemp, this.listvel, this.listpres);
+                    nozzle.GuardarEstadoFichero(textbutton_fichero.Text, this.parametros[0], this.parametros[1], this.parametros[2], Convert.ToInt32(this.parametros[3]), this.parametros[4], this.listdt, this.listdens, this.listtemp, this.listvel, this.listpres);
 
                     //cerramos form
                     this.Close();

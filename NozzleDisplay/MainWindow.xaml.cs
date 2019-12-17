@@ -552,11 +552,22 @@ namespace NozzleDisplay
                     this.contadordt = Convert.ToInt32(param[0, 0]);
                     this.dx = param[1, 0];
                     this.dt = param[1, 1];
+                    this.C = param[0, 2];
                     this.numR = this.nozzle.GetNumRects();
                     this.positionThroat = this.nozzle.getthroatpos();
 
-                    nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
+                    // escribimos en los textbox
+                    cbox.Text = Convert.ToString(this.C);
+                    dxbox.Text = Convert.ToString(this.dx);
+                    numrectbox.Text = Convert.ToString(this.numR);
 
+                    // creamos el mass flow 
+                    this.nozzle.getMassFlow();
+
+                    // creamos los rectangulos para dibujar
+                    nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
+                    
+                    // creamos las listas para los plots respecto del tiempo
                     if (this.contadordt != 0)
                     {
                         this.listdt = new List<double>();
@@ -565,7 +576,7 @@ namespace NozzleDisplay
                         this.listtempdt = new List<double>();
                         this.listveldt = new List<double>();
                         int cont = 0;
-                        while (cont <= contadordt)
+                        while (cont <= contadordt + 1)
                         {
                             listdt.Add(param[2, cont]);
                             listdendt.Add(param[3, cont]);
@@ -576,9 +587,20 @@ namespace NozzleDisplay
                         }
                     }
 
+                    // creamos las listas para los plots respecto el eje X
+                    this.listdx = this.nozzle.getNozzleXL(this.dx);
+                    this.listpre = this.nozzle.getPressures();
+                    this.listvel = this.nozzle.getVelocities();
+                    this.listtemp = this.nozzle.getTemperatures();
+                    this.listden = this.nozzle.getDensities();
+                    this.listAs = this.nozzle.getNozzleArea();
+
+                    // parte gráfica:
                     fillCanvasNozzle();
                     refreshCanvas();
-                    updateParameterlist();
+                    refreshplotsxl();
+                    refreshplotstime();
+                    refreshplotmassflow();
                     crearDataTable();
 
                     //enseñamos botones etc
@@ -591,7 +613,7 @@ namespace NozzleDisplay
                     stepback.Visibility = Visibility.Visible;
 
                     //ajustamos el slider
-                    sliderthroat.Value = this.numR / 2;
+                    sliderthroat.Value = this.positionThroat;
                     lockSlider();
                 }
                 catch 
@@ -608,7 +630,7 @@ namespace NozzleDisplay
             else //si hay:
             {
                 //guardamos los parámetros actuales
-                double[] param = { this.dx, this.dt, 1.4, this.contadordt };
+                double[] param = { this.dx, this.dt, 1.4, this.contadordt, this.C };
 
                 //abrimos el form y le pasamos los parámetros y el estado actual
                 SaveFile savefilewindow = new SaveFile();
@@ -638,9 +660,27 @@ namespace NozzleDisplay
                 // sacamos la última posición de la pila y la asignamos como estado actual
                 this.nozzle = this.pilaNozzle.Pop();
 
+                // actualizamos las listas para el plot respecto al eje X
+                this.listdx = this.nozzle.getNozzleXL(this.dx);
+                this.listpre = this.nozzle.getPressures();
+                this.listvel = this.nozzle.getVelocities();
+                this.listtemp = this.nozzle.getTemperatures();
+                this.listden = this.nozzle.getDensities();
+                this.listAs = this.nozzle.getNozzleArea();
+
+                // eliminamos la última posición de las listas para el plot respecto al tiempo
+                contadordt = contadordt - 1;
+                listtempdt.RemoveAt(this.contadordt);
+                listdendt.RemoveAt(this.contadordt);
+                listpredt.RemoveAt(this.contadordt);
+                listveldt.RemoveAt(this.contadordt);
+                listdt.RemoveAt(this.contadordt);
+
                 // actualizamos la parte gráfica
                 this.refreshCanvas();
-                this.updateParameterlist();
+                refreshplotsxl();
+                refreshplotstime();
+                refreshplotmassflow();
                 this.crearDataTable();
             }
         }
@@ -663,19 +703,19 @@ namespace NozzleDisplay
 
             for (int i = 0; i <= this.numR; i++)
             {
-                datanozzle.Columns.Add(new DataColumn(((i)).ToString()));
+                datanozzle.Columns.Add(new DataColumn(((i * this.dx)).ToString()));
             }
 
-            DataRow dr_xl = datanozzle.NewRow(); dr_xl[0] = ("X L");
+           // DataRow dr_xl = datanozzle.NewRow(); dr_xl[0] = ("X L");
             DataRow dr_a = datanozzle.NewRow(); dr_a[0] = ("A A*");
             DataRow dr_p = datanozzle.NewRow(); dr_p[0] = ("P Po");
             DataRow dr_v = datanozzle.NewRow(); dr_v[0] = ("V Vo");
             DataRow dr_t = datanozzle.NewRow(); dr_t[0] = ("T To");
             DataRow dr_de = datanozzle.NewRow(); dr_de[0] = ("p po");
 
-            for (int i = 1; i < datanozzle.Columns.Count - 1; i++)
+            for (int i = 1; i <= datanozzle.Columns.Count - 1; i++)
             {
-                dr_xl[i] = listdx[i - 1].ToString();
+               // dr_xl[i] = listdx[i - 1].ToString();
                 dr_a[i] = listAs[i - 1].ToString();
                 dr_p[i] = listpre[i - 1].ToString();
                 dr_v[i] = listvel[i - 1].ToString();
@@ -683,7 +723,7 @@ namespace NozzleDisplay
                 dr_de[i] = listden[i - 1].ToString();
             }
 
-            datanozzle.Rows.Add(dr_xl.ItemArray);
+           // datanozzle.Rows.Add(dr_xl.ItemArray);
             datanozzle.Rows.Add(dr_a.ItemArray);
             datanozzle.Rows.Add(dr_p.ItemArray);
             datanozzle.Rows.Add(dr_v.ItemArray);
@@ -842,7 +882,6 @@ namespace NozzleDisplay
                 lg.StrokeThickness = 2;
                 lg.Plot(this.listdx.ToArray(), this.nozzle.getMassFlow());
             }
-
         }
 
         public void lockSlider()
