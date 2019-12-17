@@ -24,6 +24,7 @@ namespace ClassLibrary
         {
             this.numRect = nozzleC.GetNumRects();
             this.nozzle = new Rectangulo[this.numRect + 2];
+            this.k = nozzleC.getK();
 
             int pos = 0;
             while (pos <= this.numRect + 1)
@@ -37,6 +38,7 @@ namespace ClassLibrary
         {
             this.numRect = numrect;
             this.nozzle = new Rectangulo[this.numRect + 2];
+            this.k = 1.5;
 
             double dens;
             double temp;
@@ -76,6 +78,7 @@ namespace ClassLibrary
                 // asignamos la altura
                 double A = 1 + (2.2 * (x - 1.5) * (x - 1.5)); // Equation: A(X) = 1 + 2.2(x - 1.5) ^ 2
                 double h = 2 * Math.Sqrt(A / Math.PI); // area de la circumferencia
+
 
                 this.nozzle[i].SetAltura(h);
                 this.nozzle[i].SetArea(A);
@@ -489,10 +492,11 @@ namespace ClassLibrary
 
         public int getthroatpos()
         {
+            double Amin = this.getNozzleArea().Min();
             int pt = 0;
             foreach(Rectangulo rect in nozzle)
             {
-                if (rect.GetArea() == 1.0)
+                if (rect.GetArea() == Amin)
                 {
                     return pt;
                 }

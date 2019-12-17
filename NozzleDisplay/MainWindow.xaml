@@ -43,7 +43,12 @@
                 <MenuItem Header="Save file" Click="click_savefile" ></MenuItem>
             </MenuItem>
             <MenuItem Header="_Anderson" Click="MenuItem_Click"></MenuItem>
-            <MenuItem Header="_Help" Click="MenuItem_Click_1" ></MenuItem>
+            <MenuItem Click="MenuItem_Click_1" Foreground="#00000000">
+                <MenuItem.Background>
+                    <ImageBrush ImageSource="Resources/pdficon.png"/>
+                </MenuItem.Background>
+            </MenuItem>
+            <MenuItem Header="_Help" ></MenuItem>
             <MenuItem Header="_About Us" Click="Click_Aboutus" ></MenuItem>
         </Menu>
         <TabControl Grid.Column="4" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="4" Background="Transparent" Margin="20,15,0,8.333">
@@ -76,7 +81,9 @@
                             <DirectionalLight x:Name="light"  Color="White" Direction="-1,-1,-1" />
                         </ModelUIElement3D>
                     </Viewport3D>
-                    <ScrollBar x:Name="scrolh" VerticalAlignment="Bottom" Orientation="Horizontal" Minimum="-360" Maximum="360" LargeChange="10" SmallChange="1" Value="0" Height="20" ValueChanged="ScrollBar_ValueChanged_1"/>
+                    <ScrollBar x:Name="scrolh" VerticalAlignment="Bottom" Orientation="Horizontal" Minimum="-360" Maximum="360" LargeChange="10" SmallChange="1" Value="0" Height="15" ValueChanged="ScrollBar_ValueChanged_1"/>
+                    <Button x:Name="zoominbut" HorizontalAlignment="Right" VerticalAlignment="Center" Content="+" Width="20" Height="20" Click="zoominbut_Click"></Button>
+                    <Button x:Name="zoomoutbut" HorizontalAlignment="Right" VerticalAlignment="Center" Content="-" Margin="0,50,0,0" Width="20" Height="20" Click="zoomoutbut_Click"></Button>
                 </Grid>
             </TabItem>
         </TabControl>

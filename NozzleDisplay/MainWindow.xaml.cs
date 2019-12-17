@@ -217,6 +217,7 @@ namespace NozzleDisplay
                             unitbox.Visibility = Visibility.Visible;
 
                             //ajustamos el slider
+                            sliderthroat.Maximum = this.numR;
                             sliderthroat.Value = this.numR / 2;
                             unlockSlider();
                         }
@@ -387,7 +388,7 @@ namespace NozzleDisplay
             {
                 canvasNozzle.Children.Clear();
 
-                double k = sliderthroat.Value / 10;
+                double k = (sliderthroat.Value)*this.dx;
                 this.nozzle = new Nozzle(this.numR, this.dx, k);
                 this.pilaNozzle = new Stack<Nozzle>();
 
@@ -499,7 +500,7 @@ namespace NozzleDisplay
                 ps.Viewport3d = myViewport;
 
                 ps.Vmin = -this.nozzle.getK();
-                ps.Vmax = 3 - this.nozzle.getK();
+                ps.Vmax = (this.numR*this.dx) - this.nozzle.getK();
                 ps.Umin = 0;
                 ps.Umax = 2 * Math.PI;
                 ps.Nu = this.numR;
@@ -627,6 +628,18 @@ namespace NozzleDisplay
         {
             Report r = new Report();
             r.ShowDialog();
+        }
+
+        private void zoominbut_Click(object sender, RoutedEventArgs e)
+        {
+            Point3D pt = camera.Position;
+            camera.Position = new Point3D(pt.X + 5, pt.Y - 5, pt.Z - 5);
+        }
+
+        private void zoomoutbut_Click(object sender, RoutedEventArgs e)
+        {
+            Point3D pt = camera.Position;
+            camera.Position = new Point3D(pt.X - 5, pt.Y + 5, pt.Z + 5);
         }
 
         private void stepback_Click(object sender, RoutedEventArgs e) // botón STEP BACK
@@ -862,12 +875,8 @@ namespace NozzleDisplay
             for (int i = 0; i < myViewport.Children.Count; i++)
             {
                 myViewport.Children[i].Transform = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), scrolh.Value));
-
-            }
-            
+            }         
         }
-
-
 
     }
 }
