@@ -63,6 +63,9 @@ namespace NozzleDisplay
             datasimgrid.ItemsSource = NozzleTabla_FirstStep.DefaultView;
             datasimgrid.DataContext = NozzleTabla_FirstStep.DefaultView;
             datasimgrid.Items.Refresh();
+            errorgrid.ItemsSource = ErrorDataTable_FirstStep.DefaultView;
+            errorgrid.DataContext = ErrorDataTable_FirstStep.DefaultView;
+            errorgrid.Items.Refresh();
         }
 
         private void andersoncombobox_SelectionChanged(object sender, SelectionChangedEventArgs e) // click en cualquier desplegable --> actualiza la tabla
@@ -250,12 +253,10 @@ namespace NozzleDisplay
             // INITIAL CONDITIONS - SIMULATION
             NozzleTabla_InitialConditions = this.nozzle.GetEstado(this.Ax);
 
-
             //TABLAS ERRORES
             ErrorDataTable_FirstStep = getErrorTables(AndersonTabla_FisrtStep, NozzleTabla_FirstStep);
             ErrorDataTable_InitialConditions = getErrorTables(AndersonTabla_InitialConditions, NozzleTabla_InitialConditions);
             ErrorDataTable_SteadyState = getErrorTables(AndersonTabla_SteadyState, NozzleTabla_SteadyState);
-
         }
 
         public DataTable SimularHastaSteady() // simula 1400 ciclos y da la tabla con los resultados

@@ -364,9 +364,7 @@ namespace NozzleDisplay
                 a.ShowDialog();
             }
             else
-            {
                 MessageBox.Show("Anderson validation only availabe for default values", "Warning",MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
         }
 
         private void EjecutarUnCiclo() // función que ejecuta un ciclo
@@ -409,7 +407,7 @@ namespace NozzleDisplay
             {
                 canvasNozzle.Children.Clear();
 
-                double k = this.positionThroat * this.dx;
+                double k = this.sliderthroat.Value * this.dx;
                 this.nozzle = new Nozzle(this.numR, this.dx, k);
                 this.pilaNozzle = new Stack<Nozzle>();
 
@@ -432,7 +430,6 @@ namespace NozzleDisplay
                 crearDataTable();
             }
             catch { }
-
         }
 
         private void pausebut_Click(object sender, RoutedEventArgs e) // botón STOP
@@ -592,7 +589,7 @@ namespace NozzleDisplay
                     contadortxt.Text = " Contador: " + this.contadordt.ToString() + " Δt";
 
                     // creamos el mass flow 
-                    this.nozzle.getMassFlow();
+                    this.listmassflowdt = this.nozzle.getMassFlow();
 
                     // creamos los rectangulos para dibujar
                     nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
@@ -924,13 +921,13 @@ namespace NozzleDisplay
                 lg.Plot(this.listdx.ToArray(), this.nozzle.getMassFlow());
             }
 
-            //massflowxlplotdt.Children.Clear();
-            //var lg_2 = new LineGraph();
-            //massflowxlplotdt.Children.Add(lg_2);
-            //lg_2.Stroke = new SolidColorBrush(Colors.Blue);
-            //lg_2.Description = String.Format("Mass Flow at throat");
-            //lg_2.StrokeThickness = 2;
-            //lg_2.Plot(this.listdt.ToArray(), this.listmassflowdt.ToArray());
+            massflowxlplotdt.Children.Clear();
+            var lg_2 = new LineGraph();
+            massflowxlplotdt.Children.Add(lg_2);
+            lg_2.Stroke = new SolidColorBrush(Colors.Blue);
+            lg_2.Description = String.Format("Mass Flow at throat");
+            lg_2.StrokeThickness = 2;
+            lg_2.Plot(this.listdt.ToArray(), this.listmassflowdt.ToArray());
         }
 
         public void lockSlider()//bloqueamos el slider para que no se pueda mover cuando la simulacion empieza
