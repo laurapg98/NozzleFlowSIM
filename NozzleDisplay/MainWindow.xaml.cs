@@ -556,6 +556,9 @@ namespace NozzleDisplay
                     dxbox.Text = Convert.ToString(this.dx);
                     numrectbox.Text = Convert.ToString(this.numR);
 
+                    // escribimos n la label del contador
+                    contadortxt.Text = " Contador: " + this.contadordt.ToString() + " Δt";
+
                     // creamos el mass flow 
                     this.nozzle.getMassFlow();
 
@@ -640,19 +643,19 @@ namespace NozzleDisplay
             au.ShowDialog();
         }
 
-        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e) // botón PDF
         {
             Report r = new Report();
             r.ShowDialog();
         }
 
-        private void zoominbut_Click(object sender, RoutedEventArgs e)
+        private void zoominbut_Click(object sender, RoutedEventArgs e) // ZOOM IN en el 3D
         {
             Point3D pt = camera.Position;
             camera.Position = new Point3D(pt.X + 5, pt.Y - 5, pt.Z - 5);
         }
 
-        private void zoomoutbut_Click(object sender, RoutedEventArgs e)
+        private void zoomoutbut_Click(object sender, RoutedEventArgs e) // ZOOM OUT en el 3D
         {
             Point3D pt = camera.Position;
             camera.Position = new Point3D(pt.X - 5, pt.Y + 5, pt.Z + 5);
@@ -683,6 +686,9 @@ namespace NozzleDisplay
                 listveldt.RemoveAt(this.contadordt);
                 listdt.RemoveAt(this.contadordt);
 
+                // escribimos en la label del contador
+                contadortxt.Text = " Contador: " + this.contadordt.ToString() + " Δt";
+
                 // actualizamos la parte gráfica
                 this.refreshCanvas();
                 refreshplotsxl();
@@ -695,7 +701,6 @@ namespace NozzleDisplay
         private void onestepbut_Click(object sender, RoutedEventArgs e) // botón STEP
         {
             this.EjecutarUnCiclo();
-
             lockSlider();
         }
 
