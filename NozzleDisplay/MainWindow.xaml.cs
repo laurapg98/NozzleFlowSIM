@@ -32,7 +32,7 @@ namespace NozzleDisplay
         double C;
         int contadordt;
         int numR;
-        List<double> listtemp, listdx, listvel, listpre, listden, listtempdt, listdt, listveldt, listpredt, listdendt, listAs;
+        List<double> listtemp, listdx, listvel, listpre, listden, listtempdt, listdt, listveldt, listpredt, listdendt, listAs, listmassflowdt;
         Stack<Nozzle> pilaNozzle;
         System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer(); //Para el tick del timer
         int milisecs = 250;
@@ -199,6 +199,7 @@ namespace NozzleDisplay
                             this.listpredt = new List<double>(); this.listpredt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetPresP());
                             this.listtempdt = new List<double>(); this.listtempdt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetTempP());
                             this.listveldt = new List<double>(); this.listveldt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetVelP());
+                            this.listmassflowdt = new List<double>(); this.listmassflowdt.Add(listdendt[this.contadordt] * this.nozzle.GetRectangulo(this.positionThroat).GetArea() * this.listveldt[this.contadordt]);
 
                             fillCanvasNozzle();
                             refreshCanvas();
@@ -398,6 +399,7 @@ namespace NozzleDisplay
                 this.listpredt = new List<double>(); this.listpredt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetPresP());
                 this.listtempdt = new List<double>(); this.listtempdt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetTempP());
                 this.listveldt = new List<double>(); this.listveldt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetVelP());
+                this.listmassflowdt = new List<double>(); this.listmassflowdt.Add(listdendt[this.contadordt] * this.nozzle.GetRectangulo(this.positionThroat).GetArea() * this.listveldt[this.contadordt]);
 
                 fillCanvasNozzleSlider();
                 refreshCanvas();
@@ -718,11 +720,11 @@ namespace NozzleDisplay
 
             for (int i = 1; i <= datanozzle.Columns.Count - 1; i++)
             {
-                dr_a[i] = listAs[i - 1].ToString();
-                dr_p[i] = listpre[i - 1].ToString();
-                dr_v[i] = listvel[i - 1].ToString();
-                dr_t[i] = listtemp[i - 1].ToString();
-                dr_de[i] = listden[i - 1].ToString();
+                dr_a[i] = listAs[i - 1].ToString("0.000");
+                dr_p[i] = listpre[i - 1].ToString("0.000");
+                dr_v[i] = listvel[i - 1].ToString("0.000");
+                dr_t[i] = listtemp[i - 1].ToString("0.000");
+                dr_de[i] = listden[i - 1].ToString("0.000");
             }
 
             datanozzle.Rows.Add(dr_a.ItemArray);
@@ -750,7 +752,8 @@ namespace NozzleDisplay
             this.listpredt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetPresP());
             this.listtempdt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetTempP());
             this.listveldt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetVelP());
-
+            this.listmassflowdt.Add(listdendt[this.contadordt] * this.nozzle.GetRectangulo(this.positionThroat).GetArea() * this.listveldt[this.contadordt]);
+            
             // actualizamos los plots
             refreshplotsxl();
             refreshplotstime();
@@ -883,6 +886,16 @@ namespace NozzleDisplay
                 lg.StrokeThickness = 2;
                 lg.Plot(this.listdx.ToArray(), this.nozzle.getMassFlow());
             }
+
+            massflowxlplotdt.Children.Clear();
+            var lg_2 = new LineGraph();
+            massflowxlplotdt.Children.Add(lg_2);
+            lg_2.Stroke = new SolidColorBrush(Colors.Blue);
+            lg_2.Description = String.Format("Mass Flow at throat");
+            lg_2.StrokeThickness = 2;
+            lg_2.Plot(this.listdt.ToArray(), this.listmassflowdt.ToArray());
+
+
         }
 
         public void lockSlider()

@@ -63,9 +63,29 @@ namespace NozzleDisplay.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap laura {
+            get {
+                object obj = ResourceManager.GetObject("laura", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap loop {
             get {
                 object obj = ResourceManager.GetObject("loop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap marc {
+            get {
+                object obj = ResourceManager.GetObject("marc", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,6 +153,16 @@ namespace NozzleDisplay.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap samuel {
+            get {
+                object obj = ResourceManager.GetObject("samuel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap skip {
             get {
                 object obj = ResourceManager.GetObject("skip", resourceCulture);
@@ -146,6 +176,16 @@ namespace NozzleDisplay.Properties {
         internal static System.Drawing.Bitmap skip__1_ {
             get {
                 object obj = ResourceManager.GetObject("skip__1_", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap upcbanner {
+            get {
+                object obj = ResourceManager.GetObject("upcbanner", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
