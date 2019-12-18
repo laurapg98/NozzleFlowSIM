@@ -24,13 +24,14 @@ namespace NozzleDisplay
     /// </summary>
     public partial class MainWindow : Window
     {
+        int contadordt;
         Nozzle nozzle;
         Rectangle[] nozzlerectangles;
         DataTable datanozzle;
         double dx;
         double dt;
         double C;
-        int contadordt;
+     
         int numR;
         List<double> listtemp, listdx, listvel, listpre, listden, listtempdt, listdt, listveldt, listpredt, listdendt, listAs, listmassflowdt;
         Stack<Nozzle> pilaNozzle;
@@ -59,9 +60,12 @@ namespace NozzleDisplay
 
         public void fillCanvasNozzle() // crea el nozzle
         {
+            int pos = this.nozzle.getthroatpos();
             canvasNozzle.Children.Clear();
-            sliderthroat.Maximum = this.numR;
             sliderthroat.Minimum = 1;
+            sliderthroat.Maximum = this.numR;
+            sliderthroat.Value = pos;
+          
             for (int i = 0; i < nozzlerectangles.Length; i++)
             {
                 Rectangulo rect_nozzle = this.nozzle.GetRectangulo(i + 1);
@@ -383,7 +387,7 @@ namespace NozzleDisplay
             {
                 canvasNozzle.Children.Clear();
 
-                double k = (sliderthroat.Value)*this.dx;
+                double k = this.positionThroat * this.dx;
                 this.nozzle = new Nozzle(this.numR, this.dx, k);
                 this.pilaNozzle = new Stack<Nozzle>();
 
@@ -391,7 +395,6 @@ namespace NozzleDisplay
                 this.dt = this.nozzle.getdt(this.C, this.dx);
 
                 this.positionThroat = this.nozzle.getthroatpos();
-                this.contadordt = 0;
                 contadortxt.Text = " Contador: " + this.contadordt.ToString() + " Δt";
 
                 this.listdt = new List<double>(); this.listdt.Add(this.contadordt);
@@ -603,6 +606,8 @@ namespace NozzleDisplay
                     refreshplotmassflow();
                     crearDataTable();
 
+                    this.contadordt = Convert.ToInt32(param[0, 0]);
+
                     //enseñamos botones etc
                     playbut.Visibility = Visibility.Visible;
                     pausebut.Visibility = Visibility.Visible;
@@ -614,7 +619,7 @@ namespace NozzleDisplay
 
                     //ajustamos el slider
                     sliderthroat.Value = this.positionThroat;
-                    lockSlider();
+                    //lockSlider();
                 }
                 catch 
                 {
@@ -892,15 +897,13 @@ namespace NozzleDisplay
                 lg.Plot(this.listdx.ToArray(), this.nozzle.getMassFlow());
             }
 
-            massflowxlplotdt.Children.Clear();
-            var lg_2 = new LineGraph();
-            massflowxlplotdt.Children.Add(lg_2);
-            lg_2.Stroke = new SolidColorBrush(Colors.Blue);
-            lg_2.Description = String.Format("Mass Flow at throat");
-            lg_2.StrokeThickness = 2;
-            lg_2.Plot(this.listdt.ToArray(), this.listmassflowdt.ToArray());
-
-
+            //massflowxlplotdt.Children.Clear();
+            //var lg_2 = new LineGraph();
+            //massflowxlplotdt.Children.Add(lg_2);
+            //lg_2.Stroke = new SolidColorBrush(Colors.Blue);
+            //lg_2.Description = String.Format("Mass Flow at throat");
+            //lg_2.StrokeThickness = 2;
+            //lg_2.Plot(this.listdt.ToArray(), this.listmassflowdt.ToArray());
         }
 
         public void lockSlider()
