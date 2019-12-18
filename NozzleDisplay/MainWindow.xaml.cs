@@ -84,7 +84,7 @@ namespace NozzleDisplay
             }
         }
 
-        public void fillCanvasNozzleSlider()
+        public void fillCanvasNozzleSlider()//Modifica el nozzle en cada tick
         {
             for (int i = 0; i < nozzlerectangles.Length; i++)
             {
@@ -94,7 +94,7 @@ namespace NozzleDisplay
                 Canvas.SetLeft(nozzlerectangles[i], i * nozzlerectangles[i].Width);
                 Canvas.SetTop(nozzlerectangles[i], (canvasNozzle.ActualHeight / 2) - (nozzlerectangles[i].Height / 2));
             }
-        }
+        } 
 
         public Color GetColorMach(double rangeStart, double rangeEnd, double actualValue) // escala de color de la velocidad (Mach)
         {
@@ -170,13 +170,29 @@ namespace NozzleDisplay
                     double dx = Convert.ToDouble(dxbox.Text);
                     int numrect = Convert.ToInt32(numrectbox.Text);
                     if (C <= 0 || dx <= 0 || numrect <= 0)
-                        MessageBox.Show("All parameters should be positive and different from 0\n(Courant parameter, horizontal axis steps & number of rectangles)", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show("All parameters should be positive and different from 0\n(Courant parameter, horizontal axis steps & number of rectangles)", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (dx * numrect != 3)
+                    {
+                        if (MessageBox.Show("It is recommended to input variables where dx*NumRect = 3, if not the simulation might become unstable or not represent reality, you wish to continue with those values?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        {
+                            // guardamos los parámetros
+                            this.C = C;
+                            this.dx = dx;
+                            this.numR = numrect;
+
+                            BuildNozzle();
+                        }
+                        else
+                        {
+                        }
+                        
+                    }
                     else
                     {
                         // comprobamos que se cumpla la condicion de Courant --> estabilidad
                         if (C > 1)
                         {
-                            MessageBox.Show("In order to get a stable simulation, the parameter C should not be bigger than 1","Warning",MessageBoxButton.OK,MessageBoxImage.Warning);
+                            MessageBox.Show("In order to get a stable simulation, the parameter C should not be bigger than 1", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                         }
                         else
                         {
@@ -185,46 +201,7 @@ namespace NozzleDisplay
                             this.dx = dx;
                             this.numR = numrect;
 
-                            // creamos el nozzle
-                            this.nozzle = new Nozzle(this.numR, this.dx);
-                            this.pilaNozzle = new Stack<Nozzle>();
-
-                            // Courant condition --> stability
-                            this.dt = this.nozzle.getdt(this.C, this.dx);
-
-                            nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
-
-                            this.positionThroat = this.nozzle.getthroatpos();
-                            this.contadordt = 0;
-                            contadortxt.Text = " Contador: " + this.contadordt.ToString() + " Δt";
-
-                            this.listdt = new List<double>(); this.listdt.Add(this.contadordt);
-                            this.listdendt = new List<double>(); this.listdendt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetDensP());
-                            this.listpredt = new List<double>(); this.listpredt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetPresP());
-                            this.listtempdt = new List<double>(); this.listtempdt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetTempP());
-                            this.listveldt = new List<double>(); this.listveldt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetVelP());
-                            this.listmassflowdt = new List<double>(); this.listmassflowdt.Add(listdendt[this.contadordt] * this.nozzle.GetRectangulo(this.positionThroat).GetArea() * this.listveldt[this.contadordt]);
-
-                            fillCanvasNozzle();
-                            refreshCanvas();
-                            updateParameterlist();
-                            crearDataTable();
-
-                            //enseñamos botones etc
-                            playbut.Visibility = Visibility.Visible;
-                            pausebut.Visibility = Visibility.Visible;
-                            resetbut.Visibility = Visibility.Visible;
-                            onestepbut.Visibility = Visibility.Visible;
-                            comboboxcolor.Visibility = Visibility.Visible;
-                            PlotsTabControl.Visibility = Visibility.Visible;
-                            stepback.Visibility = Visibility.Visible;
-                            contadortxt.Visibility = Visibility.Visible;
-                            unitbox.Visibility = Visibility.Visible;
-
-                            //ajustamos el slider
-                            sliderthroat.Maximum = this.numR;
-                            sliderthroat.Value = this.numR / 2;
-                            unlockSlider();
+                            BuildNozzle();
                         }
                     }
                 }
@@ -238,6 +215,51 @@ namespace NozzleDisplay
                 
             }
         }
+
+        private void BuildNozzle()//Funcion para construir el nozzle
+        {
+
+            // creamos el nozzle
+            this.nozzle = new Nozzle(this.numR, this.dx);
+            this.pilaNozzle = new Stack<Nozzle>();
+
+            // Courant condition --> stability
+            this.dt = this.nozzle.getdt(this.C, this.dx);
+
+            nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
+
+            this.positionThroat = this.nozzle.getthroatpos();
+            this.contadordt = 0;
+            contadortxt.Text = " Contador: " + this.contadordt.ToString() + " Δt";
+
+            this.listdt = new List<double>(); this.listdt.Add(this.contadordt);
+            this.listdendt = new List<double>(); this.listdendt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetDensP());
+            this.listpredt = new List<double>(); this.listpredt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetPresP());
+            this.listtempdt = new List<double>(); this.listtempdt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetTempP());
+            this.listveldt = new List<double>(); this.listveldt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetVelP());
+            this.listmassflowdt = new List<double>(); this.listmassflowdt.Add(listdendt[this.contadordt] * this.nozzle.GetRectangulo(this.positionThroat).GetArea() * this.listveldt[this.contadordt]);
+
+            fillCanvasNozzle();
+            refreshCanvas();
+            updateParameterlist();
+            crearDataTable();
+
+            //enseñamos botones etc
+            playbut.Visibility = Visibility.Visible;
+            pausebut.Visibility = Visibility.Visible;
+            resetbut.Visibility = Visibility.Visible;
+            onestepbut.Visibility = Visibility.Visible;
+            comboboxcolor.Visibility = Visibility.Visible;
+            PlotsTabControl.Visibility = Visibility.Visible;
+            stepback.Visibility = Visibility.Visible;
+            contadortxt.Visibility = Visibility.Visible;
+            unitbox.Visibility = Visibility.Visible;
+
+            //ajustamos el slider
+            sliderthroat.Maximum = this.numR;
+            sliderthroat.Value = this.numR / 2;
+            unlockSlider();
+        } 
 
         private void comboboxcolor_SelectionChanged(object sender, SelectionChangedEventArgs e) // click en el combobox de escoger propiedad a mostrar
         {
@@ -423,7 +445,7 @@ namespace NozzleDisplay
             cbox.Text= (0.5).ToString();
             dxbox.Text = (0.1).ToString();
             numrectbox.Text = (30).ToString();
-        }
+        } //boton default --> pone los valores por defecto del anderson
 
         private void resetbut_Click(object sender, RoutedEventArgs e) // botón RESET
         {
@@ -493,17 +515,22 @@ namespace NozzleDisplay
                 myModelVisual3D.Content = (myModel3DGroup);
                 myViewport.Children.Add(myModelVisual3D);
 
+                //Creamos nuestra clase 3D y le indicamos valores
                 ParametricCurve3D ps = new ParametricCurve3D();
                 ps.SurfaceColor = Colors.LightBlue;
                 ps.IsHiddenLine = false;
                 ps.Viewport3d = myViewport;
 
-                ps.Vmin = -this.nozzle.getK();
+                //Limites laterales de la tubera (relacionados con la equacion de la tubera 2D)
+                ps.Vmin = -this.nozzle.getK(); 
                 ps.Vmax = (this.numR*this.dx) - this.nozzle.getK();
+                //Limites de revolucion (0 a 2PI es la tubera cerrada)
                 ps.Umin = 0;
                 ps.Umax = 2 * Math.PI;
+                //Numero de rectangulos que vamos a crear en la representacion 3D, mas rectamgulos mas redonda
                 ps.Nu = this.numR;
                 ps.Nv = this.numR;
+                //Creamos la superficie 3D
                 ps.CreateSurface(Hyperboloid);
             }
 
@@ -770,7 +797,7 @@ namespace NozzleDisplay
             refreshplotmassflow();
         }
 
-        private void refreshplotsxl()
+        private void refreshplotsxl()//refrescamos los plots del nozzle en cada step
         {
             pressureplot.Children.Clear();
             var lg = new LineGraph();
@@ -803,9 +830,9 @@ namespace NozzleDisplay
             lg.Description = String.Format("Density");
             lg.StrokeThickness = 2;
             lg.Plot(this.listdx.ToArray(), this.listden.ToArray());
-        }
+        } 
 
-        public void refreshplotstime()
+        public void refreshplotstime()//Vamos actualizando los plots del tiempo a medida que van pasando los steps
         {
             pressureplotdt.Children.Clear();
             var lg = new LineGraph();
@@ -838,9 +865,9 @@ namespace NozzleDisplay
             lg.Description = String.Format("Density");
             lg.StrokeThickness = 2;
             lg.Plot(this.listdt.ToArray(), this.listdendt.ToArray());
-        }
+        } 
 
-        public void refreshplotmassflow()
+        public void refreshplotmassflow() //Generamos los plots de massflow en cada dt concreto
         {
             if (this.contadordt == 1)
             {
@@ -906,25 +933,25 @@ namespace NozzleDisplay
             //lg_2.Plot(this.listdt.ToArray(), this.listmassflowdt.ToArray());
         }
 
-        public void lockSlider()
+        public void lockSlider()//bloqueamos el slider para que no se pueda mover cuando la simulacion empieza
         {
             sliderthroat.IsEnabled = false;
             padlockimg.Visibility = Visibility.Visible;
-        }
+        } 
 
-        public void unlockSlider()
+        public void unlockSlider()//deblocqueamos el slider en caso de que se quiera modificar la tubuera
+
         {
             sliderthroat.IsEnabled = true;
             padlockimg.Visibility = Visibility.Hidden;
-        }
-
-        private void ScrollBar_ValueChanged_1(object sender, RoutedPropertyChangedEventArgs<double> e)
+        } 
+        private void ScrollBar_ValueChanged_1(object sender, RoutedPropertyChangedEventArgs<double> e)//scrollbar de la camara del Viewport3D
         {
             for (int i = 0; i < myViewport.Children.Count; i++)
             {
                 myViewport.Children[i].Transform = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), scrolh.Value));
             }         
-        }
+        } 
 
     }
 }
