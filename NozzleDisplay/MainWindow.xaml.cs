@@ -90,7 +90,7 @@ namespace NozzleDisplay
                 Canvas.SetLeft(nozzlerectangles[i], i * nozzlerectangles[i].Width);
                 Canvas.SetTop(nozzlerectangles[i], (canvasNozzle.ActualHeight / 2) - (nozzlerectangles[i].Height / 2));
             }
-        }
+        } //Modifica el nozzle en cada tick
 
         public Color GetColorMach(double rangeStart, double rangeEnd, double actualValue) // escala de color de la velocidad (Mach)
         {
@@ -166,13 +166,29 @@ namespace NozzleDisplay
                     double dx = Convert.ToDouble(dxbox.Text);
                     int numrect = Convert.ToInt32(numrectbox.Text);
                     if (C <= 0 || dx <= 0 || numrect <= 0)
-                        MessageBox.Show("All parameters should be positive and different from 0\n(Courant parameter, horizontal axis steps & number of rectangles)", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show("All parameters should be positive and different from 0\n(Courant parameter, horizontal axis steps & number of rectangles)", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (dx * numrect != 3)
+                    {
+                        if (MessageBox.Show("It is recommended to input variables where dx*NumRect = 3, if not the simulation might become unstable or not represent reality, you wish to continue with those values?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        {
+                            // guardamos los parámetros
+                            this.C = C;
+                            this.dx = dx;
+                            this.numR = numrect;
+
+                            BuildNozzle();
+                        }
+                        else
+                        {
+                        }
+                        
+                    }
                     else
                     {
                         // comprobamos que se cumpla la condicion de Courant --> estabilidad
                         if (C > 1)
                         {
-                            MessageBox.Show("In order to get a stable simulation, the parameter C should not be bigger than 1","Warning",MessageBoxButton.OK,MessageBoxImage.Warning);
+                            MessageBox.Show("In order to get a stable simulation, the parameter C should not be bigger than 1", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                         }
                         else
                         {
@@ -181,46 +197,7 @@ namespace NozzleDisplay
                             this.dx = dx;
                             this.numR = numrect;
 
-                            // creamos el nozzle
-                            this.nozzle = new Nozzle(this.numR, this.dx);
-                            this.pilaNozzle = new Stack<Nozzle>();
-
-                            // Courant condition --> stability
-                            this.dt = this.nozzle.getdt(this.C, this.dx);
-
-                            nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
-
-                            this.positionThroat = this.nozzle.getthroatpos();
-                            this.contadordt = 0;
-                            contadortxt.Text = " Contador: " + this.contadordt.ToString() + " Δt";
-
-                            this.listdt = new List<double>(); this.listdt.Add(this.contadordt);
-                            this.listdendt = new List<double>(); this.listdendt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetDensP());
-                            this.listpredt = new List<double>(); this.listpredt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetPresP());
-                            this.listtempdt = new List<double>(); this.listtempdt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetTempP());
-                            this.listveldt = new List<double>(); this.listveldt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetVelP());
-                            this.listmassflowdt = new List<double>(); this.listmassflowdt.Add(listdendt[this.contadordt] * this.nozzle.GetRectangulo(this.positionThroat).GetArea() * this.listveldt[this.contadordt]);
-
-                            fillCanvasNozzle();
-                            refreshCanvas();
-                            updateParameterlist();
-                            crearDataTable();
-
-                            //enseñamos botones etc
-                            playbut.Visibility = Visibility.Visible;
-                            pausebut.Visibility = Visibility.Visible;
-                            resetbut.Visibility = Visibility.Visible;
-                            onestepbut.Visibility = Visibility.Visible;
-                            comboboxcolor.Visibility = Visibility.Visible;
-                            PlotsTabControl.Visibility = Visibility.Visible;
-                            stepback.Visibility = Visibility.Visible;
-                            contadortxt.Visibility = Visibility.Visible;
-                            unitbox.Visibility = Visibility.Visible;
-
-                            //ajustamos el slider
-                            sliderthroat.Maximum = this.numR;
-                            sliderthroat.Value = this.numR / 2;
-                            unlockSlider();
+                            BuildNozzle();
                         }
                     }
                 }
@@ -233,6 +210,51 @@ namespace NozzleDisplay
                 
                 
             }
+        }
+
+        private void BuildNozzle()
+        {
+
+            // creamos el nozzle
+            this.nozzle = new Nozzle(this.numR, this.dx);
+            this.pilaNozzle = new Stack<Nozzle>();
+
+            // Courant condition --> stability
+            this.dt = this.nozzle.getdt(this.C, this.dx);
+
+            nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
+
+            this.positionThroat = this.nozzle.getthroatpos();
+            this.contadordt = 0;
+            contadortxt.Text = " Contador: " + this.contadordt.ToString() + " Δt";
+
+            this.listdt = new List<double>(); this.listdt.Add(this.contadordt);
+            this.listdendt = new List<double>(); this.listdendt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetDensP());
+            this.listpredt = new List<double>(); this.listpredt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetPresP());
+            this.listtempdt = new List<double>(); this.listtempdt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetTempP());
+            this.listveldt = new List<double>(); this.listveldt.Add(this.nozzle.GetRectangulo(this.positionThroat).GetVelP());
+            this.listmassflowdt = new List<double>(); this.listmassflowdt.Add(listdendt[this.contadordt] * this.nozzle.GetRectangulo(this.positionThroat).GetArea() * this.listveldt[this.contadordt]);
+
+            fillCanvasNozzle();
+            refreshCanvas();
+            updateParameterlist();
+            crearDataTable();
+
+            //enseñamos botones etc
+            playbut.Visibility = Visibility.Visible;
+            pausebut.Visibility = Visibility.Visible;
+            resetbut.Visibility = Visibility.Visible;
+            onestepbut.Visibility = Visibility.Visible;
+            comboboxcolor.Visibility = Visibility.Visible;
+            PlotsTabControl.Visibility = Visibility.Visible;
+            stepback.Visibility = Visibility.Visible;
+            contadortxt.Visibility = Visibility.Visible;
+            unitbox.Visibility = Visibility.Visible;
+
+            //ajustamos el slider
+            sliderthroat.Maximum = this.numR;
+            sliderthroat.Value = this.numR / 2;
+            unlockSlider();
         }
 
         private void comboboxcolor_SelectionChanged(object sender, SelectionChangedEventArgs e) // click en el combobox de escoger propiedad a mostrar
