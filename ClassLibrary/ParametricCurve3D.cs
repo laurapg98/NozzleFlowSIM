@@ -11,7 +11,7 @@ namespace ClassLibrary
 {
     public class ParametricCurve3D
     {
-
+        //Atributos
         public delegate Point3D Function(double u, double v);
         private int nu = 30;
         private int nv = 30;
@@ -31,6 +31,8 @@ namespace ClassLibrary
         private bool isHiddenLine = false;
         private bool isWireframe = true;
         private Viewport3D viewport3d = new Viewport3D();
+
+        //Getters y setters
         public bool IsWireframe
         {
             get { return isWireframe; }
@@ -121,7 +123,7 @@ namespace ClassLibrary
             get { return viewport3d; }
             set { viewport3d = value; }
         }
-        public void CreateSurface(Function f)
+        public void CreateSurface(Function f) //Crea la superficie parametrizada a partir de la ecuacion que le demos
         {
             double du = (Umax - Umin) / (Nu - 1);
             double dv = (Vmax - Vmin) / (Nv - 1);
@@ -148,7 +150,7 @@ namespace ClassLibrary
                     p[1] = pts[i, j + 1];
                     p[2] = pts[i + 1, j + 1];
                     p[3] = pts[i + 1, j];
-                    //Create rectangular face:
+                    //Creamos las caras  rectangulares
 
                     Utility.CreateRectangleFace(p[0], p[1], p[2], p[3], SurfaceColor, Viewport3d);
                     Utility.CreateRectangleFace(p[3], p[2], p[1], p[0], SurfaceColor, Viewport3d);
@@ -158,9 +160,9 @@ namespace ClassLibrary
         }
     }
 
-    public class Utility
+    public class Utility //Clase extra para la construccion de los lados y los indices de los triangulos
     {
-        public static void CreateRectangleFace(Point3D p0, Point3D p1, Point3D p2, Point3D p3, Color surfaceColor, Viewport3D viewport)
+        public static void CreateRectangleFace(Point3D p0, Point3D p1, Point3D p2, Point3D p3, Color surfaceColor, Viewport3D viewport) //Crea cara rectangular
         {
             MeshGeometry3D mesh = new MeshGeometry3D();
             mesh.Positions.Add(p0);
@@ -182,7 +184,7 @@ namespace ClassLibrary
             viewport.Children.Add(model);
         }
 
-        public static Point3D GetNormalize(Point3D pt, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax)
+        public static Point3D GetNormalize(Point3D pt, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax) //Funcion para normalizar los puntos dentro del mesh
         {
             pt.X = -1 + 2 * (pt.X - xmin) / (xmax - xmin);
             pt.Y = -1 + 2 * (pt.Y - ymin) / (ymax - ymin);

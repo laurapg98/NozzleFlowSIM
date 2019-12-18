@@ -22,6 +22,7 @@ namespace NozzleDisplay
     {
         public Report()
         {
+            //Mostramos el pdf del report en una ventana
             InitializeComponent();
             string curDir = Directory.GetCurrentDirectory();
             Uri u =new Uri(string.Format("file:///{0}/Resources/REPORT.pdf",curDir));

@@ -80,7 +80,7 @@ namespace NozzleDisplay
             }
         }
 
-        public void fillCanvasNozzleSlider()
+        public void fillCanvasNozzleSlider()//Modifica el nozzle en cada tick
         {
             for (int i = 0; i < nozzlerectangles.Length; i++)
             {
@@ -90,7 +90,7 @@ namespace NozzleDisplay
                 Canvas.SetLeft(nozzlerectangles[i], i * nozzlerectangles[i].Width);
                 Canvas.SetTop(nozzlerectangles[i], (canvasNozzle.ActualHeight / 2) - (nozzlerectangles[i].Height / 2));
             }
-        } //Modifica el nozzle en cada tick
+        } 
 
         public Color GetColorMach(double rangeStart, double rangeEnd, double actualValue) // escala de color de la velocidad (Mach)
         {
@@ -212,7 +212,7 @@ namespace NozzleDisplay
             }
         }
 
-        private void BuildNozzle()
+        private void BuildNozzle()//Funcion para construir el nozzle
         {
 
             // creamos el nozzle
@@ -255,7 +255,7 @@ namespace NozzleDisplay
             sliderthroat.Maximum = this.numR;
             sliderthroat.Value = this.numR / 2;
             unlockSlider();
-        }
+        } 
 
         private void comboboxcolor_SelectionChanged(object sender, SelectionChangedEventArgs e) // click en el combobox de escoger propiedad a mostrar
         {
@@ -442,7 +442,7 @@ namespace NozzleDisplay
             cbox.Text= (0.5).ToString();
             dxbox.Text = (0.1).ToString();
             numrectbox.Text = (30).ToString();
-        }
+        } //boton default --> pone los valores por defecto del anderson
 
         private void resetbut_Click(object sender, RoutedEventArgs e) // botón RESET
         {
@@ -512,17 +512,22 @@ namespace NozzleDisplay
                 myModelVisual3D.Content = (myModel3DGroup);
                 myViewport.Children.Add(myModelVisual3D);
 
+                //Creamos nuestra clase 3D y le indicamos valores
                 ParametricCurve3D ps = new ParametricCurve3D();
                 ps.SurfaceColor = Colors.LightBlue;
                 ps.IsHiddenLine = false;
                 ps.Viewport3d = myViewport;
 
-                ps.Vmin = -this.nozzle.getK();
+                //Limites laterales de la tubera (relacionados con la equacion de la tubera 2D)
+                ps.Vmin = -this.nozzle.getK(); 
                 ps.Vmax = (this.numR*this.dx) - this.nozzle.getK();
+                //Limites de revolucion (0 a 2PI es la tubera cerrada)
                 ps.Umin = 0;
                 ps.Umax = 2 * Math.PI;
+                //Numero de rectangulos que vamos a crear en la representacion 3D, mas rectamgulos mas redonda
                 ps.Nu = this.numR;
                 ps.Nv = this.numR;
+                //Creamos la superficie 3D
                 ps.CreateSurface(Hyperboloid);
             }
 
@@ -787,7 +792,7 @@ namespace NozzleDisplay
             refreshplotmassflow();
         }
 
-        private void refreshplotsxl()
+        private void refreshplotsxl()//refrescamos los plots del nozzle en cada step
         {
             pressureplot.Children.Clear();
             var lg = new LineGraph();
@@ -820,9 +825,9 @@ namespace NozzleDisplay
             lg.Description = String.Format("Density");
             lg.StrokeThickness = 2;
             lg.Plot(this.listdx.ToArray(), this.listden.ToArray());
-        }
+        } 
 
-        public void refreshplotstime()
+        public void refreshplotstime()//Vamos actualizando los plots del tiempo a medida que van pasando los steps
         {
             pressureplotdt.Children.Clear();
             var lg = new LineGraph();
@@ -855,9 +860,9 @@ namespace NozzleDisplay
             lg.Description = String.Format("Density");
             lg.StrokeThickness = 2;
             lg.Plot(this.listdt.ToArray(), this.listdendt.ToArray());
-        }
+        } 
 
-        public void refreshplotmassflow()
+        public void refreshplotmassflow() //Generamos los plots de massflow en cada dt concreto
         {
             if (this.contadordt == 1)
             {
@@ -925,25 +930,25 @@ namespace NozzleDisplay
 
         }
 
-        public void lockSlider()
+        public void lockSlider()//bloqueamos el slider para que no se pueda mover cuando la simulacion empieza
         {
             sliderthroat.IsEnabled = false;
             padlockimg.Visibility = Visibility.Visible;
-        }
+        } 
 
-        public void unlockSlider()
+        public void unlockSlider()//deblocqueamos el slider en caso de que se quiera modificar la tubuera
+
         {
             sliderthroat.IsEnabled = true;
             padlockimg.Visibility = Visibility.Hidden;
-        }
-
-        private void ScrollBar_ValueChanged_1(object sender, RoutedPropertyChangedEventArgs<double> e)
+        } 
+        private void ScrollBar_ValueChanged_1(object sender, RoutedPropertyChangedEventArgs<double> e)//scrollbar de la camara del Viewport3D
         {
             for (int i = 0; i < myViewport.Children.Count; i++)
             {
                 myViewport.Children[i].Transform = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), scrolh.Value));
             }         
-        }
+        } 
 
     }
 }
