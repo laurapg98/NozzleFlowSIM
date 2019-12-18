@@ -5,21 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NozzleDisplay"
         mc:Ignorable="d"
-        Title="About us" Height="350" Width="650">
-    <Grid Margin="10,10,360,199.5">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="164*"/>
-            <ColumnDefinition Width="71*"/>
-        </Grid.ColumnDefinitions>
-        <Image Margin="0,0,27,-5" Source="Image1.png" Stretch="Fill" Grid.ColumnSpan="2"/>
-        <Grid Margin="0,123,-337,-192" Grid.ColumnSpan="2">
-            <TextBox Name="tbSettingText">
-                "Contenido About US"
-            </TextBox>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="164*"/>
-                <ColumnDefinition Width="71*"/>
-            </Grid.ColumnDefinitions>
-        </Grid>
+        Title="About us" Height="350" Width="475.667">
+    <Grid>
+        <Image Source="Resources/upcbanner.png" Margin="0,0,0,215.667" HorizontalAlignment="Left" IsEnabled="False"/>
+        <Image HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" RenderTransformOrigin="1.172,2.262" Margin="35,150,0,0" Source="Resources/marc.png"/>
+        <Image HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" RenderTransformOrigin="1.172,2.262" Margin="175,150,0,0" Source="Resources/laura.jpg"/>
+        <Image HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" RenderTransformOrigin="1.172,2.262" Margin="330,150,0,0" Source="Resources/samuel.png"/>
+        <TextBlock Margin="52,254,349.333,45.667">Marc Vila</TextBlock>
+        <TextBlock Margin="189,255,211.333,44.667">Laura Parga</TextBlock>
+        <TextBlock Margin="341,255,47.333,44.667">Samuel Picón</TextBlock>
     </Grid>
 </Window>

@@ -43,13 +43,13 @@
                 <MenuItem Header="Save file" Click="click_savefile" ></MenuItem>
             </MenuItem>
             <MenuItem Header="_Anderson" Click="MenuItem_Click"></MenuItem>
+            <MenuItem Header="_Help" ></MenuItem>
+            <MenuItem Header="_About Us" Click="Click_Aboutus" ></MenuItem>
             <MenuItem Click="MenuItem_Click_1" Foreground="#00000000">
                 <MenuItem.Background>
                     <ImageBrush ImageSource="Resources/pdficon.png"/>
                 </MenuItem.Background>
             </MenuItem>
-            <MenuItem Header="_Help" ></MenuItem>
-            <MenuItem Header="_About Us" Click="Click_Aboutus" ></MenuItem>
         </Menu>
         <TabControl Grid.Column="4" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="4" Background="Transparent" Margin="20,15,0,8.333">
             <TabItem x:Name="tab2d" Header="2D">
@@ -91,22 +91,22 @@
             <Grid>
                 <TextBox x:Name="cbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="20,30,75,214" Height="20" Width="90"></TextBox>
                 <TextBox x:Name="dxbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="20,80,76,160" Height="20" Width="90"></TextBox>
-                <Button x:Name="parambut" Content="Build" HorizontalAlignment="Left" Margin="10,236,100,0" VerticalAlignment="Top" Click="parambut_Click" Width="75" Height="30"></Button>
+                <Button x:Name="parambut" Content="Build" HorizontalAlignment="Left" Margin="10,236,100,0" VerticalAlignment="Top" Click="parambut_Click" Width="75" Height="30" Background="{x:Null}"></Button>
                 <TextBox x:Name="numrectbox" BorderBrush="Black" Background="White" BorderThickness="0.4" Margin="20,140,76,112" Height="20" Width="90" />
                 <TextBlock HorizontalAlignment="Left" Margin="20,10,0,0" TextWrapping="Wrap" Text="Courant parameter:" VerticalAlignment="Top"/>
                 <TextBlock HorizontalAlignment="Left" Margin="20,60,0,0" TextWrapping="Wrap" Text="Width of each rectangle:" VerticalAlignment="Top"/>
                 <TextBlock HorizontalAlignment="Left" Margin="20,120,0,0" TextWrapping="Wrap" Text="Number of rectangles:" VerticalAlignment="Top"/>
-                <Button x:Name="Defaultbut" Content="Default" HorizontalAlignment="Left" Margin="100,236,10,0" VerticalAlignment="Top" Width="75" Height="30" Click="Defaultbut_Click"/>
+                <Button x:Name="Defaultbut" Content="Default" HorizontalAlignment="Left" Margin="100,236,10,0" VerticalAlignment="Top" Width="75" Height="30" Click="Defaultbut_Click" Background="{x:Null}"/>
             </Grid>
         </GroupBox>
         <GroupBox BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="1" Grid.RowSpan="4" Width="200" Height="300" Grid.ColumnSpan="1" Margin="0,20,0,0" Header="Simulation Controls">
             <Grid>
                 <TextBlock x:Name="unitbox" Text="[]" Margin="126,18,17,232"/>
-                <ComboBox x:Name="comboboxcolor" Margin="14,17,74,232" SelectionChanged="comboboxcolor_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="Black" Width="100" Height="25">
-                    <ComboBoxItem x:Name="pressure" Content="Pressure" IsSelected="True"></ComboBoxItem>
-                    <ComboBoxItem x:Name="velocity" Content="Velocity" IsSelected="False"></ComboBoxItem>
-                    <ComboBoxItem x:Name="temperature" Content="Temperature" IsSelected="False"></ComboBoxItem>
-                    <ComboBoxItem x:Name="density" Content="Density" IsSelected="False"></ComboBoxItem>
+                <ComboBox x:Name="comboboxcolor" Margin="14,17,74,232" SelectionChanged="comboboxcolor_SelectionChanged" Background="White" BorderBrush="White" Foreground="Black" Width="100" Height="25">
+                    <ComboBoxItem x:Name="pressure" Content="Pressure" IsSelected="True" Background="White"></ComboBoxItem>
+                    <ComboBoxItem x:Name="velocity" Content="Velocity" IsSelected="False" Background="White"></ComboBoxItem>
+                    <ComboBoxItem x:Name="temperature" Content="Temperature" IsSelected="False" Background="White"></ComboBoxItem>
+                    <ComboBoxItem x:Name="density" Content="Density" IsSelected="False" Background="White"></ComboBoxItem>
                 </ComboBox>
                 <Button x:Name="playbut" Margin="67,80,71,144" Click="playbut_Click" Width="50" Height="50" BorderBrush="{x:Null}" Background="{x:Null}">
                     <Image Source="Resources/play.png" Stretch="Fill" HorizontalAlignment="Center"/>
@@ -171,16 +171,16 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="20"/>
                     </Grid.RowDefinitions>
-                    <d3:Chart BottomTitle="t" LeftTitle="P/Po" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1">
+                    <d3:Chart BottomTitle="Δt" LeftTitle="P/Po" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1">
                         <d3:LineGraph x:Name="pressureplotdt" d3:Legend.IsVisible="False"/>
                     </d3:Chart>
-                    <d3:Chart BottomTitle="t" LeftTitle="V/Vo" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1">
+                    <d3:Chart BottomTitle="Δt" LeftTitle="V/Vo" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1">
                         <d3:LineGraph x:Name="velocityplotdt" d3:Legend.IsVisible="False"/>
                     </d3:Chart>
-                    <d3:Chart BottomTitle="t" LeftTitle="T/To" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" Grid.Row="1">
+                    <d3:Chart BottomTitle="Δt" LeftTitle="T/To" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" Grid.Row="1">
                         <d3:LineGraph x:Name="temperatureplotdt" d3:Legend.IsVisible="False"/>
                     </d3:Chart>
-                    <d3:Chart BottomTitle="t" LeftTitle="p/po" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="4" Grid.Row="1">
+                    <d3:Chart BottomTitle="Δt" LeftTitle="p/po" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="4" Grid.Row="1">
                         <d3:LineGraph x:Name="densityplotdt" d3:Legend.IsVisible="False"/>
                     </d3:Chart>
                 </Grid>
@@ -201,8 +201,8 @@
                     <d3:Chart BottomTitle="x/L" LeftTitle="Nondimensional mass flow (pVA)" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="1">
                         <d3:LineGraph x:Name="massflowxlplot" d3:Legend.IsVisible="False"/>
                     </d3:Chart>
-                    <d3:Chart BottomTitle="x/L" LeftTitle="Nondimensional mass flow (pVA)" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="2" Grid.Row="1">
-                        <d3:LineGraph x:Name="massflowxlplot_2" d3:Legend.IsVisible="False"/>
+                    <d3:Chart BottomTitle="Δt" LeftTitle="Nondimensional mass flow (pVA)" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="2" Grid.Row="1">
+                        <d3:LineGraph x:Name="massflowxlplotdt" d3:Legend.IsVisible="False"/>
                     </d3:Chart>
                 </Grid>
             </TabItem>
