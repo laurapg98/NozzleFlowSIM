@@ -483,7 +483,7 @@ namespace ClassLibrary
 
             for (int i = 0; i <= this.numRect; i++)
             {
-                mf.Add(this.nozzle[i].GetArea()* this.nozzle[i].GetVelP()* this.nozzle[i].GetDensP());
+                mf.Add(this.nozzle[i].GetArea() * this.nozzle[i].GetVelP() * this.nozzle[i].GetDensP());
             }
 
             return mf;

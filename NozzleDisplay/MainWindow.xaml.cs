@@ -62,9 +62,9 @@ namespace NozzleDisplay
         {
             int pos = this.nozzle.getthroatpos();
             canvasNozzle.Children.Clear();
+            //sliderthroat.Value = pos;
             sliderthroat.Minimum = 1;
             sliderthroat.Maximum = this.numR;
-            sliderthroat.Value = pos;
           
             for (int i = 0; i < nozzlerectangles.Length; i++)
             {
@@ -588,9 +588,6 @@ namespace NozzleDisplay
                     // escribimos n la label del contador
                     contadortxt.Text = " Contador: " + this.contadordt.ToString() + " Δt";
 
-                    // creamos el mass flow 
-                    this.listmassflowdt = this.nozzle.getMassFlow();
-
                     // creamos los rectangulos para dibujar
                     nozzlerectangles = new Rectangle[this.nozzle.GetNumRects()];
                     
@@ -610,6 +607,9 @@ namespace NozzleDisplay
                             listtempdt.Add(param[4, cont]);
                             listveldt.Add(param[5, cont]);
                             listpredt.Add(param[6, cont]);
+
+                            listmassflowdt.Add(listdendt[cont] * this.nozzle.GetRectangulo(this.positionThroat).GetArea() * this.listveldt[cont]);
+
                             cont++;
                         }
                     }
@@ -622,6 +622,8 @@ namespace NozzleDisplay
                     this.listden = this.nozzle.getDensities();
                     this.listAs = this.nozzle.getNozzleArea();
 
+                    lockSlider();
+
                     // parte gráfica:
                     fillCanvasNozzle();
                     refreshCanvas();
@@ -630,7 +632,7 @@ namespace NozzleDisplay
                     refreshplotmassflow();
                     crearDataTable();
 
-                    this.contadordt = Convert.ToInt32(param[0, 0]);
+                    //this.contadordt = Convert.ToInt32(param[0, 0]);
 
                     //enseñamos botones etc
                     playbut.Visibility = Visibility.Visible;
