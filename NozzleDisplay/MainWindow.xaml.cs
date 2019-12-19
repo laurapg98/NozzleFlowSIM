@@ -712,12 +712,13 @@ namespace NozzleDisplay
                 this.listAs = this.nozzle.getNozzleArea();
 
                 // eliminamos la última posición de las listas para el plot respecto al tiempo
+                listtempdt.RemoveAt(this.contadordt + 1);
+                listdendt.RemoveAt(this.contadordt + 1);
+                listpredt.RemoveAt(this.contadordt + 1);
+                listveldt.RemoveAt(this.contadordt + 1);
+                listdt.RemoveAt(this.contadordt + 1);
+                listmassflowdt.RemoveAt(this.contadordt + 1);
                 contadordt = contadordt - 1;
-                listtempdt.RemoveAt(this.contadordt);
-                listdendt.RemoveAt(this.contadordt);
-                listpredt.RemoveAt(this.contadordt);
-                listveldt.RemoveAt(this.contadordt);
-                listdt.RemoveAt(this.contadordt);
 
                 // escribimos en la label del contador
                 contadortxt.Text = " Contador: " + this.contadordt.ToString() + " Δt";
