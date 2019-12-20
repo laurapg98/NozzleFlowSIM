@@ -688,6 +688,12 @@ namespace NozzleDisplay
             camera.Position = new Point3D(pt.X + 5, pt.Y - 5, pt.Z - 5);
         }
 
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            Help h = new Help();
+            h.ShowDialog();
+        }
+
         private void zoomoutbut_Click(object sender, RoutedEventArgs e) // ZOOM OUT en el 3D
         {
             Point3D pt = camera.Position;

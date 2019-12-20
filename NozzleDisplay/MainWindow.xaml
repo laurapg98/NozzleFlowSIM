@@ -43,7 +43,7 @@
                 <MenuItem Header="Save file" Click="click_savefile" ></MenuItem>
             </MenuItem>
             <MenuItem Header="_Anderson" Click="MenuItem_Click"></MenuItem>
-            <MenuItem Header="_Help" ></MenuItem>
+            <MenuItem Header="_Help" Click="MenuItem_Click_2"></MenuItem>
             <MenuItem Header="_About Us" Click="Click_Aboutus" ></MenuItem>
             <MenuItem Click="MenuItem_Click_1" Foreground="#00000000">
                 <MenuItem.Background>
