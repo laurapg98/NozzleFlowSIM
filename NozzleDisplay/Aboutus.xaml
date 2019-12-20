@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NozzleDisplay"
         mc:Ignorable="d"
-        Title="About us" Height="350" Width="475.667">
+        Title="About us" Height="360" Width="475.667">
     <Grid>
         <Image Source="Resources/upcbanner.png" Margin="0,0,0,215.667" HorizontalAlignment="Left" IsEnabled="False"/>
         <Image HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" RenderTransformOrigin="1.172,2.262" Margin="35,150,0,0" Source="Resources/marc.png"/>
